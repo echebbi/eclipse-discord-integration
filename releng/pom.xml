@@ -11,5 +11,6 @@
     </parent>
     
 	<modules>
+        <module>fr.kazejiyu.discord.rpc.integration.target</module>
 	</modules>
 </project>
