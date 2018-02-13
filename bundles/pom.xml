@@ -12,5 +12,6 @@
     
 	<modules>
         <module>fr.kazejiyu.discord.rpc.integration</module>
+        <module>com.github.psnrigner.discord-rpc-java</module>
 	</modules>
 </project>
