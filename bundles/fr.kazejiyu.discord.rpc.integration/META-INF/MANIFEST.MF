@@ -1,11 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Eclipse Discord Integration
-Bundle-SymbolicName: fr.kazejiyu.discord.rpc.integration
+Bundle-SymbolicName: fr.kazejiyu.discord.rpc.integration;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: fr.kazejiyu.discord.rpc.integration.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  com.github.psnrigner.discord-rpc-java;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Bundle-ActivationPolicy: lazy
