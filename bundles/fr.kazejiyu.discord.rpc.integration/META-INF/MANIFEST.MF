@@ -6,5 +6,7 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: fr.kazejiyu.discord.rpc.integration.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- com.github.psnrigner.discord-rpc-java;bundle-version="1.0.0"
+ com.github.psnrigner.discord-rpc-java;bundle-version="1.0.0",
+ org.eclipse.e4.ui.workbench;bundle-version="1.5.1",
+ org.eclipse.e4.ui.model.workbench;bundle-version="2.0.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
