@@ -11,7 +11,7 @@ import com.github.psnrigner.discordrpcjava.ErrorCode;
  * 
  * @author Emmanuel CHEBBI
  */
-public class DiscordRPC {
+public class DiscordRpcProxy {
 	
 	private static final String applicationId = "413038514616139786";
 	
