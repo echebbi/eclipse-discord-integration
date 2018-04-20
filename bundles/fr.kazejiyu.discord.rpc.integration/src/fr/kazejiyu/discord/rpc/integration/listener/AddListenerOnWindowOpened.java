@@ -37,12 +37,6 @@ public class AddListenerOnWindowOpened implements IWindowListener {
 		removeSelectionListener(window);
 	}
 
-	@Override
-	public void windowActivated(IWorkbenchWindow window) {}
-
-	@Override
-	public void windowDeactivated(IWorkbenchWindow window) {}
-
 	/** Adds {@code listener} as an ISelectionListener of {@code window} */
     private void addSelectionListener(IWorkbenchWindow window) {
         if (window != null) {
@@ -56,4 +50,10 @@ public class AddListenerOnWindowOpened implements IWindowListener {
             window.getSelectionService().removeSelectionListener(listener);
         }
     }
+    
+    @Override
+    public void windowActivated(IWorkbenchWindow window) {}
+    
+    @Override
+    public void windowDeactivated(IWorkbenchWindow window) {}
 }
