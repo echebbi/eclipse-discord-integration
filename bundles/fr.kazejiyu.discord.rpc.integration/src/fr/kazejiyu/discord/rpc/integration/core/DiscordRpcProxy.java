@@ -1,5 +1,8 @@
 package fr.kazejiyu.discord.rpc.integration.core;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import com.github.psnrigner.discordrpcjava.DiscordEventHandler;
 import com.github.psnrigner.discordrpcjava.DiscordJoinRequest;
 import com.github.psnrigner.discordrpcjava.DiscordRichPresence;
@@ -13,13 +16,20 @@ import com.github.psnrigner.discordrpcjava.ErrorCode;
  */
 public class DiscordRpcProxy {
 	
+	/** Identifies the Eclipse Integration Discord app */
 	private static final String applicationId = "413038514616139786";
+	
+	/** The delay before shutting down the connection with Discord, in seconds */
+	private static final long TIMEOUT_BEFORE_SHUTTING_DOWN = 5000;
+	
+	/** Helps to close the connection to Discord after a certain delay */
+	private final Timer timer = new Timer("Shutdown Discord RPC connection");
 	
 	/**
 	 * Initializes the connection to Discord session.
 	 */
 	public void initialize() {
-		
+		setDetails("");
 	}
 
 	/**
@@ -43,14 +53,27 @@ public class DiscordRpcProxy {
 		
 		rpc.runCallbacks();
 		
-		// Wait so that Discord can be notified before shutting down the connection		
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		rpc.shutdown();
+		// Wait before closing the connection, so that Discord can be notified		
+		timer.schedule(shutdown(rpc), TIMEOUT_BEFORE_SHUTTING_DOWN);
+	}
+	
+	/**
+	 * Returns a new {@link TimerTask} instance that calls {@code rpc.shutdown();}.
+	 * 
+	 * @param rpc
+	 * 			The Discord connection to close. Must not be {@code null}.
+	 * 
+	 * @return the new {@code TimerTask} instance.
+	 */
+	private TimerTask shutdown(DiscordRpc rpc) {
+		return new TimerTask() {
+			
+			@Override
+			public void run() {
+				System.out.println("Shutting down");
+				rpc.shutdown();
+			}
+		};
 	}
 	
 	/**
