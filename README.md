@@ -1,6 +1,6 @@
 # Eclipse Discord Integration
 
-![Build Status](https://travis-ci.org/KazeJiyu/eclipse-discord-integration.svg?branch=master)
+![Build Status](https://travis-ci.org/KazeJiyu/eclipse-discord-integration.svg?branch=master) [![Managed with TAIGA.io](https://img.shields.io/badge/managed%20with-TAIGA.io-brightgreen.svg)](https://tree.taiga.io/project/kazejiyu-eclipse-discord-integration/)
 
 ## Motivation
 
