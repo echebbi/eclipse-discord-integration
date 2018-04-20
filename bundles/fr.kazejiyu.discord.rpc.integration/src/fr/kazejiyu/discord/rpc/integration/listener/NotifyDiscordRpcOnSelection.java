@@ -4,16 +4,16 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 
-import fr.kazejiyu.discord.rpc.integration.core.DiscordRPC;
+import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcProxy;
 
 /**
- * Notifies {@link DiscordRPC} each time Eclipse's current selection changes.
+ * Notifies {@link DiscordRpcProxy} each time Eclipse's current selection changes.
  * 
  * @author Emmanuel CHEBBI
  */
 public class NotifyDiscordRpcOnSelection implements ISelectionListener {
 	
-	private final DiscordRPC rpc = new DiscordRPC();
+	private final DiscordRpcProxy rpc = new DiscordRpcProxy();
 	
 	public NotifyDiscordRpcOnSelection() {
 		rpc.initialize();
