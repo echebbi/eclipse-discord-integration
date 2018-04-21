@@ -2,8 +2,10 @@ package fr.kazejiyu.discord.rpc.integration.listener;
 
 import static java.util.Objects.requireNonNull;
 
+import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWindowListener;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 
 /**
@@ -11,10 +13,10 @@ import org.eclipse.ui.IWorkbenchWindow;
  * 
  * @author Emmanuel CHEBBI
  */
-public class AddListenerOnWindowOpened implements IWindowListener {
+public class AddListenerOnWindowOpened<T extends ISelectionListener & IPartListener2> implements IWindowListener {
 	
 	/** The listener to add to each window that opens */
-	private final ISelectionListener listener;
+	private final T listener;
 	
 	/**
 	 * Creates a new instance.
@@ -23,7 +25,7 @@ public class AddListenerOnWindowOpened implements IWindowListener {
 	 * 			The listener that should be added to each window that opens.
 	 * 			Must not be {@code null}.
 	 */
-	public AddListenerOnWindowOpened(ISelectionListener listener) {
+	public AddListenerOnWindowOpened(T listener) {
 		this.listener = requireNonNull(listener, "The listener must not be null");
 	}
 
@@ -41,6 +43,10 @@ public class AddListenerOnWindowOpened implements IWindowListener {
     private void addSelectionListener(IWorkbenchWindow window) {
         if (window != null) {
             window.getSelectionService().addSelectionListener(listener);
+            
+            for (IWorkbenchPage page : window.getPages()) {
+				page.addPartListener(listener);
+			}
         }
     }
 
@@ -48,6 +54,10 @@ public class AddListenerOnWindowOpened implements IWindowListener {
     private void removeSelectionListener(IWorkbenchWindow window) {
         if (window != null) {
             window.getSelectionService().removeSelectionListener(listener);
+            
+            for (IWorkbenchPage page : window.getPages()) {
+				page.removePartListener(listener);
+			}
         }
     }
     

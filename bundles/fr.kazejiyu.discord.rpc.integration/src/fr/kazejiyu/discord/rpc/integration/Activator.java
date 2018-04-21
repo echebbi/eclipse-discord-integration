@@ -1,8 +1,8 @@
 package fr.kazejiyu.discord.rpc.integration;
 
-import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -23,13 +23,13 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	public static final String PLUGIN_ID = "fr.kazejiyu.discord.rpc.integration"; //$NON-NLS-1$
 
 	/** Listens current selection then notify Discord'RPC */
-	private final ISelectionListener rpcNotifier = new NotifyDiscordRpcOnSelection();
+	private final NotifyDiscordRpcOnSelection rpcNotifier = new NotifyDiscordRpcOnSelection();
 
 	@Override
 	public void earlyStartup() {
 		final IWorkbench workbench = PlatformUI.getWorkbench();
 		
-		workbench.addWindowListener(new AddListenerOnWindowOpened(rpcNotifier));
+		workbench.addWindowListener(new AddListenerOnWindowOpened<NotifyDiscordRpcOnSelection>(rpcNotifier));
 
 		workbench.getDisplay()
 				 .asyncExec(listenForSelectionInOpenedWindows(workbench));
@@ -41,6 +41,10 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 			for (IWorkbenchWindow window : workbench.getWorkbenchWindows()) {
 				if (window != null) {
 					window.getSelectionService().addSelectionListener(rpcNotifier);
+					
+					for (IWorkbenchPage page : window.getPages()) {
+						page.addPartListener(rpcNotifier);
+					}
 				}
 			}
 		};
