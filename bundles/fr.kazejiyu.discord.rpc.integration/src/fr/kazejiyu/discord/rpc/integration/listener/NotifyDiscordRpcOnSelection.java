@@ -3,8 +3,10 @@ package fr.kazejiyu.discord.rpc.integration.listener;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
@@ -16,6 +18,7 @@ import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcProxy;
 import fr.kazejiyu.discord.rpc.integration.extensions.DiscordIntegrationExtensions;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
 import fr.kazejiyu.discord.rpc.integration.extensions.RichPresence;
+import fr.kazejiyu.discord.rpc.integration.extensions.impl.UnknownInputRichPresence;
 
 /**
  * Notifies {@link DiscordRpcProxy} each time Eclipse's current selection changes.
@@ -49,10 +52,15 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 		
 		Optional<EditorInputRichPresence> maybeUserAdapter = extensions.findAdapterFor(editor.getEditorInput());
 		
-		if (maybeUserAdapter.isPresent()) {
-			Optional<RichPresence> maybePresence = maybeUserAdapter.get().createRichPresence(preferences, editor.getEditorInput());
-			maybePresence.ifPresent(forwardToDiscord());
-		}
+		EditorInputRichPresence adapter = maybeUserAdapter.orElseGet(defaultAdapterFor(editor.getEditorInput()));
+		
+		Optional<RichPresence> maybePresence = adapter.createRichPresence(preferences, editor.getEditorInput());
+		maybePresence.ifPresent(forwardToDiscord());
+	}
+
+	/** @return a built-in adapter handling {@code input} */
+	private Supplier<EditorInputRichPresence> defaultAdapterFor(IEditorInput input) {
+		return () -> extensions.findDefaultAdapterFor(input).orElse(new UnknownInputRichPresence());
 	}
 	
 	/** @return a consumer that takes a {@code RichPresence} and sends its information to Discord */
