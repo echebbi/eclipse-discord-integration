@@ -3,6 +3,7 @@ package fr.kazejiyu.discord.rpc.integration.listener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.part.EditorPart;
 
 import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcProxy;
 
@@ -21,7 +22,8 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener {
 
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		rpc.setDetails(part.getTitle());
+		if (part instanceof EditorPart)
+			rpc.setDetails(part.getTitle());
 	}
 	
 }
