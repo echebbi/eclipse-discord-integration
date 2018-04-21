@@ -1,6 +1,7 @@
 package fr.kazejiyu.discord.rpc.integration.listener;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISelectionListener;
@@ -29,11 +30,14 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener {
 		
 		EditorPart editor = (EditorPart) part;
 		
-		System.out.println(selection);
-		
 		if (editor.getEditorInput() instanceof IFileEditorInput) {
 			IFile inEdition = ((IFileEditorInput) editor.getEditorInput()).getFile();
-			rpc.setDetails("Editing " + inEdition.getName());
+			IProject project = inEdition.getProject();
+			
+			String details = "Editing " + inEdition.getName();
+			String state = (project == null) ? "" : "Working on " + project.getName();
+				
+			rpc.setInformations(details, state);
 		}
 	}
 	
