@@ -39,6 +39,10 @@ public class DiscordRpcProxy {
 	 * 			The new details. Must not be {@code null}.
 	 */
 	public void setDetails(String details) {
+		setInformations(details, "");
+	}
+
+	public void setInformations(String details, String state) {
 		// NOTE Currently, API is broken and connection must be re-created at each modification
 		// see https://github.com/PSNRigner/discord-rpc-java/issues/13
 		
@@ -46,7 +50,7 @@ public class DiscordRpcProxy {
 		rpc.init(applicationId, createDiscordEventHandler(), true);
 		
 		DiscordRichPresence presence = new DiscordRichPresence();
-		presence.setState("Developping");
+		presence.setState(state);
 		presence.setDetails(details);
 		
 		rpc.updatePresence(presence);
@@ -70,7 +74,6 @@ public class DiscordRpcProxy {
 			
 			@Override
 			public void run() {
-				System.out.println("Shutting down");
 				rpc.shutdown();
 			}
 		};
