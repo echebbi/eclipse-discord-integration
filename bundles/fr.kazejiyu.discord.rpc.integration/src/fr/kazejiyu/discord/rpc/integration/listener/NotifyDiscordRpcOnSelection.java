@@ -15,6 +15,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.part.EditorPart;
 
+import fr.kazejiyu.discord.rpc.integration.core.DiscordIntegrationPreferences;
 import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcProxy;
 
 /**
@@ -24,9 +25,13 @@ import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcProxy;
  */
 public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartListener2 {
 	
+	/** Communicates informations to Discord */
 	private final DiscordRpcProxy rpc = new DiscordRpcProxy();
 	
 	private IWorkbenchPart lastSelectedPart = null;
+
+	/** User's preferences */
+	private static final DiscordIntegrationPreferences preferences = DiscordIntegrationPreferences.INSTANCE;
 	
 	public NotifyDiscordRpcOnSelection() {
 		rpc.initialize();
@@ -45,8 +50,17 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 			IFile inEdition = ((IFileEditorInput) editor.getEditorInput()).getFile();
 			IProject project = inEdition.getProject();
 			
-			String details = "Editing " + inEdition.getName();
-			String state = (project != null) ? "Working on " + project.getName() : "";
+			String details, state;
+			
+			if (preferences.showsFileName())
+				details = "Editing " + inEdition.getName();
+			else
+				details = "Editing a mysterious file";
+			
+			if (preferences.showsProjectName())
+				state = (project != null) ? "Working on " + project.getName() : "";
+			else
+				state = "Working on a mysterious project";	
 				
 			rpc.setInformations(details, state);
 			lastSelectedPart = part;
@@ -57,8 +71,17 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 			
 			File editedFile = new File(inEdition.getPath());
 			
-			String details = editedFile.exists() ? "Editing " + editedFile.getName() : "";
-			String state = "Unknown project";
+			String details, state;
+			
+			if (preferences.showsFileName())
+				details = editedFile.exists() ? "Editing " + editedFile.getName() : "";
+			else
+				details = "Editing a mysterious file";
+			
+			if (preferences.showsProjectName())
+				state = "Unknown project";
+			else
+				state = "Working on a mysterious project";
 				
 			rpc.setInformations(details, state);
 			lastSelectedPart = part;
@@ -79,21 +102,33 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 	}
 
 	@Override
-	public void partBroughtToTop(IWorkbenchPartReference partRef) {}
+	public void partBroughtToTop(IWorkbenchPartReference partRef) {
+		// irrelevant event
+	}
 
 	@Override
-	public void partDeactivated(IWorkbenchPartReference partRef) {}
+	public void partDeactivated(IWorkbenchPartReference partRef) {
+		// irrelevant event
+	}
 
 	@Override
-	public void partOpened(IWorkbenchPartReference partRef) {}
+	public void partOpened(IWorkbenchPartReference partRef) {
+		// irrelevant event
+	}
 
 	@Override
-	public void partHidden(IWorkbenchPartReference partRef) {}
+	public void partHidden(IWorkbenchPartReference partRef) {
+		// irrelevant event
+	}
 
 	@Override
-	public void partVisible(IWorkbenchPartReference partRef) {}
+	public void partVisible(IWorkbenchPartReference partRef) {
+		// irrelevant event
+	}
 
 	@Override
-	public void partInputChanged(IWorkbenchPartReference partRef) {}
+	public void partInputChanged(IWorkbenchPartReference partRef) {
+		// irrelevant event
+	}
 	
 }

@@ -62,8 +62,12 @@ public class AddListenerOnWindowOpened<T extends ISelectionListener & IPartListe
     }
     
     @Override
-    public void windowActivated(IWorkbenchWindow window) {}
+    public void windowActivated(IWorkbenchWindow window) {
+    	// irrelevant event
+    }
     
     @Override
-    public void windowDeactivated(IWorkbenchWindow window) {}
+    public void windowDeactivated(IWorkbenchWindow window) {
+    	// irrelevant event
+    }
 }
