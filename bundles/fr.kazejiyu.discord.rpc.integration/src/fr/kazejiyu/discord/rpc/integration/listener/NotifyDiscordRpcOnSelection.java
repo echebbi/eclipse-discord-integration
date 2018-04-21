@@ -1,6 +1,8 @@
 package fr.kazejiyu.discord.rpc.integration.listener;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.EditorPart;
@@ -22,8 +24,17 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener {
 
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		if (part instanceof EditorPart)
-			rpc.setDetails(part.getTitle());
+		if (!(part instanceof EditorPart))
+				return;
+		
+		EditorPart editor = (EditorPart) part;
+		
+		System.out.println(selection);
+		
+		if (editor.getEditorInput() instanceof IFileEditorInput) {
+			IFile inEdition = ((IFileEditorInput) editor.getEditorInput()).getFile();
+			rpc.setDetails("Editing " + inEdition.getName());
+		}
 	}
 	
 }

@@ -47,7 +47,7 @@ public class DiscordRpcProxy {
 		
 		DiscordRichPresence presence = new DiscordRichPresence();
 		presence.setState("Developping");
-		presence.setDetails("Current selection: " + details);
+		presence.setDetails(details);
 		
 		rpc.updatePresence(presence);
 		
