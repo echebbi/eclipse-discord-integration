@@ -29,7 +29,7 @@ public class DiscordRpcProxy {
 	 * Initializes the connection to Discord session.
 	 */
 	public void initialize() {
-		setDetails("");
+		
 	}
 
 	/**
@@ -86,6 +86,10 @@ public class DiscordRpcProxy {
 	 */
 	public void shutdown() {
 		
+	}
+	
+	public void setDefault() {
+		setInformations("Browsing IDE", "No project");
 	}
 	
 	/** Creates an handler listening for Discord events. Not used at the moment. */
