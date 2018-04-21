@@ -87,3 +87,4 @@ Export-Package: com.github.psnrigner.discordrpcjava,
  org.objectweb.asm.tree.analysis,
  org.objectweb.asm.util
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: com.github.psnrigner.discord-rpc-java
