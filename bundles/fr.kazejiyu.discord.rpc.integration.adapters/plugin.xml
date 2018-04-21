@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="fr.kazejiyu.discord.rpc.integration.editor_input_default_adapters">
+      <adapter
+            class="fr.kazejiyu.discord.rpc.integration.adapters.DefaultURIEditorInputRichPresence">
+      </adapter>
+      <adapter
+            class="fr.kazejiyu.discord.rpc.integration.adapters.DefaultFileEditorInputRichPresence">
+      </adapter>
+   </extension> 
+
+</plugin>

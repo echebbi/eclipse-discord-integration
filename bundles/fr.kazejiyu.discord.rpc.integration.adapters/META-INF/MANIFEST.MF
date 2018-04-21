@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Discord Integration Default Adapters
+Bundle-SymbolicName: fr.kazejiyu.discord.rpc.integration.adapters;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Automatic-Module-Name: fr.kazejiyu.discord.rpc.integration.adapters
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: fr.kazejiyu.discord.rpc.integration,
+ org.eclipse.ui.workbench,
+ org.eclipse.ui.ide;bundle-version="3.13.1",
+ org.eclipse.core.resources
