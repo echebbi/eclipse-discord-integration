@@ -53,6 +53,7 @@ public class DefaultFileEditorInputRichPresence implements EditorInputRichPresen
 		
 		presence.setDetails(detailsOf(preferences, fileInput));
 		presence.setState(stateOf(preferences, fileInput));
+		presence.setProject(projectOf(preferences, fileInput));
 		
 		return Optional.of(presence);
 	}
@@ -74,6 +75,11 @@ public class DefaultFileEditorInputRichPresence implements EditorInputRichPresen
 		IProject project = inEdition.getProject();
 		
 		return "Working on " + ((project != null) ? project.getName() : "an unknown project");
+	}
+
+	private IProject projectOf(DiscordIntegrationPreferences preferences, IFileEditorInput input) {
+		IFile inEdition = input.getFile();
+		return inEdition.getProject();
 	}
 
 }

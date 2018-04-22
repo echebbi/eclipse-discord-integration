@@ -17,7 +17,7 @@ import com.github.psnrigner.discordrpcjava.ErrorCode;
 public class DiscordRpcProxy {
 	
 	/** Identifies the Eclipse Integration Discord app */
-	private static final String applicationId = "413038514616139786";
+	private static final String APPLICATION_ID = "413038514616139786";
 	
 	/** The delay before shutting down the connection with Discord, in seconds */
 	private static final long TIMEOUT_BEFORE_SHUTTING_DOWN = 5000;
@@ -25,11 +25,13 @@ public class DiscordRpcProxy {
 	/** Helps to close the connection to Discord after a certain delay */
 	private final Timer timer = new Timer("Shutdown Discord RPC connection");
 	
+	private final long timeOnStartup = System.currentTimeMillis() / 1000;
+	
 	/**
 	 * Initializes the connection to Discord session.
 	 */
 	public void initialize() {
-		
+
 	}
 
 	/**
@@ -39,19 +41,20 @@ public class DiscordRpcProxy {
 	 * 			The new details. Must not be {@code null}.
 	 */
 	public void setDetails(String details) {
-		setInformations(details, "");
+		setInformations(details, "", System.currentTimeMillis() / 1000);
 	}
 
-	public void setInformations(String details, String state) {
+	public void setInformations(String details, String state, long elapsedTime) {
 		// NOTE Currently, API is broken and connection must be re-created at each modification
 		// see https://github.com/PSNRigner/discord-rpc-java/issues/13
 		
 		DiscordRpc rpc = new DiscordRpc();
-		rpc.init(applicationId, createDiscordEventHandler(), true);
+		rpc.init(APPLICATION_ID, createDiscordEventHandler(), true);
 		
 		DiscordRichPresence presence = new DiscordRichPresence();
 		presence.setState(state);
 		presence.setDetails(details);
+		presence.setStartTimestamp(elapsedTime == 0 ? timeOnStartup : elapsedTime);
 		
 		rpc.updatePresence(presence);
 		
@@ -89,7 +92,7 @@ public class DiscordRpcProxy {
 	}
 	
 	public void setDefault() {
-		setInformations("Browsing IDE", "No project");
+		setInformations("Browsing IDE", "No project", System.currentTimeMillis());
 	}
 	
 	/** Creates an handler listening for Discord events. Not used at the moment. */

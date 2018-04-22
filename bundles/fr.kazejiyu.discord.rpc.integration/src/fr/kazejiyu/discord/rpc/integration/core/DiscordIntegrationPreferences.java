@@ -24,5 +24,23 @@ public enum DiscordIntegrationPreferences {
 		IPreferenceStore s = new ScopedPreferenceStore(InstanceScope.INSTANCE, "fr.kazejiyu.discord.rpc.integration.preferences.store");
 		return s.getBoolean("SHOW_PROJECT_NAME");
 	}
+	
+	/** @return whether the name of the current project should be shown in Discord */
+	public boolean resetsElapsedTimeOnStartup() {
+		IPreferenceStore s = new ScopedPreferenceStore(InstanceScope.INSTANCE, "fr.kazejiyu.discord.rpc.integration.preferences.store");
+		return s.getString("RESET_ELAPSED_TIME").equals("RESET_ELAPSED_TIME_ON_STARTUP");
+	}
+	
+	/** @return whether the name of the current project should be shown in Discord */
+	public boolean resetsElapsedTimeOnNewProject() {
+		IPreferenceStore s = new ScopedPreferenceStore(InstanceScope.INSTANCE, "fr.kazejiyu.discord.rpc.integration.preferences.store");
+		return s.getString("RESET_ELAPSED_TIME").equals("RESET_ELAPSED_TIME_ON_NEW_PROJECT");
+	}
+	
+	/** @return whether the name of the current project should be shown in Discord */
+	public boolean resetsElapsedTimeOnNewFile() {
+		IPreferenceStore s = new ScopedPreferenceStore(InstanceScope.INSTANCE, "fr.kazejiyu.discord.rpc.integration.preferences.store");
+		return s.getString("RESET_ELAPSED_TIME").equals("RESET_ELAPSED_TIME_ON_NEW_FILE");
+	}
 
 }
