@@ -3,7 +3,9 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Discord-rpc-java
 Bundle-SymbolicName: com.github.psnrigner.discord-rpc-java
 Bundle-Version: 1.0.0
-Bundle-ClassPath: discord-rpc-java-1.0.4.jar
+Bundle-ClassPath: discord-rpc-java-1.0.4.jar,
+ discord-rpc-java-1.0.4-sources.jar,
+ discord-rpc-java-1.0.4-javadoc.jar
 Export-Package: com.github.psnrigner.discordrpcjava,
  com.github.psnrigner.discordrpcjava.examples,
  com.github.psnrigner.discordrpcjava.impl,
