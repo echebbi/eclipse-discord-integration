@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPartListener2;
@@ -31,6 +32,10 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 	private final DiscordRpcProxy rpc = new DiscordRpcProxy();
 	
 	private IWorkbenchPart lastSelectedPart = null;
+	
+	private IProject lastSelectedProject = null;
+	
+	private long timeOnNewProject = 0;
 	
 	private DiscordIntegrationExtensions extensions = new DiscordIntegrationExtensions();
 
@@ -65,7 +70,22 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 	
 	/** @return a consumer that takes a {@code RichPresence} and sends its information to Discord */
 	private Consumer<RichPresence> forwardToDiscord() {
-		return presence -> rpc.setInformations(presence.getDetails(), presence.getState()); 
+		return presence -> rpc.setInformations(presence.getDetails(), presence.getState(), computeElapsedTime(presence)); 
+	}
+	
+	private long computeElapsedTime(RichPresence presence) {
+		if (preferences.resetsElapsedTimeOnNewFile())
+			return System.currentTimeMillis() / 1000;
+		
+		if (preferences.resetsElapsedTimeOnNewProject()) {
+			if (! Objects.equals(presence.getProject(), lastSelectedProject)) {
+				timeOnNewProject = System.currentTimeMillis() / 1000;
+				lastSelectedProject = presence.getProject();
+			}
+			return timeOnNewProject;
+		}
+		
+		return 0;
 	}
 	
 	@Override
