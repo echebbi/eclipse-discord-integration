@@ -60,7 +60,7 @@ public class DefaultFileEditorInputRichPresence implements EditorInputRichPresen
 
 	private String detailsOf(DiscordIntegrationPreferences preferences, IFileEditorInput input) {
 		if (! preferences.showsFileName())
-			return "Editing a mysterious file";
+			return "";
 		
 		IFile inEdition = input.getFile();
 		
@@ -69,7 +69,7 @@ public class DefaultFileEditorInputRichPresence implements EditorInputRichPresen
 
 	private String stateOf(DiscordIntegrationPreferences preferences, IFileEditorInput input) {
 		if (! preferences.showsProjectName())
-			return "Working on a mysterious project";
+			return "";
 		
 		IFile inEdition = input.getFile();
 		IProject project = inEdition.getProject();
