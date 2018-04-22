@@ -65,7 +65,7 @@ public class DefaultURIEditorInputRichPresence implements EditorInputRichPresenc
 
 	private String detailsOf(DiscordIntegrationPreferences preferences, IURIEditorInput input) {
 		if (! preferences.showsFileName())
-			return "Editing a mysterious file";
+			return "";
 		
 		URI inEdition = input.getURI();
 		File editedFile = new File(inEdition.getPath());
@@ -75,7 +75,7 @@ public class DefaultURIEditorInputRichPresence implements EditorInputRichPresenc
 
 	private String stateOf(DiscordIntegrationPreferences preferences, IURIEditorInput input) {
 		if (! preferences.showsProjectName())
-			return "Working on a mysterious project";
+			return "";
 		
 		return "Unknown project";
 	}
