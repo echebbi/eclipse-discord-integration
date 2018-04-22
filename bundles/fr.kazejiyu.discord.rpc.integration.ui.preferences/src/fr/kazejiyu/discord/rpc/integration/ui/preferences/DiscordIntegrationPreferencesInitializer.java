@@ -11,6 +11,7 @@ public class DiscordIntegrationPreferencesInitializer extends AbstractPreference
 		
         store.setDefault("SHOW_FILE_NAME", true);
         store.setDefault("SHOW_PROJECT_NAME", true);
+        store.setDefault("RESET_ELAPSED_TIME", "RESET_ELAPSED_TIME_ON_PROJECT");
 	}
 
 }
