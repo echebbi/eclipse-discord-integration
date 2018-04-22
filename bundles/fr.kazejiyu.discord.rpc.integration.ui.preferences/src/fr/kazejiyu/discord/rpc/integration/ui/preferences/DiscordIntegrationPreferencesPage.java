@@ -8,9 +8,9 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
-public class DiscordIntegrationPreferences extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class DiscordIntegrationPreferencesPage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public DiscordIntegrationPreferences() {
+	public DiscordIntegrationPreferencesPage() {
 		super(GRID);
 	}
 
