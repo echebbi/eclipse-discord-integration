@@ -51,9 +51,9 @@ public class DefaultFileEditorInputRichPresence implements EditorInputRichPresen
 		RichPresence presence = new RichPresence();
 		IFileEditorInput fileInput = (IFileEditorInput) input;
 		
-		presence.setDetails(detailsOf(preferences, fileInput));
-		presence.setState(stateOf(preferences, fileInput));
-		presence.setProject(projectOf(preferences, fileInput));
+		presence.withDetails(detailsOf(preferences, fileInput));
+		presence.withState(stateOf(preferences, fileInput));
+		presence.withProject(projectOf(preferences, fileInput));
 		
 		return Optional.of(presence);
 	}

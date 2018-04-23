@@ -9,6 +9,8 @@ import com.github.psnrigner.discordrpcjava.DiscordRichPresence;
 import com.github.psnrigner.discordrpcjava.DiscordRpc;
 import com.github.psnrigner.discordrpcjava.ErrorCode;
 
+import fr.kazejiyu.discord.rpc.integration.extensions.RichPresence;
+
 /**
  * A quick interface around Discord RPC's API allowing to change the API used easily.
  * 
@@ -25,26 +27,21 @@ public class DiscordRpcProxy {
 	/** Helps to close the connection to Discord after a certain delay */
 	private final Timer timer = new Timer("Shutdown Discord RPC connection");
 	
-	private final long timeOnStartup = System.currentTimeMillis() / 1000;
-	
 	/**
 	 * Initializes the connection to Discord session.
 	 */
 	public void initialize() {
 
 	}
-
+	
 	/**
-	 * Updates details within Discord's overlay.
+	 * Shows given presence on Discord.
 	 * 
-	 * @param details
-	 * 			The new details. Must not be {@code null}.
+	 * @param rp
+	 * 			Contains the elements to show on Discord.
+	 * 			Must not be {@code null}.
 	 */
-	public void setDetails(String details) {
-		setInformations(details, "", System.currentTimeMillis() / 1000);
-	}
-
-	public void setInformations(String details, String state, long elapsedTime) {
+	public void show(RichPresence rp) {
 		// NOTE Currently, API is broken and connection must be re-created at each modification
 		// see https://github.com/PSNRigner/discord-rpc-java/issues/13
 		
@@ -52,9 +49,10 @@ public class DiscordRpcProxy {
 		rpc.init(APPLICATION_ID, createDiscordEventHandler(), true);
 		
 		DiscordRichPresence presence = new DiscordRichPresence();
-		presence.setState(state);
-		presence.setDetails(details);
-		presence.setStartTimestamp(elapsedTime == 0 ? timeOnStartup : elapsedTime);
+		
+		rp.getState().ifPresent(presence::setState);
+		rp.getDetails().ifPresent(presence::setDetails);
+		rp.getStartTimestamp().ifPresent(presence::setStartTimestamp);
 		
 		rpc.updatePresence(presence);
 		
@@ -89,10 +87,6 @@ public class DiscordRpcProxy {
 	 */
 	public void shutdown() {
 		
-	}
-	
-	public void setDefault() {
-		setInformations("Browsing IDE", "No project", System.currentTimeMillis());
 	}
 	
 	/** Creates an handler listening for Discord events. Not used at the moment. */

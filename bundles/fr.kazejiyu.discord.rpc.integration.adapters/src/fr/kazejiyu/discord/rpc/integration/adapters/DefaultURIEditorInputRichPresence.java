@@ -57,8 +57,8 @@ public class DefaultURIEditorInputRichPresence implements EditorInputRichPresenc
 		
 		RichPresence presence = new RichPresence();
 		
-		presence.setDetails(detailsOf(preferences, uriInput));
-		presence.setState(stateOf(preferences, uriInput));
+		presence.withDetails(detailsOf(preferences, uriInput));
+		presence.withState(stateOf(preferences, uriInput));
 		
 		return Optional.of(presence);
 	}

@@ -24,13 +24,7 @@ public class UnknownInputRichPresence implements EditorInputRichPresence {
 
 	@Override
 	public Optional<RichPresence> createRichPresence(DiscordIntegrationPreferences preferences, IEditorInput input) {
-		RichPresence presence = new RichPresence();
-		
-		// TODO Set details & state to empty String as soon as Discord RPC API is fixed
-		presence.setDetails("Unknown file");
-		presence.setState("Unknown project");
-		
-		return Optional.of(presence);
+		return Optional.of(new RichPresence());
 	}
 
 }

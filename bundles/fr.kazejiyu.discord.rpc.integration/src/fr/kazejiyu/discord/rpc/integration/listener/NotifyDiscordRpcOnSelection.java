@@ -2,7 +2,7 @@ package fr.kazejiyu.discord.rpc.integration.listener;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.eclipse.core.resources.IProject;
@@ -29,7 +29,7 @@ import fr.kazejiyu.discord.rpc.integration.extensions.impl.UnknownInputRichPrese
 public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartListener2 {
 	
 	/** Communicates informations to Discord */
-	private final DiscordRpcProxy rpc = new DiscordRpcProxy();
+	private final DiscordRpcProxy discord = new DiscordRpcProxy();
 	
 	private IWorkbenchPart lastSelectedPart = null;
 	
@@ -37,14 +37,21 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 	
 	private long timeOnNewProject = 0;
 	
+	private final long timeOnStartup = System.currentTimeMillis() / 1000;
+	
 	private DiscordIntegrationExtensions extensions = new DiscordIntegrationExtensions();
 
 	/** User's preferences */
 	private static final DiscordIntegrationPreferences preferences = DiscordIntegrationPreferences.INSTANCE;
 	
 	public NotifyDiscordRpcOnSelection() {
-		rpc.initialize();
-		rpc.setDefault();
+		discord.initialize();
+		showNoActivity();
+	}
+	
+	private void showNoActivity() {
+		// no activity == nothing to show on Discord
+		discord.show(new RichPresence());
 	}
 
 	@Override
@@ -60,7 +67,8 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 		EditorInputRichPresence adapter = maybeUserAdapter.orElseGet(defaultAdapterFor(editor.getEditorInput()));
 		
 		Optional<RichPresence> maybePresence = adapter.createRichPresence(preferences, editor.getEditorInput());
-		maybePresence.ifPresent(forwardToDiscord());
+		maybePresence.map(withStartTimeStamp())
+					 .ifPresent(discord::show);
 	}
 
 	/** @return a built-in adapter handling {@code input} */
@@ -68,30 +76,28 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 		return () -> extensions.findDefaultAdapterFor(input).orElse(new UnknownInputRichPresence());
 	}
 	
-	/** @return a consumer that takes a {@code RichPresence} and sends its information to Discord */
-	private Consumer<RichPresence> forwardToDiscord() {
-		return presence -> rpc.setInformations(presence.getDetails(), presence.getState(), computeElapsedTime(presence)); 
-	}
-	
-	private long computeElapsedTime(RichPresence presence) {
-		if (preferences.resetsElapsedTimeOnNewFile())
-			return System.currentTimeMillis() / 1000;
-		
-		if (preferences.resetsElapsedTimeOnNewProject()) {
-			if (! Objects.equals(presence.getProject(), lastSelectedProject)) {
-				timeOnNewProject = System.currentTimeMillis() / 1000;
-				lastSelectedProject = presence.getProject();
+	private Function<RichPresence, RichPresence> withStartTimeStamp() {
+		return presence -> {
+			if (preferences.resetsElapsedTimeOnNewFile())
+				return presence.withCurrentTimestamp();
+			
+			if (preferences.resetsElapsedTimeOnNewProject()) {
+				if (! Objects.equals(presence.getProject().orElse(null), lastSelectedProject)) {
+					timeOnNewProject = System.currentTimeMillis() / 1000;
+					lastSelectedProject = presence.getProject().orElse(null);
+				}
+				return presence.withStartTimestamp(timeOnNewProject);
 			}
-			return timeOnNewProject;
-		}
-		
-		return 0;
+			
+			// last possible case: the time starts on startup
+			return presence.withStartTimestamp(timeOnStartup);
+		};
 	}
 	
 	@Override
 	public void partClosed(IWorkbenchPartReference partRef) {
 		if (Objects.equals(partRef.getPart(false), lastSelectedPart)) {
-			rpc.setDefault();
+			showNoActivity();
 		}
 	}
 
