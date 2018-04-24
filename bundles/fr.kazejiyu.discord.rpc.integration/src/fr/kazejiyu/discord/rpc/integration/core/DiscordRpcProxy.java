@@ -27,6 +27,8 @@ public class DiscordRpcProxy {
 	/** Helps to close the connection to Discord after a certain delay */
 	private final Timer timer = new Timer("Shutdown Discord RPC connection");
 	
+	private RichPresence lastPresence = null;
+	
 	/**
 	 * Initializes the connection to Discord session.
 	 */
@@ -42,6 +44,8 @@ public class DiscordRpcProxy {
 	 * 			Must not be {@code null}.
 	 */
 	public void show(RichPresence rp) {
+		lastPresence = rp.clone();
+		
 		// NOTE Currently, API is broken and connection must be re-created at each modification
 		// see https://github.com/PSNRigner/discord-rpc-java/issues/13
 		
@@ -60,6 +64,18 @@ public class DiscordRpcProxy {
 		
 		// Wait before closing the connection, so that Discord can be notified		
 		timer.schedule(shutdown(rpc), TIMEOUT_BEFORE_SHUTTING_DOWN);
+	}
+	
+	public void updateDetails(String details) {
+		show(lastPresence.withDetails(details));
+	}
+	
+	public void updateState(String state) {
+		show(lastPresence.withState(state));
+	}
+	
+	public void updateStartTimestamp(long start) {
+		show(lastPresence.withStartTimestamp(start));
 	}
 	
 	/**

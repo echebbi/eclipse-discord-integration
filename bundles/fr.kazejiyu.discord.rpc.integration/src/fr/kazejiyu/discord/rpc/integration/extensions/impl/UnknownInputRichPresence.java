@@ -4,9 +4,9 @@ import java.util.Optional;
 
 import org.eclipse.ui.IEditorInput;
 
-import fr.kazejiyu.discord.rpc.integration.core.DiscordIntegrationPreferences;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
 import fr.kazejiyu.discord.rpc.integration.extensions.RichPresence;
+import fr.kazejiyu.discord.rpc.integration.settings.DiscordIntegrationPreferences;
 
 /**
  * Used when no valid adapter can be found for a given {@link IEditorInput}.<br>

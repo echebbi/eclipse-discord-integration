@@ -14,12 +14,12 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.part.EditorPart;
 
-import fr.kazejiyu.discord.rpc.integration.core.DiscordIntegrationPreferences;
 import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcProxy;
 import fr.kazejiyu.discord.rpc.integration.extensions.DiscordIntegrationExtensions;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
 import fr.kazejiyu.discord.rpc.integration.extensions.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.extensions.impl.UnknownInputRichPresence;
+import fr.kazejiyu.discord.rpc.integration.settings.DiscordIntegrationPreferences;
 
 /**
  * Notifies {@link DiscordRpcProxy} each time Eclipse's current selection changes.
@@ -31,7 +31,7 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 	/** Communicates informations to Discord */
 	private final DiscordRpcProxy discord = new DiscordRpcProxy();
 	
-	private IWorkbenchPart lastSelectedPart = null;
+	IWorkbenchPart lastSelectedPart = null;
 	
 	private IProject lastSelectedProject = null;
 	
@@ -39,14 +39,19 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 	
 	private final long timeOnStartup = System.currentTimeMillis() / 1000;
 	
+	private long timeOnSelection = -1;
+	
+	/** Manages extension points */
 	private DiscordIntegrationExtensions extensions = new DiscordIntegrationExtensions();
 
 	/** User's preferences */
-	private static final DiscordIntegrationPreferences preferences = DiscordIntegrationPreferences.INSTANCE;
+	private final DiscordIntegrationPreferences preferences = new DiscordIntegrationPreferences();
 	
 	public NotifyDiscordRpcOnSelection() {
 		discord.initialize();
 		showNoActivity();
+		
+		preferences.addSettingChangeListener(new RunOnSettingChange(this::updateDiscord));
 	}
 	
 	private void showNoActivity() {
@@ -59,8 +64,15 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 		if (!(part instanceof EditorPart) || part.equals(lastSelectedPart))
 			return;
 		
+		timeOnSelection = System.currentTimeMillis() / 1000;
 		lastSelectedPart = part;
-		EditorPart editor = (EditorPart) part;
+		
+		updateDiscord();
+	}
+
+	/** Shows information corresponding to the last selected part in Discord */
+	void updateDiscord() {
+		EditorPart editor = (EditorPart) lastSelectedPart;
 		
 		Optional<EditorInputRichPresence> maybeUserAdapter = extensions.findAdapterFor(editor.getEditorInput());
 		
@@ -69,8 +81,10 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 		Optional<RichPresence> maybePresence = adapter.createRichPresence(preferences, editor.getEditorInput());
 		maybePresence.map(withStartTimeStamp())
 					 .ifPresent(discord::show);
+		
+		System.out.println("UPDATE DISCORD");
 	}
-
+	
 	/** @return a built-in adapter handling {@code input} */
 	private Supplier<EditorInputRichPresence> defaultAdapterFor(IEditorInput input) {
 		return () -> extensions.findDefaultAdapterFor(input).orElse(new UnknownInputRichPresence());
@@ -79,7 +93,7 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 	private Function<RichPresence, RichPresence> withStartTimeStamp() {
 		return presence -> {
 			if (preferences.resetsElapsedTimeOnNewFile())
-				return presence.withCurrentTimestamp();
+				return presence.withStartTimestamp(timeOnSelection);
 			
 			if (preferences.resetsElapsedTimeOnNewProject()) {
 				if (! Objects.equals(presence.getProject().orElse(null), lastSelectedProject)) {

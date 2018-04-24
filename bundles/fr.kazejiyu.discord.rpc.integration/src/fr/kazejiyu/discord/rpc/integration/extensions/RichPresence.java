@@ -9,7 +9,7 @@ import org.eclipse.core.resources.IProject;
  * 
  * @author Emmanuel CHEBBI
  */
-public class RichPresence {
+public class RichPresence implements Cloneable {
 	
 	private String details;
 
@@ -24,6 +24,17 @@ public class RichPresence {
 	 */
 	public RichPresence() {
 		reset();
+	}
+	
+	public RichPresence(RichPresence origin) {
+		this.details = origin.details;
+		this.state = origin.state;
+		this.startTimestamp = origin.startTimestamp;
+		this.project = origin.project;
+	}
+	
+	public RichPresence clone() {
+		return new RichPresence(this);
 	}
 	
 	/**

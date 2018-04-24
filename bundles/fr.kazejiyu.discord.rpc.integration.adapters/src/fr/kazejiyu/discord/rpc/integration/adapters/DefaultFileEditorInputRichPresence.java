@@ -7,9 +7,9 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 
-import fr.kazejiyu.discord.rpc.integration.core.DiscordIntegrationPreferences;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
 import fr.kazejiyu.discord.rpc.integration.extensions.RichPresence;
+import fr.kazejiyu.discord.rpc.integration.settings.DiscordIntegrationPreferences;
 
 /**
  * Default implementation of {@link EditorInputRichPresence}.<br>

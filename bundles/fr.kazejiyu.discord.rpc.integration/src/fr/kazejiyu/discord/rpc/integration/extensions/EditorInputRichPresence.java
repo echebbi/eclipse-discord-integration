@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.eclipse.ui.IEditorInput;
 
-import fr.kazejiyu.discord.rpc.integration.core.DiscordIntegrationPreferences;
+import fr.kazejiyu.discord.rpc.integration.settings.DiscordIntegrationPreferences;
 
 /**
  * Extracts Rich Presence from an {@link IEditorInput}.
