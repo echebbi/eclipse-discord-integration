@@ -1,4 +1,4 @@
-package fr.kazejiyu.discord.rpc.integration.core;
+package fr.kazejiyu.discord.rpc.integration.settings;
 
 import static java.util.Objects.requireNonNull;
 
@@ -9,9 +9,6 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
-
-import fr.kazejiyu.discord.rpc.integration.settings.DiscordIntegrationPreferencesListener;
-import fr.kazejiyu.discord.rpc.integration.settings.SettingChangeListener;
 
 /**
  * Provides easy access to the settings defined by the user for Discord Integration.
