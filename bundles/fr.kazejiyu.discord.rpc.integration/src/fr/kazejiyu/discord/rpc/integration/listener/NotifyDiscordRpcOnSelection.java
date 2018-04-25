@@ -72,6 +72,9 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 
 	/** Shows information corresponding to the last selected part in Discord */
 	void updateDiscord() {
+		if (lastSelectedPart == null)
+			return;
+		
 		EditorPart editor = (EditorPart) lastSelectedPart;
 		
 		Optional<EditorInputRichPresence> maybeUserAdapter = extensions.findAdapterFor(editor.getEditorInput());
@@ -81,8 +84,6 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 		Optional<RichPresence> maybePresence = adapter.createRichPresence(preferences, editor.getEditorInput());
 		maybePresence.map(withStartTimeStamp())
 					 .ifPresent(discord::show);
-		
-		System.out.println("UPDATE DISCORD");
 	}
 	
 	/** @return a built-in adapter handling {@code input} */
@@ -92,6 +93,9 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 	
 	private Function<RichPresence, RichPresence> withStartTimeStamp() {
 		return presence -> {
+			if (! preferences.showsElapsedTime())
+				return presence;
+			
 			if (preferences.resetsElapsedTimeOnNewFile())
 				return presence.withStartTimestamp(timeOnSelection);
 			

@@ -1,6 +1,7 @@
 package fr.kazejiyu.discord.rpc.integration.settings;
 
 import static java.util.Objects.requireNonNull;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,27 +35,32 @@ public class DiscordIntegrationPreferences {
 	
 	/** @return whether the name of the edited file should be shown in Discord */
 	public boolean showsFileName() {
-		return store.getBoolean("SHOW_FILE_NAME");
+		return store.getBoolean(SHOW_FILE_NAME.property());
 	}
 	
 	/** @return whether the name of the current project should be shown in Discord */
 	public boolean showsProjectName() {
-		return store.getBoolean("SHOW_PROJECT_NAME");
+		return store.getBoolean(SHOW_PROJECT_NAME.property());
+	}
+	
+	/** @return whether the time elapsed should be shown in Discord */
+	public boolean showsElapsedTime() {
+		return store.getBoolean(SHOW_ELAPSED_TIME.property());
 	}
 	
 	/** @return whether the name of the current project should be shown in Discord */
 	public boolean resetsElapsedTimeOnStartup() {
-		return store.getString("RESET_ELAPSED_TIME").equals("RESET_ELAPSED_TIME_ON_STARTUP");
+		return store.getString(RESET_ELAPSED_TIME.property()).equals(RESET_ELAPSED_TIME_ON_STARTUP.property());
 	}
 	
 	/** @return whether the name of the current project should be shown in Discord */
 	public boolean resetsElapsedTimeOnNewProject() {
-		return store.getString("RESET_ELAPSED_TIME").equals("RESET_ELAPSED_TIME_ON_NEW_PROJECT");
+		return store.getString(RESET_ELAPSED_TIME.property()).equals(RESET_ELAPSED_TIME_ON_NEW_PROJECT.property());
 	}
 	
 	/** @return whether the name of the current project should be shown in Discord */
 	public boolean resetsElapsedTimeOnNewFile() {
-		return store.getString("RESET_ELAPSED_TIME").equals("RESET_ELAPSED_TIME_ON_NEW_FILE");
+		return store.getString(RESET_ELAPSED_TIME.property()).equals(RESET_ELAPSED_TIME_ON_NEW_FILE.property());
 	}
 
 	/**
