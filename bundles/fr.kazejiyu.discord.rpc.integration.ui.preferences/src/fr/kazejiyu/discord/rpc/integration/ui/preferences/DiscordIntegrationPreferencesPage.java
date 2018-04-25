@@ -1,5 +1,7 @@
 package fr.kazejiyu.discord.rpc.integration.ui.preferences;
 
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.*;
+
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
@@ -7,6 +9,7 @@ import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
+
 
 public class DiscordIntegrationPreferencesPage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -24,11 +27,13 @@ public class DiscordIntegrationPreferencesPage extends FieldEditorPreferencePage
     public void createFieldEditors() {
 		GroupFieldEditor group = new GroupFieldEditor("Privacy", getFieldEditorParent());
 		
-        BooleanFieldEditor showFileName = new BooleanFieldEditor("SHOW_FILE_NAME", "Show &file's name", group.getFieldEditorParent());
-        BooleanFieldEditor showProjectName = new BooleanFieldEditor("SHOW_PROJECT_NAME", "Show &project's name", group.getFieldEditorParent());
+        BooleanFieldEditor showFileName = new BooleanFieldEditor(SHOW_FILE_NAME.property(), "Show &file's name", group.getFieldEditorParent());
+        BooleanFieldEditor showProjectName = new BooleanFieldEditor(SHOW_PROJECT_NAME.property(), "Show &project's name", group.getFieldEditorParent());
+        BooleanFieldEditor showElapsedTime = new BooleanFieldEditor(SHOW_ELAPSED_TIME.property(), "Show &elapsed time", group.getFieldEditorParent());
         
         group.addFieldEditor(showFileName);
         group.addFieldEditor(showProjectName);
+        group.addFieldEditor(showElapsedTime);
         
         addField(group);
         
