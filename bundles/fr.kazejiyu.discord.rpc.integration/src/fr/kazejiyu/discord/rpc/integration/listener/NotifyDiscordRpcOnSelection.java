@@ -12,6 +12,7 @@ import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
 
 import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcProxy;
@@ -49,11 +50,26 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 	
 	public NotifyDiscordRpcOnSelection() {
 		discord.initialize();
-		showNoActivity();
 		
+		PlatformUI.getWorkbench().getDisplay().syncExec(this::findActivePart);
 		preferences.addSettingChangeListener(new RunOnSettingChange(this::updateDiscord));
+		
+		if (lastSelectedPart == null)
+			showNoActivity();
+		else
+			updateDiscord();
 	}
 	
+	/** Sets {@link #lastSelectedPart} to workbench's active editor, if any */
+	private void findActivePart() {
+		try {
+			lastSelectedPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+		} catch (NullPointerException e) {
+			// no active editor
+		}
+	}
+	
+	/** Shows nothing except "Playing Eclipse IDE" on Discord */
 	private void showNoActivity() {
 		// no activity == nothing to show on Discord
 		discord.show(new RichPresence());

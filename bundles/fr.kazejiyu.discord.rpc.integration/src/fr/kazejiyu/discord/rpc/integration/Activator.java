@@ -23,10 +23,11 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	public static final String PLUGIN_ID = "fr.kazejiyu.discord.rpc.integration"; //$NON-NLS-1$
 
 	/** Listens current selection then notify Discord'RPC */
-	private final NotifyDiscordRpcOnSelection rpcNotifier = new NotifyDiscordRpcOnSelection();
+	private NotifyDiscordRpcOnSelection rpcNotifier;
 
 	@Override
 	public void earlyStartup() {
+		rpcNotifier = new NotifyDiscordRpcOnSelection();
 		final IWorkbench workbench = PlatformUI.getWorkbench();
 		
 		workbench.addWindowListener(new AddListenerOnWindowOpened<NotifyDiscordRpcOnSelection>(rpcNotifier));
