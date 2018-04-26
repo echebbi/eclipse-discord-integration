@@ -1,5 +1,11 @@
 package fr.kazejiyu.discord.rpc.integration;
 
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_PROJECT;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_ELAPSED_TIME;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_FILE_NAME;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
+
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
@@ -24,9 +30,11 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 
 	/** Listens current selection then notify Discord'RPC */
 	private NotifyDiscordRpcOnSelection rpcNotifier;
-
+	
 	@Override
 	public void earlyStartup() {
+		setDefaultPreferencesValue();
+		
 		rpcNotifier = new NotifyDiscordRpcOnSelection();
 		final IWorkbench workbench = PlatformUI.getWorkbench();
 		
@@ -35,7 +43,16 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 		workbench.getDisplay()
 				 .asyncExec(listenForSelectionInOpenedWindows(workbench));
 	}
-
+	
+	/** Sets default values for plug-in's Preferences */
+	private void setDefaultPreferencesValue() {
+		getPreferenceStore().setDefault(SHOW_FILE_NAME.property(), true);
+		getPreferenceStore().setDefault(SHOW_PROJECT_NAME.property(), true);
+		getPreferenceStore().setDefault(SHOW_ELAPSED_TIME.property(), true);
+		getPreferenceStore().setDefault(RESET_ELAPSED_TIME.property(), RESET_ELAPSED_TIME_ON_NEW_PROJECT.property());
+	}
+	
+	
 	/** Adds {@code rpcNotifier} as an {@code ISelectionListener} to each opened window. */
 	private Runnable listenForSelectionInOpenedWindows(IWorkbench workbench) {
 		return () -> {

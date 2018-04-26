@@ -11,6 +11,8 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
+import fr.kazejiyu.discord.rpc.integration.Activator;
+
 /**
  * Provides easy access to the settings defined by the user for Discord Integration.
  * 
@@ -18,7 +20,7 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
  */
 public class DiscordIntegrationPreferences {
 	
-	private static final String PREFERENCES_STORE_ID = "fr.kazejiyu.discord.rpc.integration.preferences.store";
+	private static final String PREFERENCES_STORE_ID = Activator.PLUGIN_ID;
 
 	private List<SettingChangeListener> listeners = new ArrayList<>();
 	
