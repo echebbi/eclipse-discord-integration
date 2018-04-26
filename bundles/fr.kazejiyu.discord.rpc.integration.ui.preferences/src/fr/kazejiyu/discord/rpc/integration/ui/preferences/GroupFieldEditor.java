@@ -61,7 +61,7 @@ public class GroupFieldEditor extends FieldEditor {
 	@Override
 	protected void doLoadDefault() {
 		for (FieldEditor field : fields) {
-			field.load();
+			field.loadDefault();
 		}
 	}
 
@@ -72,6 +72,21 @@ public class GroupFieldEditor extends FieldEditor {
 		}
 	}
 
+	@Override
+	public void store() {
+		if (getPreferenceStore() == null)
+			return;
+		
+		if (presentsDefaultValue()) {
+			for (FieldEditor field : fields) {
+				getPreferenceStore().setToDefault(field.getPreferenceName());
+			}
+		}
+		else {
+			doStore();
+		}
+	}
+	
 	@Override
 	public int getNumberOfControls() {
 		return 1;
