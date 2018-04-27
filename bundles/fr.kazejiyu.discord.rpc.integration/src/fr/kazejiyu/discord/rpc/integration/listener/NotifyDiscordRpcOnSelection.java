@@ -16,9 +16,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
 
 import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcProxy;
+import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.extensions.DiscordIntegrationExtensions;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
-import fr.kazejiyu.discord.rpc.integration.extensions.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.extensions.impl.UnknownInputRichPresence;
 import fr.kazejiyu.discord.rpc.integration.settings.DiscordIntegrationPreferences;
 

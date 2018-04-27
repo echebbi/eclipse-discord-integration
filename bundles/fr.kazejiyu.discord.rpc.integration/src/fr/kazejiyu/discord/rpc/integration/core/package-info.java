@@ -1,5 +1,5 @@
 /**
- * Classes aimed to deal with Discord RPC's API.
+ * Classes aimed to deal with Discord RPC's API.<br>
  * 
  * @author Emmanuel CHEBBI
  */

@@ -7,6 +7,8 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.ui.IEditorInput;
 
+import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
+
 /**
  * Manages plug-in's extensions.
  * 
