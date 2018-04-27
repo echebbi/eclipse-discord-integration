@@ -1,11 +1,11 @@
-package fr.kazejiyu.discord.rpc.integration.extensions;
+package fr.kazejiyu.discord.rpc.integration.core;
 
 import java.util.Optional;
 
 import org.eclipse.core.resources.IProject;
 
 /**
- * Defines the elements to show on Discord.
+ * Defines the elements to show in Discord.
  * 
  * @author Emmanuel CHEBBI
  */
@@ -33,6 +33,7 @@ public class RichPresence implements Cloneable {
 		this.project = origin.project;
 	}
 	
+	@Override
 	public RichPresence clone() {
 		return new RichPresence(this);
 	}

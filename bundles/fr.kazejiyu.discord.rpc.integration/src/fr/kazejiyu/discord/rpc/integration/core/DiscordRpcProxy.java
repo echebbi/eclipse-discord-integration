@@ -9,20 +9,21 @@ import com.github.psnrigner.discordrpcjava.DiscordRichPresence;
 import com.github.psnrigner.discordrpcjava.DiscordRpc;
 import com.github.psnrigner.discordrpcjava.ErrorCode;
 
-import fr.kazejiyu.discord.rpc.integration.extensions.RichPresence;
-
 /**
- * A quick interface around Discord RPC's API allowing to change the API used easily.
+ * A proxy able to communicate with Discord.<br>
+ * <br>
+ * Instances of this class are aimed to send Rich Presence information
+ * to a Discord client so that it can show it.<br>
  * 
  * @author Emmanuel CHEBBI
  */
 public class DiscordRpcProxy {
 	
-	/** Identifies the Eclipse Integration Discord app */
+	/** Identifies the Eclipse Integration Discord application */
 	private static final String APPLICATION_ID = "413038514616139786";
 	
-	/** The delay before shutting down the connection with Discord, in seconds */
-	private static final long TIMEOUT_BEFORE_SHUTTING_DOWN = 5000;
+	/** The delay before shutting down the connection with Discord, in milliseconds */
+	private static final long TIMEOUT_BEFORE_SHUTTING_DOWN_IN_MS = 5000;
 	
 	/** Helps to close the connection to Discord after a certain delay */
 	private final Timer timer = new Timer("Shutdown Discord RPC connection");
@@ -63,17 +64,41 @@ public class DiscordRpcProxy {
 		rpc.runCallbacks();
 		
 		// Wait before closing the connection, so that Discord can be notified		
-		timer.schedule(shutdown(rpc), TIMEOUT_BEFORE_SHUTTING_DOWN);
+		timer.schedule(shutdown(rpc), TIMEOUT_BEFORE_SHUTTING_DOWN_IN_MS);
 	}
 	
+	/**
+	 * Changes the details shown in Discord, keeping the other information.<br>
+	 * <br>
+	 * Passing either an empty String or {@code null} will hide the details field. 
+	 * 
+	 * @param details
+	 * 			The new details to show.
+	 */
 	public void updateDetails(String details) {
 		show(lastPresence.withDetails(details));
 	}
 	
+	/**
+	 * Changes the state shown in Discord, keeping the other information.<br>
+	 * <br>
+	 * Passing either an empty String or {@code null} will hide the state field. 
+	 * 
+	 * @param state
+	 * 			The new state to show.
+	 */
 	public void updateState(String state) {
 		show(lastPresence.withState(state));
 	}
 	
+	/**
+	 * Changes the elapsed time shown in Discord, keeping the other information.<br>
+	 * <br>
+	 * Passing a negative timestamp will hide the elapsed time field. 
+	 * 
+	 * @param start
+	 * 			The start timestamp.
+	 */
 	public void updateStartTimestamp(long start) {
 		show(lastPresence.withStartTimestamp(start));
 	}

@@ -4,10 +4,14 @@ import java.util.Optional;
 
 import org.eclipse.ui.IEditorInput;
 
+import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.settings.DiscordIntegrationPreferences;
 
 /**
- * Extracts Rich Presence from an {@link IEditorInput}.
+ * Extracts Rich Presence from an {@link IEditorInput}.<br>
+ * <br>
+ * This interface should be implemented by clients who aim to define
+ * the information to show in Discord for their own editor.
  * 
  * @author Emmanuel CHEBBI
  */
