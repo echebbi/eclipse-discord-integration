@@ -1,10 +1,10 @@
-# Eclipse Discord Integration
+# Discord Rich Presence for Eclipse IDE
 
 ![Build Status](https://travis-ci.org/KazeJiyu/eclipse-discord-integration.svg?branch=master) [![Managed with TAIGA.io](https://img.shields.io/badge/managed%20with-TAIGA.io-brightgreen.svg)](https://tree.taiga.io/project/kazejiyu-eclipse-discord-integration/)
 
 ## Presentation
 
-Eclipse Discord Integration is an Eclipse IDE plug-in that uses [Rich Presence](https://discordapp.com/rich-presence) in order to display information related to your current work in Discord.
+Discord Rich Presence for Eclipse IDE is a plug-in that uses [Rich Presence](https://discordapp.com/rich-presence) in order to display information related to your current work in Discord.
 
 Here is an example of the Rich Presence Integration:
 
