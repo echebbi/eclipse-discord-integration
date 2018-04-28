@@ -45,6 +45,11 @@ import fr.kazejiyu.discord.rpc.integration.settings.DiscordIntegrationPreference
 public class DefaultFileEditorInputRichPresence implements EditorInputRichPresence {
 	
 	@Override
+	public int getPriority() {
+		return 0;
+	}
+	
+	@Override
 	public Class<IFileEditorInput> getExpectedEditorInputClass() {
 		return IFileEditorInput.class;
 	}
