@@ -2,7 +2,6 @@
 <?eclipse version="3.0"?>
 <plugin>
    <extension-point id="editor_input_adapter" name="EditorInput Adapter" schema="schema/editor_input_adapter.exsd"/>
-   <extension-point id="editor_input_default_adapters" name="EditorInput Default Adapters" schema="schema/editor_input_default_adapters.exsd"/>
    <extension
          point="org.eclipse.ui.startup">
       <startup
