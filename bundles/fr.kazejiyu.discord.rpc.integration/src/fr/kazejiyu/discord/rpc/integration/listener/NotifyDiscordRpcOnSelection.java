@@ -113,9 +113,10 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 	
 	/** @return a built-in adapter handling {@code input} */
 	private Supplier<EditorInputRichPresence> defaultAdapterFor(IEditorInput input) {
-		return () -> extensions.findDefaultAdapterFor(input).orElse(new UnknownInputRichPresence());
+		return UnknownInputRichPresence::new;
 	}
 	
+	/** Enriches a {@code RichPresence} with the appropriate start timestamp. */
 	private Function<RichPresence, RichPresence> withStartTimeStamp() {
 		return presence -> {
 			if (! preferences.showsElapsedTime())
