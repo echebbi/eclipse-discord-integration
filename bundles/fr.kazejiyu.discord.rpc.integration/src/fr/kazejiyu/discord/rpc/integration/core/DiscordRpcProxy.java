@@ -45,7 +45,7 @@ public class DiscordRpcProxy {
 	 * 			Must not be {@code null}.
 	 */
 	public void show(RichPresence rp) {
-		lastPresence = rp.clone();
+		lastPresence = new RichPresence(rp);
 		
 		// NOTE Currently, API is broken and connection must be re-created at each modification
 		// see https://github.com/PSNRigner/discord-rpc-java/issues/13
