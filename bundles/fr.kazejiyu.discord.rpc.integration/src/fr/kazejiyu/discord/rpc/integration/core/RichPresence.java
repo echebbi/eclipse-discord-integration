@@ -158,4 +158,38 @@ public class RichPresence implements Cloneable {
 		return this;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((details == null) ? 0 : details.hashCode());
+		result = prime * result + (int) (startTimestamp ^ (startTimestamp >>> 32));
+		result = prime * result + ((state == null) ? 0 : state.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof RichPresence))
+			return false;
+		RichPresence other = (RichPresence) obj;
+		if (details == null) {
+			if (other.details != null)
+				return false;
+		} else if (!details.equals(other.details))
+			return false;
+		if (startTimestamp != other.startTimestamp)
+			return false;
+		if (state == null) {
+			if (other.state != null)
+				return false;
+		} else if (!state.equals(other.state))
+			return false;
+		return true;
+	}
+	
 }
