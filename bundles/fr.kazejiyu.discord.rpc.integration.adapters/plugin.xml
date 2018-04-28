@@ -2,7 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="fr.kazejiyu.discord.rpc.integration.editor_input_default_adapters">
+         point="fr.kazejiyu.discord.rpc.integration.editor_input_adapter">
       <adapter
             class="fr.kazejiyu.discord.rpc.integration.adapters.DefaultURIEditorInputRichPresence">
       </adapter>
