@@ -19,18 +19,15 @@ import fr.kazejiyu.discord.rpc.integration.settings.DiscordIntegrationPreference
  * <table style="border: 1px solid black ; border-collapse: collapse">
  * 	<tr style="border: 1px solid black">
  * 		<th style="border: 1px solid black">Property</th>
- * 		<th style="border: 1px solid black">If shown</th>
- * 		<th style="border: 1px solid black">If not shown</th>
+ * 		<th style="border: 1px solid black">Shown in Discord</th>
  * 	</tr>
  * 	<tr>
  * 		<td style="border: 1px solid black"><b>Details</b></td>
  * 		<td style="border: 1px solid black">Editing <i>&lt;file.name&gt;</i></td>
- * 		<td style="border: 1px solid black">Working on a mysterious file</td>
  * 	</tr>
  * 	<tr>
  * 		<td style="border: 1px solid black"><b>State</b></td>
  * 		<td style="border: 1px solid black">Working on <i>&lt;project.name&gt;</i></td>
- * 		<td style="border: 1px solid black">Working on a mysterious project</td>
  * 	</tr>
  * </table>
  * 
