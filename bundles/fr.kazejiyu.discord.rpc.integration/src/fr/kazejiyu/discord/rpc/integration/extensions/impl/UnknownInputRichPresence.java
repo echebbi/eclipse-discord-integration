@@ -20,11 +20,16 @@ import fr.kazejiyu.discord.rpc.integration.settings.DiscordIntegrationPreference
 /**
  * Used when no valid adapter can be found for a given {@link IEditorInput}.<br>
  * <br>
- * Clear information shown in Discord.
+ * Show no information in Discord.
  * 
  * @author Emmanuel CHEBBI
  */
 public class UnknownInputRichPresence implements EditorInputRichPresence {
+	
+	@Override
+	public int getPriority() {
+		return Integer.MIN_VALUE;
+	}
 
 	@Override
 	public Class<? extends IEditorInput> getExpectedEditorInputClass() {

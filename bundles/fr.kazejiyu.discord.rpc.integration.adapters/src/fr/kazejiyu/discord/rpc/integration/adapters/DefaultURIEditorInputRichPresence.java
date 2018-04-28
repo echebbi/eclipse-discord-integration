@@ -46,6 +46,11 @@ import fr.kazejiyu.discord.rpc.integration.settings.DiscordIntegrationPreference
 public class DefaultURIEditorInputRichPresence implements EditorInputRichPresence {
 	
 	@Override
+	public int getPriority() {
+		return 0;
+	}
+	
+	@Override
 	public Class<FileStoreEditorInput> getExpectedEditorInputClass() {
 		return FileStoreEditorInput.class;
 		

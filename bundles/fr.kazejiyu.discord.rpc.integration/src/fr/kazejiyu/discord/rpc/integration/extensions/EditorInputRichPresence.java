@@ -12,19 +12,40 @@ package fr.kazejiyu.discord.rpc.integration.extensions;
 import java.util.Optional;
 
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.part.FileEditorInput;
 
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.settings.DiscordIntegrationPreferences;
 
 /**
- * Extracts Rich Presence from an {@link IEditorInput}.<br>
+ * Extracts {@link RichPresence} from an {@link IEditorInput}.<br>
  * <br>
  * This interface should be implemented by clients who aim to define
- * the information to show in Discord for their own editor.
+ * the information shown in Discord for their own editor.
  * 
  * @author Emmanuel CHEBBI
  */
 public interface EditorInputRichPresence {
+	
+	/**
+	 * Helps to choose an adapter over another when several ones
+	 * are registered for the same {@code IEditorInput}.<br>
+	 * <br>
+	 * The higher the priority, the more the adapter will be favored.<br>
+	 * <br>
+	 * For instance, given two adapters registering themselves for inputs of type
+	 * {@link FileEditorInput} and which priorities are 0 and 1, then the adapter
+	 * of priority 1 will be chosen to handle the input.<br>
+	 * <br>
+	 * Built-in adapters have a priority of 0. Hence, giving a higher priority
+	 * ensure that the adapter will be preferred over default ones.<br>
+	 * <br>
+	 * It is advised to only choose tens, such as 10 or 20, instead of digits
+	 * so that it is easier to add new adapters later if needed.
+	 * 
+	 * @return the priority associated with this adapter.
+	 */
+	int getPriority();
 	
 	/**
 	 * Returns the class of the input expected as an argument of {@link #createRichPresence(DiscordIntegrationPreferences, IEditorInput)}.
