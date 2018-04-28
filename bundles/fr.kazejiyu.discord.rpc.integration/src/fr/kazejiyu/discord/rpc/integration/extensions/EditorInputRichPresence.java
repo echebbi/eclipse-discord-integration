@@ -25,7 +25,7 @@ import fr.kazejiyu.discord.rpc.integration.settings.DiscordIntegrationPreference
  * 
  * @author Emmanuel CHEBBI
  */
-public interface EditorInputRichPresence {
+public interface EditorInputRichPresence extends Comparable<EditorInputRichPresence> {
 	
 	/**
 	 * Helps to choose an adapter over another when several ones
@@ -67,4 +67,13 @@ public interface EditorInputRichPresence {
 	 */
 	Optional<RichPresence> createRichPresence(DiscordIntegrationPreferences preferences, IEditorInput input);
 
+	@Override
+	default int compareTo(EditorInputRichPresence rhs) {
+		if (this.getPriority() < rhs.getPriority())
+			return -1;
+		if (this.getPriority() > rhs.getPriority())
+			return 1;
+		return 0;
+	}
+	
 }
