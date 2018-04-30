@@ -15,4 +15,18 @@
             class="fr.kazejiyu.discord.rpc.integration.ui.preferences.DiscordIntegrationPreferencesInitializer">
       </initializer>
    </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            class="fr.kazejiyu.discord.rpc.integration.ui.preferences.properties.ProjectPropertiesPage"
+            id="fr.kazejiyu.discord.rpc.integration.ui.preferences.properties.projectPropertiesPage"
+            name="Discord Integration"
+            nameFilter="*">
+         <enabledWhen>
+            <instanceof
+                  value="org.eclipse.core.resources.IProject">
+            </instanceof>
+         </enabledWhen>
+      </page>
+   </extension>
 </plugin>
