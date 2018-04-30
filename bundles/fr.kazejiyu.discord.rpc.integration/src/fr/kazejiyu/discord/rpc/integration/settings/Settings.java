@@ -12,6 +12,10 @@ package fr.kazejiyu.discord.rpc.integration.settings;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.runtime.QualifiedName;
+
+import fr.kazejiyu.discord.rpc.integration.Activator;
+
 /**
  * Constants used to idendify the different available settings.
  * 
@@ -31,7 +35,9 @@ public enum Settings {
 
 	RESET_ELAPSED_TIME_ON_NEW_PROJECT("RESET_ELAPSED_TIME_ON_NEW_PROJECT"),
 	
-	RESET_ELAPSED_TIME_ON_NEW_FILE("RESET_ELAPSED_TIME_ON_NEW_FILE");
+	RESET_ELAPSED_TIME_ON_NEW_FILE("RESET_ELAPSED_TIME_ON_NEW_FILE"),
+	
+	USE_PROJECT_SETTINGS("USE_PROJECT_SETTINGS");
 	
 	/** A key identifying the setting */
 	private final String property;
@@ -42,6 +48,10 @@ public enum Settings {
 	
 	public String property() {
 		return property;
+	}
+	
+	public QualifiedName qualifiedName() {
+		return new QualifiedName(Activator.PLUGIN_ID, property());
 	}
 	
 	/** @return the setting corresponding to the given key, or null no one match */
