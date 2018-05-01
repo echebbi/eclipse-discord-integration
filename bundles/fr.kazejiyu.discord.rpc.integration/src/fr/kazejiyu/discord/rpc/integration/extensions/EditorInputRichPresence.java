@@ -15,7 +15,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
-import fr.kazejiyu.discord.rpc.integration.settings.DiscordIntegrationPreferences;
+import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
 
 /**
  * Extracts {@link RichPresence} from an {@link IEditorInput}.<br>
@@ -48,8 +48,8 @@ public interface EditorInputRichPresence extends Comparable<EditorInputRichPrese
 	int getPriority();
 	
 	/**
-	 * Returns the class of the input expected as an argument of {@link #createRichPresence(DiscordIntegrationPreferences, IEditorInput)}.
-	 * @return the class of the input expected as an argument of {@link #createRichPresence(DiscordIntegrationPreferences, IEditorInput)}
+	 * Returns the class of the input expected as an argument of {@link #createRichPresence(GlobalPreferences, IEditorInput)}.
+	 * @return the class of the input expected as an argument of {@link #createRichPresence(GlobalPreferences, IEditorInput)}
 	 */
 	Class<? extends IEditorInput> getExpectedEditorInputClass();
 	
@@ -65,7 +65,7 @@ public interface EditorInputRichPresence extends Comparable<EditorInputRichPrese
 	 * 
 	 * @return the information to show in Discord
 	 */
-	Optional<RichPresence> createRichPresence(DiscordIntegrationPreferences preferences, IEditorInput input);
+	Optional<RichPresence> createRichPresence(GlobalPreferences preferences, IEditorInput input);
 
 	@Override
 	default int compareTo(EditorInputRichPresence rhs) {

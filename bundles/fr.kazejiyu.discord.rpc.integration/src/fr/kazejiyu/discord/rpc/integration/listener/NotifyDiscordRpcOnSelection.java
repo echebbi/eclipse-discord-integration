@@ -29,7 +29,7 @@ import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.extensions.DiscordIntegrationExtensions;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
 import fr.kazejiyu.discord.rpc.integration.extensions.impl.UnknownInputRichPresence;
-import fr.kazejiyu.discord.rpc.integration.settings.DiscordIntegrationPreferences;
+import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
 
 /**
  * Notifies {@link DiscordRpcProxy} each time Eclipse's current selection changes.
@@ -55,7 +55,7 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 	private DiscordIntegrationExtensions extensions = new DiscordIntegrationExtensions();
 
 	/** User's preferences */
-	private final DiscordIntegrationPreferences preferences = new DiscordIntegrationPreferences();
+	private final GlobalPreferences preferences = new GlobalPreferences();
 	
 	public NotifyDiscordRpcOnSelection() {
 		discord.initialize();

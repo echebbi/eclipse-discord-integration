@@ -15,7 +15,7 @@ import org.eclipse.ui.IEditorInput;
 
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
-import fr.kazejiyu.discord.rpc.integration.settings.DiscordIntegrationPreferences;
+import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
 
 /**
  * Used when no valid adapter can be found for a given {@link IEditorInput}.<br>
@@ -37,7 +37,7 @@ public class UnknownInputRichPresence implements EditorInputRichPresence {
 	}
 
 	@Override
-	public Optional<RichPresence> createRichPresence(DiscordIntegrationPreferences preferences, IEditorInput input) {
+	public Optional<RichPresence> createRichPresence(GlobalPreferences preferences, IEditorInput input) {
 		return Optional.of(new RichPresence());
 	}
 
