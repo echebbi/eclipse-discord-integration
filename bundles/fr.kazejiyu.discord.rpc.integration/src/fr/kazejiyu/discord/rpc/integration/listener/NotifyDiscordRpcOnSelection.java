@@ -30,6 +30,7 @@ import fr.kazejiyu.discord.rpc.integration.extensions.DiscordIntegrationExtensio
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
 import fr.kazejiyu.discord.rpc.integration.extensions.impl.UnknownInputRichPresence;
 import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
+import fr.kazejiyu.discord.rpc.integration.settings.UserPreferences;
 
 /**
  * Notifies {@link DiscordRpcProxy} each time Eclipse's current selection changes.
@@ -69,7 +70,8 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 			updateDiscord();
 	}
 	
-	/** Sets {@link #lastSelectedPart} to workbench's active editor, if any */
+	/** Sets {@link #lastSelectedPart} to workbench's active editor, if any.
+	 * 	Helps to select automatically the active part on IDE startup. */
 	private void findActivePart() {
 		try {
 			lastSelectedPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
@@ -119,13 +121,15 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 	/** Enriches a {@code RichPresence} with the appropriate start timestamp. */
 	private Function<RichPresence, RichPresence> withStartTimeStamp() {
 		return presence -> {
-			if (! preferences.showsElapsedTime())
+			UserPreferences prefs = preferences.getApplicablePreferencesFor(presence.getProject().orElse(null));
+			
+			if (! prefs.showsElapsedTime())
 				return presence;
 			
-			if (preferences.resetsElapsedTimeOnNewFile())
+			if (prefs.resetsElapsedTimeOnNewFile())
 				return presence.withStartTimestamp(timeOnSelection);
 			
-			if (preferences.resetsElapsedTimeOnNewProject()) {
+			if (prefs.resetsElapsedTimeOnNewProject()) {
 				if (! Objects.equals(presence.getProject().orElse(null), lastSelectedProject)) {
 					timeOnNewProject = System.currentTimeMillis() / 1000;
 					lastSelectedProject = presence.getProject().orElse(null);

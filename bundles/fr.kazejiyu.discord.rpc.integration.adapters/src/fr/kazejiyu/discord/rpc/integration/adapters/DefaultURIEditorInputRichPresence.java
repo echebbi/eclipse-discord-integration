@@ -19,7 +19,7 @@ import org.eclipse.ui.ide.FileStoreEditorInput;
 
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
-import fr.kazejiyu.discord.rpc.integration.settings.DiscordIntegrationPreferences;
+import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
 
 /**
  * Default implementation of {@link EditorInputRichPresence}.<br>
@@ -60,7 +60,7 @@ public class DefaultURIEditorInputRichPresence implements EditorInputRichPresenc
 	}
 	
 	@Override
-	public Optional<RichPresence> createRichPresence(DiscordIntegrationPreferences preferences, IEditorInput input) {
+	public Optional<RichPresence> createRichPresence(GlobalPreferences preferences, IEditorInput input) {
 		if (!(input instanceof IURIEditorInput))
 			throw new IllegalArgumentException("input must be an instance of " + IURIEditorInput.class);
 		
@@ -74,7 +74,7 @@ public class DefaultURIEditorInputRichPresence implements EditorInputRichPresenc
 		return Optional.of(presence);
 	}
 
-	private String detailsOf(DiscordIntegrationPreferences preferences, IURIEditorInput input) {
+	private String detailsOf(GlobalPreferences preferences, IURIEditorInput input) {
 		if (! preferences.showsFileName())
 			return "";
 		
@@ -84,7 +84,7 @@ public class DefaultURIEditorInputRichPresence implements EditorInputRichPresenc
 		return "Editing " + editedFile.getName();
 	}
 
-	private String stateOf(DiscordIntegrationPreferences preferences, IURIEditorInput input) {
+	private String stateOf(GlobalPreferences preferences, IURIEditorInput input) {
 		if (! preferences.showsProjectName())
 			return "";
 		

@@ -9,12 +9,19 @@
 **********************************************************************/
 package fr.kazejiyu.discord.rpc.integration.settings;
 
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_FILE;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_PROJECT;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_STARTUP;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_ELAPSED_TIME;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_FILE_NAME;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
 import static java.util.Objects.requireNonNull;
-import static fr.kazejiyu.discord.rpc.integration.settings.Settings.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -23,11 +30,12 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import fr.kazejiyu.discord.rpc.integration.Activator;
 
 /**
- * Provides easy access to the settings defined by the user for Discord Integration.
+ * User preferences regarding the way information are shown in Discord
+ * by default. 
  * 
  * @author Emmanuel CHEBBI
  */
-public class GlobalPreferences {
+public class GlobalPreferences implements UserPreferences {
 	
 	private static final String PREFERENCES_STORE_ID = Activator.PLUGIN_ID;
 
@@ -37,6 +45,9 @@ public class GlobalPreferences {
 	
 	private final IPreferenceStore store;
 	
+	/**
+	 * Creates a new instance aimed to check Discord preferences.
+	 */
 	public GlobalPreferences() {
 		this.store = new ScopedPreferenceStore(InstanceScope.INSTANCE, PREFERENCES_STORE_ID);
 		this.listener = new DiscordIntegrationPreferencesListener(listeners);
@@ -44,34 +55,61 @@ public class GlobalPreferences {
 		this.store.addPropertyChangeListener(this.listener);
 	}
 	
-	/** @return whether the name of the edited file should be shown in Discord */
+	@Override
 	public boolean showsFileName() {
 		return store.getBoolean(SHOW_FILE_NAME.property());
 	}
 	
-	/** @return whether the name of the current project should be shown in Discord */
+	@Override
 	public boolean showsProjectName() {
 		return store.getBoolean(SHOW_PROJECT_NAME.property());
 	}
 	
-	/** @return whether the time elapsed should be shown in Discord */
+	@Override
 	public boolean showsElapsedTime() {
 		return store.getBoolean(SHOW_ELAPSED_TIME.property());
 	}
 	
-	/** @return whether the name of the current project should be shown in Discord */
+	@Override
 	public boolean resetsElapsedTimeOnStartup() {
 		return store.getString(RESET_ELAPSED_TIME.property()).equals(RESET_ELAPSED_TIME_ON_STARTUP.property());
 	}
 	
-	/** @return whether the name of the current project should be shown in Discord */
+	@Override
 	public boolean resetsElapsedTimeOnNewProject() {
 		return store.getString(RESET_ELAPSED_TIME.property()).equals(RESET_ELAPSED_TIME_ON_NEW_PROJECT.property());
 	}
 	
-	/** @return whether the name of the current project should be shown in Discord */
+	@Override
 	public boolean resetsElapsedTimeOnNewFile() {
 		return store.getString(RESET_ELAPSED_TIME.property()).equals(RESET_ELAPSED_TIME_ON_NEW_FILE.property());
+	}
+	
+	/**
+	 * Returns the user preferences that should be applied for {@code project}.<br>
+	 * <br>
+	 * If {@code project} uses global preferences, the method returns {@code this}.<br>
+	 * <br>
+	 * Otherwise, it returns a new {@link ProjectPreferences} describing the specific preferences
+	 * of this project.
+	 * 
+	 * @param project
+	 * 			The project to check.
+	 * 
+	 * @return the preferences that should apply to {@code project}.
+	 */
+	public UserPreferences getApplicablePreferencesFor(IProject project) {
+		try {
+			ProjectPreferences projectPreferences = new ProjectPreferences(project);
+			
+			if (projectPreferences.useProjectSettings())
+				return projectPreferences;
+		
+		} catch (IllegalArgumentException e) {
+			// The project is not valid, return default preferences
+		}
+		
+		return this;
 	}
 
 	/**
