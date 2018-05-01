@@ -18,7 +18,8 @@ import org.eclipse.ui.IFileEditorInput;
 
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
-import fr.kazejiyu.discord.rpc.integration.settings.DiscordIntegrationPreferences;
+import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
+import fr.kazejiyu.discord.rpc.integration.settings.UserPreferences;
 
 /**
  * Default implementation of {@link EditorInputRichPresence}.<br>
@@ -55,21 +56,24 @@ public class DefaultFileEditorInputRichPresence implements EditorInputRichPresen
 	}
 	
 	@Override
-	public Optional<RichPresence> createRichPresence(DiscordIntegrationPreferences preferences, IEditorInput input) {
+	public Optional<RichPresence> createRichPresence(GlobalPreferences preferences, IEditorInput input) {
 		if (!(input instanceof IFileEditorInput))
 			throw new IllegalArgumentException("input must be an instance of " + IFileEditorInput.class);
 		
 		RichPresence presence = new RichPresence();
 		IFileEditorInput fileInput = (IFileEditorInput) input;
+		IProject project = projectOf(preferences, fileInput);
+		presence.withProject(project);
 		
-		presence.withDetails(detailsOf(preferences, fileInput));
-		presence.withState(stateOf(preferences, fileInput));
-		presence.withProject(projectOf(preferences, fileInput));
+		UserPreferences applicablePreferences = preferences.getApplicablePreferencesFor(project);
+		
+		presence.withDetails(detailsOf(applicablePreferences, fileInput));
+		presence.withState(stateOf(applicablePreferences, fileInput));
 		
 		return Optional.of(presence);
 	}
 
-	private String detailsOf(DiscordIntegrationPreferences preferences, IFileEditorInput input) {
+	private String detailsOf(UserPreferences preferences, IFileEditorInput input) {
 		if (! preferences.showsFileName())
 			return "";
 		
@@ -78,7 +82,7 @@ public class DefaultFileEditorInputRichPresence implements EditorInputRichPresen
 		return "Editing " + inEdition.getName();
 	}
 
-	private String stateOf(DiscordIntegrationPreferences preferences, IFileEditorInput input) {
+	private String stateOf(UserPreferences preferences, IFileEditorInput input) {
 		if (! preferences.showsProjectName())
 			return "";
 		
@@ -88,7 +92,7 @@ public class DefaultFileEditorInputRichPresence implements EditorInputRichPresen
 		return "Working on " + ((project != null) ? project.getName() : "an unknown project");
 	}
 
-	private IProject projectOf(DiscordIntegrationPreferences preferences, IFileEditorInput input) {
+	private IProject projectOf(GlobalPreferences preferences, IFileEditorInput input) {
 		IFile inEdition = input.getFile();
 		return inEdition.getProject();
 	}

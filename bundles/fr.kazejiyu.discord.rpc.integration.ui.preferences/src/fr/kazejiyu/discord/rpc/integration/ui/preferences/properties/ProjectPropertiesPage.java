@@ -168,7 +168,7 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 		useWorkspaceSettings = new Button(resetTime, SWT.RADIO);
 		useWorkspaceSettings.setText("Use workspace settings");
 		useWorkspaceSettings.setSelection(
-				Boolean.parseBoolean(
+				! Boolean.parseBoolean(
 						project.getPersistentProperty(USE_PROJECT_SETTINGS.qualifiedName())
 				)
 		);
@@ -176,7 +176,7 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 		useProjectSettings = new Button(resetTime, SWT.RADIO);
 		useProjectSettings.setText("Use project settings");
 		useProjectSettings.setSelection(
-				! Boolean.parseBoolean(
+				Boolean.parseBoolean(
 						project.getPersistentProperty(USE_PROJECT_SETTINGS.qualifiedName())
 				)
 		);
