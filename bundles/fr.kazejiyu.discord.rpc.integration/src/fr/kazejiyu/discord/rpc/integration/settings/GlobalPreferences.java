@@ -27,7 +27,7 @@ import fr.kazejiyu.discord.rpc.integration.Activator;
  * 
  * @author Emmanuel CHEBBI
  */
-public class DiscordIntegrationPreferences {
+public class GlobalPreferences {
 	
 	private static final String PREFERENCES_STORE_ID = Activator.PLUGIN_ID;
 
@@ -37,7 +37,7 @@ public class DiscordIntegrationPreferences {
 	
 	private final IPreferenceStore store;
 	
-	public DiscordIntegrationPreferences() {
+	public GlobalPreferences() {
 		this.store = new ScopedPreferenceStore(InstanceScope.INSTANCE, PREFERENCES_STORE_ID);
 		this.listener = new DiscordIntegrationPreferencesListener(listeners);
 		
