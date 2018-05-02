@@ -13,5 +13,6 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: fr.kazejiyu.discord.rpc.integration.core,
  fr.kazejiyu.discord.rpc.integration.extensions,
+ fr.kazejiyu.discord.rpc.integration.languages,
  fr.kazejiyu.discord.rpc.integration.settings
 Automatic-Module-Name: fr.kazejiyu.discord.rpc.integration
