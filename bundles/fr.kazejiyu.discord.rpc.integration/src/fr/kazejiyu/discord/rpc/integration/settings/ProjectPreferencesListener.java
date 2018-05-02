@@ -9,6 +9,7 @@
 **********************************************************************/
 package fr.kazejiyu.discord.rpc.integration.settings;
 
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.USE_PROJECT_SETTINGS;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_FILE;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_PROJECT;
@@ -55,6 +56,7 @@ public class ProjectPreferencesListener implements IPreferenceChangeListener {
 		events.put(SHOW_PROJECT_NAME.property(), (event, listener) -> listener.projectNameVisibilityChanged(Boolean.parseBoolean((String) event.getNewValue())));
 		events.put(SHOW_ELAPSED_TIME.property(), (event, listener) -> listener.elapsedTimeVisibilityChanged(Boolean.parseBoolean((String) event.getNewValue())));
 		events.put(RESET_ELAPSED_TIME.property(), (event, listener) -> listener.elapsedTimeResetMomentChanged(toMoment(event.getOldValue()), toMoment(event.getNewValue())));
+		events.put(USE_PROJECT_SETTINGS.property(), (event, listener) -> listener.useProjectProperties(Boolean.parseBoolean((String) event.getNewValue())));
 	}
 	
 	@Override

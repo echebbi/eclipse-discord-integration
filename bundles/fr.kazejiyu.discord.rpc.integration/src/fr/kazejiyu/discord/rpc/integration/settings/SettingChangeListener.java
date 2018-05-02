@@ -15,6 +15,15 @@ package fr.kazejiyu.discord.rpc.integration.settings;
  * @author Emmanuel CHEBBI
  */
 public interface SettingChangeListener {
+	
+	/**
+	 * Called when the user whether global preferences or project-specific ones.
+	 * 
+	 * @param use
+	 * 			{@code true} if the user wants to use project preferences, 
+	 * 			{@code false} otherwise.
+	 */
+	void useProjectProperties(boolean use);
 
 	/**
 	 * Called when the user changes file name's visibility.
