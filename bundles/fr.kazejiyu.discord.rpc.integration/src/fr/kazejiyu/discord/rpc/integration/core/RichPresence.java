@@ -9,9 +9,13 @@
 **********************************************************************/
 package fr.kazejiyu.discord.rpc.integration.core;
 
+import static fr.kazejiyu.discord.rpc.integration.languages.Language.UNKNOWN;
+
 import java.util.Optional;
 
 import org.eclipse.core.resources.IProject;
+
+import fr.kazejiyu.discord.rpc.integration.languages.Language;
 
 /**
  * Defines the elements to show in Discord.
@@ -25,6 +29,10 @@ public class RichPresence {
 	private String state;
 	
 	private long startTimestamp;
+	
+	private Language language;
+	
+	private String largeImageText;
 	
 	private IProject project;
 
@@ -46,6 +54,8 @@ public class RichPresence {
 		this.details = origin.details;
 		this.state = origin.state;
 		this.startTimestamp = origin.startTimestamp;
+		this.language = origin.language;
+		this.largeImageText = origin.largeImageText;
 		this.project = origin.project;
 	}
 	
@@ -59,6 +69,8 @@ public class RichPresence {
 		withDetails("");
 		withState("");
 		withStartTimestamp(-1l);
+		withLanguage(UNKNOWN);
+		withLargeImageText("");
 		return this;
 	}
 	
@@ -158,6 +170,60 @@ public class RichPresence {
 	 */
 	public RichPresence withCurrentTimestamp() {
 		return withStartTimestamp(System.currentTimeMillis() / 1000);
+	}
+	
+	/**
+	 * Returns the language of the active file, if known.
+	 * @return the language of the active file, if known
+	 */
+	public Optional<Language> getLanguage() {
+		if (language == null || language == UNKNOWN)
+			return Optional.empty();
+		return Optional.of(language);
+	}
+
+	/**
+	 * Sets the language of the active file. Defines the large icon to show in Discord.<br>
+	 * <br>
+	 * If the argument is {@link Language.UNKNOWN}, it is considered as
+	 * no language and no icon will be shown in Discord.
+	 * 
+	 * @param language
+	 * 			The language of the active file.
+	 * 
+	 * @return the current instance, enabling method chaining
+	 */
+	
+	public RichPresence withLanguage(Language language) {
+		this.language = language;
+		return this;
+	}
+	
+	/**
+	 * Returns the text to show when hovering the large icon, if any.
+	 * @return the text to show when hovering the large icon, if any
+	 */
+	public Optional<String> getLargeImageText() {
+		if (largeImageText == null || largeImageText.isEmpty())
+			return Optional.empty();
+		return Optional.of(largeImageText);
+	}
+
+	/**
+	 * Sets the text to show when hovering the large icon in Discord.<br>
+	 * <br>
+	 * If the argument is either {@code null} or an empty String, it is considered as
+	 * no text won't be sent to Discord.
+	 * 
+	 * @param hover
+	 * 			The text to show when hovering the large icon in Discord.
+	 * 
+	 * @return the current instance, enabling method chaining
+	 */
+	
+	public RichPresence withLargeImageText(String hover) {
+		this.largeImageText = hover;
+		return this;
 	}
 	
 	public Optional<IProject> getProject() {

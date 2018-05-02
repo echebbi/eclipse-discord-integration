@@ -18,6 +18,7 @@ import org.eclipse.ui.IFileEditorInput;
 
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
+import fr.kazejiyu.discord.rpc.integration.languages.Language;
 import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
 import fr.kazejiyu.discord.rpc.integration.settings.UserPreferences;
 
@@ -62,39 +63,51 @@ public class DefaultFileEditorInputRichPresence implements EditorInputRichPresen
 		
 		RichPresence presence = new RichPresence();
 		IFileEditorInput fileInput = (IFileEditorInput) input;
-		IProject project = projectOf(preferences, fileInput);
-		presence.withProject(project);
+		IFile file = fileInput.getFile();
+		IProject project = file.getProject();
 		
 		UserPreferences applicablePreferences = preferences.getApplicablePreferencesFor(project);
 		
-		presence.withDetails(detailsOf(applicablePreferences, fileInput));
-		presence.withState(stateOf(applicablePreferences, fileInput));
+		presence.withProject(project);
+		presence.withDetails(detailsOf(applicablePreferences, file));
+		presence.withState(stateOf(applicablePreferences, project));
+		presence.withLanguage(languageOf(applicablePreferences, file));
+		presence.withLargeImageText(largeImageTextOf(applicablePreferences, file));
 		
 		return Optional.of(presence);
 	}
 
-	private String detailsOf(UserPreferences preferences, IFileEditorInput input) {
+	private String detailsOf(UserPreferences preferences, IFile file) {
 		if (! preferences.showsFileName())
 			return "";
 		
-		IFile inEdition = input.getFile();
-		
-		return "Editing " + inEdition.getName();
+		return "Editing " + file.getName();
 	}
 
-	private String stateOf(UserPreferences preferences, IFileEditorInput input) {
+	private String stateOf(UserPreferences preferences, IProject project) {
 		if (! preferences.showsProjectName())
 			return "";
-		
-		IFile inEdition = input.getFile();
-		IProject project = inEdition.getProject();
 		
 		return "Working on " + ((project != null) ? project.getName() : "an unknown project");
 	}
 
-	private IProject projectOf(GlobalPreferences preferences, IFileEditorInput input) {
-		IFile inEdition = input.getFile();
-		return inEdition.getProject();
+	private Language languageOf(UserPreferences preferences, IFile file) {
+		if (! preferences.showsFileName())
+			return Language.UNKNOWN;
+		
+		return Language.fromFileExtension(file.getName());
+	}
+
+	private String largeImageTextOf(UserPreferences preferences, IFile file) {
+		if (! preferences.showsFileName())
+			return "";
+		
+		Language language = Language.fromFileExtension(file.getName());
+		
+		if (language == Language.UNKNOWN)
+			return "";
+		
+		return "Programming in " + language.getName();
 	}
 
 }
