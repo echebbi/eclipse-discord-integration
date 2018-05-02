@@ -24,6 +24,11 @@ class RunOnSettingChange implements SettingChangeListener {
 	public RunOnSettingChange(Runnable updateDiscord) {
 		this.updateDiscord = updateDiscord;
 	}
+	
+	@Override
+	public void useProjectProperties(boolean use) {
+		updateDiscord.run();
+	}
 
 	@Override
 	public void fileNameVisibilityChanged(boolean isVisible) {
