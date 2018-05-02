@@ -25,6 +25,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -81,11 +83,18 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 			addPrivacySection(composite);
 			addSeparator(composite);
 			addResetElapsedTimeSection(composite);
+			
+			disableUselessFields();
+			
+			enableFieldsOnUseProjectProperties();
+			disableFieldsOnUseWorkspacePreferences();
+			disableResetFieldsOnHideElapsedTime();
+			
 		} catch (CoreException e) { /* Should never happen */ }
 		
 		return composite;
 	}
-	
+
 	private void setMissingPropertiesToDefault(IResource resource) throws CoreException {
 		if (resource.getPersistentProperty(USE_PROJECT_SETTINGS.qualifiedName()) == null)
 			resource.setPersistentProperty(USE_PROJECT_SETTINGS.qualifiedName(), "true");
@@ -240,6 +249,86 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 			resetOnProjectSelection.setSelection(true);
 		if (RESET_ELAPSED_TIME_ON_NEW_FILE.property().equals(currentReset))
 			resetOnFileSelection.setSelection(true);
+	}
+	
+	private void enableFieldsOnUseProjectProperties() {
+		useProjectSettings.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				showProjectName.setEnabled(true);
+				showFileName.setEnabled(true);
+				showElapsedTime.setEnabled(true);
+				disableResetGroupIfNeeded();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}
+		});
+	}
+
+	private void disableFieldsOnUseWorkspacePreferences() {
+		useWorkspaceSettings.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				showProjectName.setEnabled(false);
+				showFileName.setEnabled(false);
+				showElapsedTime.setEnabled(false);
+				resetOnStartup.setEnabled(false);
+				resetOnProjectSelection.setEnabled(false);
+				resetOnFileSelection.setEnabled(false);
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}
+		});
+	}
+
+	private void disableResetFieldsOnHideElapsedTime() {
+		showElapsedTime.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				disableResetGroupIfNeeded();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}
+		});
+	}
+	
+	private void disableResetGroupIfNeeded() {
+		if (showElapsedTime.getSelection()) {
+			resetOnStartup.setEnabled(true);
+			resetOnProjectSelection.setEnabled(true);
+			resetOnFileSelection.setEnabled(true);
+		}
+		else {
+			resetOnStartup.setEnabled(false);
+			resetOnProjectSelection.setEnabled(false);
+			resetOnFileSelection.setEnabled(false);
+		}
+	}
+	
+	/** Initialise "enabled" property of page's fields */
+	private void disableUselessFields() {
+		disableResetGroupIfNeeded();
+
+		if (useWorkspaceSettings.getSelection()) {
+			showProjectName.setEnabled(false);
+			showFileName.setEnabled(false);
+			showElapsedTime.setEnabled(false);
+			resetOnStartup.setEnabled(false);
+			resetOnProjectSelection.setEnabled(false);
+			resetOnFileSelection.setEnabled(false);
+		}
 	}
 
 }
