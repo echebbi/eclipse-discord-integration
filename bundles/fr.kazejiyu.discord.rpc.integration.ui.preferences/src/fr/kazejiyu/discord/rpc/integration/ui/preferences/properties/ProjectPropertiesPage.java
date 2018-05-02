@@ -159,7 +159,7 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 	
 	private void addSettingsScopeSection(Composite parent) throws CoreException {
 		Group resetTime = new Group(parent, SWT.NONE);
-		resetTime.setText("Reset elapsed time:");
+		resetTime.setText("Preferences scope:");
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 3;
 		resetTime.setLayout(gridLayout);

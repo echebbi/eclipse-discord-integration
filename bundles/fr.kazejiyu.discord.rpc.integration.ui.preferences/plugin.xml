@@ -6,7 +6,7 @@
       <page
             class="fr.kazejiyu.discord.rpc.integration.ui.preferences.DiscordIntegrationPreferencesPage"
             id="fr.kazejiyu.discord.rpc.integration.ui.preferences.root"
-            name="Discord Integration">
+            name="Discord Rich Presence">
       </page>
    </extension>
    <extension
@@ -20,7 +20,7 @@
       <page
             class="fr.kazejiyu.discord.rpc.integration.ui.preferences.properties.ProjectPropertiesPage"
             id="fr.kazejiyu.discord.rpc.integration.ui.preferences.properties.projectPropertiesPage"
-            name="Discord Integration"
+            name="Discord Rich Presence"
             nameFilter="*">
          <enabledWhen>
             <instanceof
