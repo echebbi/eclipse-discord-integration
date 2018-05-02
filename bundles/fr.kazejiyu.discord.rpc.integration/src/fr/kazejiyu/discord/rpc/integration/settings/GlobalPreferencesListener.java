@@ -17,9 +17,10 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_ELAPSED
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_FILE_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.fromProperty;
+import static java.util.Objects.requireNonNull;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
@@ -27,18 +28,30 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 
 /**
- * Listens for change in plug-in's preferences.
+ * Listens for change in plug-in's global preferences.<br>
+ * <br>
+ * Each change event is forwarded to a one or several 
+ * {@link SettingChangeListener SettingChangeListeners}.
  * 
  * @author Emmanuel CHEBBI
+ * 
+ * // TODO [Refactor] Avoid duplicate code between Global & Project Listeners classes
  */
 public class GlobalPreferencesListener implements IPropertyChangeListener {
 	
-	private final List<SettingChangeListener> listeners;
+	private final Collection<SettingChangeListener> listeners;
 	
 	private final Map<String, BiConsumer<PropertyChangeEvent, SettingChangeListener>> events = new HashMap<>();
 
-	public GlobalPreferencesListener(List<SettingChangeListener> listeners) {
-		this.listeners = listeners;
+	/**
+	 * Creates a new instance aimed to listen for change in global preferences.
+	 *  
+	 * @param listeners
+	 * 			Every change event in global preferences will be forwarded to them.
+	 * 			Must not be {@code null}.
+	 */
+	public GlobalPreferencesListener(Collection<SettingChangeListener> listeners) {
+		this.listeners = requireNonNull(listeners, "The collection of listeners must not be null");
 		
 		events.put(SHOW_FILE_NAME.property(), (event, listener) -> listener.fileNameVisibilityChanged(Boolean.parseBoolean((String) event.getNewValue())));
 		events.put(SHOW_PROJECT_NAME.property(), (event, listener) -> listener.projectNameVisibilityChanged(Boolean.parseBoolean((String) event.getNewValue())));
