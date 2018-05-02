@@ -30,12 +30,16 @@ import fr.kazejiyu.discord.rpc.integration.extensions.DiscordIntegrationExtensio
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
 import fr.kazejiyu.discord.rpc.integration.extensions.impl.UnknownInputRichPresence;
 import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
+import fr.kazejiyu.discord.rpc.integration.settings.ProjectPreferences;
+import fr.kazejiyu.discord.rpc.integration.settings.SettingChangeListener;
 import fr.kazejiyu.discord.rpc.integration.settings.UserPreferences;
 
 /**
  * Notifies {@link DiscordRpcProxy} each time Eclipse's current selection changes.
  * 
  * @author Emmanuel CHEBBI
+ * 
+ * TODO [Refactor ?] This class starts to become a bit heavy.
  */
 public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartListener2 {
 	
@@ -45,6 +49,8 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 	IWorkbenchPart lastSelectedPart = null;
 	
 	private IProject lastSelectedProject = null;
+	private ProjectPreferences lastSelectedProjectPreferences = null;
+	private SettingChangeListener lastSelectedProjectListener = null;
 	
 	private long timeOnNewProject = 0;
 	
@@ -110,9 +116,12 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 		
 		Optional<RichPresence> maybePresence = adapter.createRichPresence(preferences, editor.getEditorInput());
 		maybePresence.map(withStartTimeStamp())
+					 .map(listeningForChangesInProjectPreferences())
 					 .ifPresent(discord::show);
+		
+		maybePresence.ifPresent(this::updateActiveProject);
 	}
-	
+
 	/** @return a built-in adapter handling {@code input} */
 	private Supplier<EditorInputRichPresence> defaultAdapterFor(IEditorInput input) {
 		return UnknownInputRichPresence::new;
@@ -132,7 +141,6 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 			if (prefs.resetsElapsedTimeOnNewProject()) {
 				if (! Objects.equals(presence.getProject().orElse(null), lastSelectedProject)) {
 					timeOnNewProject = System.currentTimeMillis() / 1000;
-					lastSelectedProject = presence.getProject().orElse(null);
 				}
 				return presence.withStartTimestamp(timeOnNewProject);
 			}
@@ -140,6 +148,29 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 			// last possible case: the time starts on startup
 			return presence.withStartTimestamp(timeOnStartup);
 		};
+	}
+	
+	/** Creates a new listener watching for changes in the active project, if a new one has been activated */
+	private Function<RichPresence, RichPresence> listeningForChangesInProjectPreferences() {
+		return presence -> {
+			if (Objects.equals(presence.getProject().orElse(null), lastSelectedProject))
+				return presence;
+			
+			if (lastSelectedProjectPreferences != null)
+				lastSelectedProjectPreferences.removeSettingChangeListener(lastSelectedProjectListener);
+			
+			presence.getProject().ifPresent(project -> {
+				lastSelectedProjectPreferences = new ProjectPreferences(project);
+				lastSelectedProjectListener = new RunOnSettingChange(this::updateDiscord);
+				lastSelectedProjectPreferences.addSettingChangeListener(lastSelectedProjectListener);
+			});
+			
+			return presence;
+		};
+	}
+	
+	private void updateActiveProject(RichPresence presence) {
+		this.lastSelectedProject = presence.getProject().orElse(null);
 	}
 	
 	@Override
