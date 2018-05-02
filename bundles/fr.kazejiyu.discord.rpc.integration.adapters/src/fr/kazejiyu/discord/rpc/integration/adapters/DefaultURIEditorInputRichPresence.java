@@ -19,7 +19,9 @@ import org.eclipse.ui.ide.FileStoreEditorInput;
 
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
+import fr.kazejiyu.discord.rpc.integration.languages.Language;
 import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
+import fr.kazejiyu.discord.rpc.integration.settings.UserPreferences;
 
 /**
  * Default implementation of {@link EditorInputRichPresence}.<br>
@@ -65,30 +67,50 @@ public class DefaultURIEditorInputRichPresence implements EditorInputRichPresenc
 			throw new IllegalArgumentException("input must be an instance of " + IURIEditorInput.class);
 		
 		IURIEditorInput uriInput = (IURIEditorInput) input;
+		URI fileURI = uriInput.getURI();
+		File file = new File(fileURI.getPath());
 		
 		RichPresence presence = new RichPresence();
 		
-		presence.withDetails(detailsOf(preferences, uriInput));
-		presence.withState(stateOf(preferences, uriInput));
+		presence.withDetails(detailsOf(preferences, file));
+		presence.withState(stateOf(preferences));
+		presence.withLanguage(languageOf(preferences, file));
+		presence.withLargeImageText(largeImageTextOf(preferences, file));
 		
 		return Optional.of(presence);
 	}
 
-	private String detailsOf(GlobalPreferences preferences, IURIEditorInput input) {
+	private String detailsOf(GlobalPreferences preferences, File file) {
 		if (! preferences.showsFileName())
 			return "";
 		
-		URI inEdition = input.getURI();
-		File editedFile = new File(inEdition.getPath());
-		
-		return "Editing " + editedFile.getName();
+		return "Editing " + file.getName();
 	}
 
-	private String stateOf(GlobalPreferences preferences, IURIEditorInput input) {
+	private String stateOf(GlobalPreferences preferences) {
 		if (! preferences.showsProjectName())
 			return "";
 		
 		return "Unknown project";
+	}
+
+	private Language languageOf(UserPreferences preferences, File file) {
+		if (! preferences.showsFileName())
+			return Language.UNKNOWN;
+		
+		return Language.fromFileExtension(file.getName());
+	}
+
+	private String largeImageTextOf(UserPreferences preferences, File file) {
+		if (! preferences.showsFileName())
+			return "";
+		
+		Language language = Language.fromFileExtension(file.getName());
+		
+		if (language == Language.UNKNOWN)
+			return "";
+		
+		return "Programming in " + language.getName();
 	}
 
 }

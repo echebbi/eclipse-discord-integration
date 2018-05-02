@@ -18,6 +18,8 @@ import com.github.psnrigner.discordrpcjava.DiscordRichPresence;
 import com.github.psnrigner.discordrpcjava.DiscordRpc;
 import com.github.psnrigner.discordrpcjava.ErrorCode;
 
+import fr.kazejiyu.discord.rpc.integration.languages.Language;
+
 /**
  * A proxy able to communicate with Discord.<br>
  * <br>
@@ -67,6 +69,8 @@ public class DiscordRpcProxy {
 		rp.getState().ifPresent(presence::setState);
 		rp.getDetails().ifPresent(presence::setDetails);
 		rp.getStartTimestamp().ifPresent(presence::setStartTimestamp);
+		rp.getLargeImageText().ifPresent(presence::setLargeImageText);
+		rp.getLanguage().map(Language::getKey).ifPresent(presence::setLargeImageKey);
 		
 		rpc.updatePresence(presence);
 		
