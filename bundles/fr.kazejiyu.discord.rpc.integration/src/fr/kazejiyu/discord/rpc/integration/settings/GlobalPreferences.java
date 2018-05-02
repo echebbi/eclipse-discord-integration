@@ -50,7 +50,7 @@ public class GlobalPreferences implements UserPreferences {
 	 */
 	public GlobalPreferences() {
 		this.store = new ScopedPreferenceStore(InstanceScope.INSTANCE, PREFERENCES_STORE_ID);
-		this.listener = new DiscordIntegrationPreferencesListener(listeners);
+		this.listener = new GlobalPreferencesListener(listeners);
 		
 		this.store.addPropertyChangeListener(this.listener);
 	}

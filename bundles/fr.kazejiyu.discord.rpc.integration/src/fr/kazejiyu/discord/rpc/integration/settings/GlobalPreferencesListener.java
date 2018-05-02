@@ -31,13 +31,13 @@ import org.eclipse.jface.util.PropertyChangeEvent;
  * 
  * @author Emmanuel CHEBBI
  */
-public class DiscordIntegrationPreferencesListener implements IPropertyChangeListener {
+public class GlobalPreferencesListener implements IPropertyChangeListener {
 	
 	private final List<SettingChangeListener> listeners;
 	
 	private final Map<String, BiConsumer<PropertyChangeEvent, SettingChangeListener>> events = new HashMap<>();
 
-	public DiscordIntegrationPreferencesListener(List<SettingChangeListener> listeners) {
+	public GlobalPreferencesListener(List<SettingChangeListener> listeners) {
 		this.listeners = listeners;
 		
 		events.put(SHOW_FILE_NAME.property(), (event, listener) -> listener.fileNameVisibilityChanged(Boolean.parseBoolean((String) event.getNewValue())));
