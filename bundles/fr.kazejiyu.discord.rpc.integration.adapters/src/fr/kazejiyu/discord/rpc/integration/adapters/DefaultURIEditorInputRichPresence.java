@@ -98,14 +98,14 @@ public class DefaultURIEditorInputRichPresence implements EditorInputRichPresenc
 		if (! preferences.showsFileName())
 			return Language.UNKNOWN;
 		
-		return Language.fromFileExtension(file.getName());
+		return Language.fromFileName(file.getName());
 	}
 
 	private String largeImageTextOf(UserPreferences preferences, File file) {
 		if (! preferences.showsFileName())
 			return "";
 		
-		Language language = Language.fromFileExtension(file.getName());
+		Language language = Language.fromFileName(file.getName());
 		
 		if (language == Language.UNKNOWN)
 			return "";
