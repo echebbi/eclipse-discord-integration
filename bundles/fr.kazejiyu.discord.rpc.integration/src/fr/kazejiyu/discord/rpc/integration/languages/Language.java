@@ -19,6 +19,8 @@ import java.util.List;
  * Programming languages handled by the plug-in.
  * 
  * @author Emmanuel CHEBBI
+ * 
+ * TODO [Refactor] Consider using an OO architecture to benefit from polymorphism
  */
 public enum Language {
 	

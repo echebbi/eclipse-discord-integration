@@ -9,6 +9,8 @@
 **********************************************************************/
 package fr.kazejiyu.discord.rpc.integration.adapters;
 
+import static fr.kazejiyu.discord.rpc.integration.adapters.LanguageLabel.labelOf;
+
 import java.io.File;
 import java.net.URI;
 import java.util.Optional;
@@ -106,11 +108,7 @@ public class DefaultURIEditorInputRichPresence implements EditorInputRichPresenc
 			return "";
 		
 		Language language = Language.fromFileName(file.getName());
-		
-		if (language == Language.UNKNOWN)
-			return "";
-		
-		return "Programming in " + language.getName();
+		return labelOf(language, file.getName());
 	}
 
 }
