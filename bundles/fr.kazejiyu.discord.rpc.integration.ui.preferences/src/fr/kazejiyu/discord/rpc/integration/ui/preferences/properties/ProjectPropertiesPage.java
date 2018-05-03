@@ -16,6 +16,7 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSE
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_ELAPSED_TIME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_FILE_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_LANGUAGE_ICON;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.USE_PROJECT_SETTINGS;
 
 import org.eclipse.core.resources.IProject;
@@ -50,6 +51,7 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 	private Button showProjectName;
 	private Button showFileName;
 	private Button showElapsedTime;
+	private Button showLanguageIcon;
 	
 	private Button resetOnStartup;
 	private Button resetOnProjectSelection;
@@ -102,6 +104,8 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 			resource.setPersistentProperty(SHOW_PROJECT_NAME.qualifiedName(), "true");
 		if (resource.getPersistentProperty(SHOW_FILE_NAME.qualifiedName()) == null)
 			resource.setPersistentProperty(SHOW_FILE_NAME.qualifiedName(), "true");
+		if (resource.getPersistentProperty(SHOW_LANGUAGE_ICON.qualifiedName()) == null)
+			resource.setPersistentProperty(SHOW_LANGUAGE_ICON.qualifiedName(), "true");
 		if (resource.getPersistentProperty(SHOW_ELAPSED_TIME.qualifiedName()) == null)
 			resource.setPersistentProperty(SHOW_ELAPSED_TIME.qualifiedName(), "true");
 		if (resource.getPersistentProperty(RESET_ELAPSED_TIME.qualifiedName()) == null)
@@ -114,6 +118,7 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 		showProjectName.setSelection(true);
 		showFileName.setSelection(true);
 		showElapsedTime.setSelection(true);
+		showLanguageIcon.setSelection(true);
 		resetOnStartup.setSelection(false);
 		resetOnProjectSelection.setSelection(true);
 		resetOnFileSelection.setSelection(false);
@@ -128,6 +133,7 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 			project.setPersistentProperty(SHOW_PROJECT_NAME.qualifiedName(), showProjectName.getSelection() + "");
 			project.setPersistentProperty(SHOW_FILE_NAME.qualifiedName(), showFileName.getSelection() + "");
 			project.setPersistentProperty(SHOW_ELAPSED_TIME.qualifiedName(), showElapsedTime.getSelection() + "");
+			project.setPersistentProperty(SHOW_LANGUAGE_ICON.qualifiedName(), showLanguageIcon.getSelection() + "");
 			
 			if (resetOnStartup.getSelection())
 				project.setPersistentProperty(RESET_ELAPSED_TIME.qualifiedName(), RESET_ELAPSED_TIME_ON_STARTUP.property());
@@ -140,6 +146,7 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 			preferences.putBoolean(SHOW_PROJECT_NAME.property(), showProjectName.getSelection());
 			preferences.putBoolean(SHOW_FILE_NAME.property(), showFileName.getSelection());
 			preferences.putBoolean(SHOW_ELAPSED_TIME.property(), showElapsedTime.getSelection());
+			preferences.putBoolean(SHOW_LANGUAGE_ICON.property(), showLanguageIcon.getSelection());
 
 			if (resetOnStartup.getSelection())
 				preferences.put(RESET_ELAPSED_TIME.property(), RESET_ELAPSED_TIME_ON_STARTUP.property());
@@ -222,6 +229,14 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 						project.getPersistentProperty(SHOW_ELAPSED_TIME.qualifiedName())
 				)
 		);
+
+		showLanguageIcon = new Button(privacy, SWT.CHECK);
+		showLanguageIcon.setText("Show language icon");
+		showLanguageIcon.setSelection(
+				Boolean.parseBoolean(
+						project.getPersistentProperty(SHOW_LANGUAGE_ICON.qualifiedName())
+				)
+		);
 	}
 	
 	private void addResetElapsedTimeSection(Composite parent) throws CoreException {
@@ -259,6 +274,7 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 				showProjectName.setEnabled(true);
 				showFileName.setEnabled(true);
 				showElapsedTime.setEnabled(true);
+				showLanguageIcon.setEnabled(true);
 				disableResetGroupIfNeeded();
 			}
 			
@@ -277,6 +293,7 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 				showProjectName.setEnabled(false);
 				showFileName.setEnabled(false);
 				showElapsedTime.setEnabled(false);
+				showLanguageIcon.setEnabled(false);
 				resetOnStartup.setEnabled(false);
 				resetOnProjectSelection.setEnabled(false);
 				resetOnFileSelection.setEnabled(false);
@@ -325,6 +342,7 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 			showProjectName.setEnabled(false);
 			showFileName.setEnabled(false);
 			showElapsedTime.setEnabled(false);
+			showLanguageIcon.setEnabled(false);
 			resetOnStartup.setEnabled(false);
 			resetOnProjectSelection.setEnabled(false);
 			resetOnFileSelection.setEnabled(false);

@@ -29,6 +29,7 @@ import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.extensions.DiscordIntegrationExtensions;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
 import fr.kazejiyu.discord.rpc.integration.extensions.impl.UnknownInputRichPresence;
+import fr.kazejiyu.discord.rpc.integration.languages.Language;
 import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
 import fr.kazejiyu.discord.rpc.integration.settings.ProjectPreferences;
 import fr.kazejiyu.discord.rpc.integration.settings.SettingChangeListener;
@@ -116,6 +117,7 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 		
 		Optional<RichPresence> maybePresence = adapter.createRichPresence(preferences, editor.getEditorInput());
 		maybePresence.map(withStartTimeStamp())
+					 .map(withLanguageIcon())
 					 .map(listeningForChangesInProjectPreferences())
 					 .ifPresent(discord::show);
 		
@@ -147,6 +149,18 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 			
 			// last possible case: the time starts on startup
 			return presence.withStartTimestamp(timeOnStartup);
+		};
+	}
+	
+	/** Removes presence's language if the user do not want to show it. */
+	private Function<RichPresence, RichPresence> withLanguageIcon() {
+		return presence -> {
+			UserPreferences prefs = preferences.getApplicablePreferencesFor(presence.getProject().orElse(null));
+			
+			if (! prefs.showsLanguageIcon())
+				return presence.withLanguage(Language.UNKNOWN);
+			
+			return presence;
 		};
 	}
 	

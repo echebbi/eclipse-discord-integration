@@ -39,6 +39,11 @@ class RunOnSettingChange implements SettingChangeListener {
 	public void projectNameVisibilityChanged(boolean isVisible) {
 		updateDiscord.run();
 	}
+	
+	@Override
+	public void languageIconVisibilityChanged(boolean isVisible) {
+		updateDiscord.run();
+	}
 
 	@Override
 	public void elapsedTimeVisibilityChanged(boolean isVisible) {

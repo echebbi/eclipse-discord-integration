@@ -44,6 +44,15 @@ public interface SettingChangeListener {
 	void projectNameVisibilityChanged(boolean isVisible);
 
 	/**
+	 * Called when the user changes language icon's visibility.
+	 * 
+	 * @param isVisible
+	 * 			{@code true} if the user wants to show the language icon,
+	 * 			{@code false} otherwise.
+	 */
+	void languageIconVisibilityChanged(boolean isVisible);
+
+	/**
 	 * Called when the user changes elapsed time's visibility.
 	 * 
 	 * @param isVisible

@@ -37,6 +37,8 @@ public enum Settings {
 	
 	RESET_ELAPSED_TIME_ON_NEW_FILE("RESET_ELAPSED_TIME_ON_NEW_FILE"),
 	
+	SHOW_LANGUAGE_ICON("SHOW_LANGUAGE_ICON"),
+	
 	USE_PROJECT_SETTINGS("USE_PROJECT_SETTINGS");
 	
 	/** A key identifying the setting */

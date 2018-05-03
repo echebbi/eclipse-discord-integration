@@ -15,6 +15,7 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSE
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_STARTUP;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_ELAPSED_TIME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_FILE_NAME;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_LANGUAGE_ICON;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.USE_PROJECT_SETTINGS;
 import static java.util.Objects.requireNonNull;
@@ -80,6 +81,11 @@ public class ProjectPreferences implements UserPreferences {
 	@Override
 	public boolean showsElapsedTime() {
 		return preferences.getBoolean(SHOW_ELAPSED_TIME.property(), true);
+	}
+	
+	@Override
+	public boolean showsLanguageIcon() {
+		return preferences.getBoolean(SHOW_LANGUAGE_ICON.property(), true);
 	}
 	
 	@Override
