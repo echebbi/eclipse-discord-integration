@@ -14,6 +14,7 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSE
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_ELAPSED_TIME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_FILE_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_LANGUAGE_ICON;
 
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.IWorkbench;
@@ -58,6 +59,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 		getPreferenceStore().setDefault(SHOW_FILE_NAME.property(), true);
 		getPreferenceStore().setDefault(SHOW_PROJECT_NAME.property(), true);
 		getPreferenceStore().setDefault(SHOW_ELAPSED_TIME.property(), true);
+		getPreferenceStore().setDefault(SHOW_LANGUAGE_ICON.property(), true);
 		getPreferenceStore().setDefault(RESET_ELAPSED_TIME.property(), RESET_ELAPSED_TIME_ON_NEW_PROJECT.property());
 	}
 	

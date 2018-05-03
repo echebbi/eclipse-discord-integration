@@ -12,6 +12,7 @@ package fr.kazejiyu.discord.rpc.integration.ui.preferences;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_ELAPSED_TIME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_FILE_NAME;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_LANGUAGE_ICON;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -44,10 +45,12 @@ public class DiscordIntegrationPreferencesPage extends FieldEditorPreferencePage
         BooleanFieldEditor showFileName = new BooleanFieldEditor(SHOW_FILE_NAME.property(), "Show &file name", group.getFieldEditorParent());
         BooleanFieldEditor showProjectName = new BooleanFieldEditor(SHOW_PROJECT_NAME.property(), "Show &project name", group.getFieldEditorParent());
         BooleanFieldEditor showElapsedTime = new BooleanFieldEditor(SHOW_ELAPSED_TIME.property(), "Show &elapsed time", group.getFieldEditorParent());
+        BooleanFieldEditor showLanguageIcon = new BooleanFieldEditor(SHOW_LANGUAGE_ICON.property(), "Show &language icon", group.getFieldEditorParent());
         
         group.addFieldEditor(showFileName);
         group.addFieldEditor(showProjectName);
         group.addFieldEditor(showElapsedTime);
+        group.addFieldEditor(showLanguageIcon);
         
         addField(group);
         

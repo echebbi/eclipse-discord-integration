@@ -23,6 +23,7 @@ public class DiscordIntegrationPreferencesInitializer extends AbstractPreference
         store.setDefault(SHOW_FILE_NAME.property(), true);
         store.setDefault(SHOW_PROJECT_NAME.property(), true);
         store.setDefault(SHOW_ELAPSED_TIME.property(), true);
+        store.setDefault(SHOW_LANGUAGE_ICON.property(), true);
         store.setDefault(RESET_ELAPSED_TIME.property(), RESET_ELAPSED_TIME_ON_NEW_PROJECT.property());
 	}
 

@@ -25,6 +25,9 @@ public interface UserPreferences {
 	/** @return whether the time elapsed should be shown in Discord */
 	boolean showsElapsedTime();
 	
+	/** @return whether the programming language's icon should be shown in Discord */
+	boolean showsLanguageIcon();
+	
 	/** @return whether the name of the current project should be shown in Discord */
 	boolean resetsElapsedTimeOnStartup();
 	
