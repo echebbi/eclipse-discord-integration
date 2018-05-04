@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/fr.kazejiyu.discord.rpc.integration.feature_1.0.0.qualifier.jar" id="fr.kazejiyu.discord.rpc.integration.feature" version="1.0.0.qualifier">
+      <category name="fr.kazejiyu.discord.rpc.integration"/>
+   </feature>
+   <feature url="features/fr.kazejiyu.discord.rpc.integration.ui.feature_1.0.0.qualifier.jar" id="fr.kazejiyu.discord.rpc.integration.ui.feature" version="1.0.0.qualifier">
+      <category name="fr.kazejiyu.discord.rpc.integration"/>
+   </feature>
+   <category-def name="fr.kazejiyu.discord.rpc.integration" label="Discord Rich Presence Integration">
+      <description>
+         Plug-ins integrating Discord Rich Presence within Eclipse IDE.
+      </description>
+   </category-def>
+</site>
