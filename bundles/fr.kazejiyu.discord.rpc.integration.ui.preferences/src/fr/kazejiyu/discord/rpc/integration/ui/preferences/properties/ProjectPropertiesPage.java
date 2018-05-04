@@ -39,6 +39,12 @@ import org.eclipse.ui.IWorkbenchPropertyPage;
 import org.eclipse.ui.dialogs.PropertyPage;
 import org.osgi.service.prefs.BackingStoreException;
 
+/**
+ * TODO [Refactor] Since we use IEclipsePreferences to share project properties,
+ * 				   is using Resource.*PersistentProperties method really useful ?
+ * 
+ * @author Emmanuel CHEBBI
+ */
 public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPropertyPage {
 	
 	private IProject project;
@@ -124,6 +130,8 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 		resetOnFileSelection.setSelection(false);
 		useWorkspaceSettings.setSelection(true);
 		useProjectSettings.setSelection(false);
+		
+		disableUselessFields();
 	}
 	
 	@Override
