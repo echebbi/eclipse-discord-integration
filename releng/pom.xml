@@ -12,5 +12,6 @@
     
 	<modules>
         <module>fr.kazejiyu.discord.rpc.integration.target</module>
+        <module>fr.kazejiyu.discord.rpc.integration.p2</module>
 	</modules>
 </project>
