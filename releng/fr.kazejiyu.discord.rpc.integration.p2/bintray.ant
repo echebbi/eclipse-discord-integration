@@ -13,7 +13,14 @@
 	-->
 
 	<property name="bintray.url" value="https://dl.bintray.com/${bintray.owner}/${bintray.repo}" />
-	<property name="bintray.package.version" value="${unqualifiedVersion}.${buildQualifier}" />
+	<condition property="bintray.package.version" value="${unqualifiedVersion}" else="${unqualifiedVersion}.${buildQualifier}">
+		<or>
+			<not>
+				<isset property="buildQualifier"/>
+			</not>
+			<equals arg1="" arg2="${buildQualifier}"/>
+		</or>
+	</condition>
 	<property name="bintray.releases.target.path" value="${bintray.releases.path}/${bintray.package.version}" />
 
 	<property name="main.composite.url" value="${bintray.url}/${bintray.composite.path}" />
@@ -120,7 +127,7 @@
 	</target>
 
 	<target name="push-p2-repo-zipped-to-bintray">
-		<apply executable="curl" parallel="false" relative="true" addsourcefile="false">
+		<apply executable="curl" parallel="false" relative="true" addsourcefile="false" forwardslash="true">
 			<arg value="-XPUT" />
 			<targetfile />
 
@@ -136,7 +143,7 @@
 	</target>
 
 	<target name="push-composite-to-bintray" depends="getMajorMinorVersion" >
-		<apply executable="curl" parallel="false" relative="true" addsourcefile="false">
+		<apply executable="curl" parallel="false" relative="true" addsourcefile="false" forwardslash="true">
 			<arg value="-XPUT" />
 			<targetfile />
 
@@ -152,7 +159,7 @@
 	</target>
 
 	<target name="push-main-composite-to-bintray" >
-		<apply executable="curl" parallel="false" relative="true" addsourcefile="false">
+		<apply executable="curl" parallel="false" relative="true" addsourcefile="false" forwardslash="true">
 			<arg value="-XPUT" />
 			<targetfile />
 

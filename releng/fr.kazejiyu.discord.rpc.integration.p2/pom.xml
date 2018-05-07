@@ -34,7 +34,7 @@
     
     <profiles>
 		<profile>
-			<!-- Activate this profile to perform the release to Bintray -->
+			<!-- Activate this profile to release a legacy version (x.y.z) to Bintray -->
 			<id>release-composite</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
