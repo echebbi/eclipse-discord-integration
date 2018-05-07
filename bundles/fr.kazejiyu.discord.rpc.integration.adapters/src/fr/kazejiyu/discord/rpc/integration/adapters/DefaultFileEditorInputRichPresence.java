@@ -94,14 +94,14 @@ public class DefaultFileEditorInputRichPresence implements EditorInputRichPresen
 	}
 
 	private Language languageOf(UserPreferences preferences, IFile file) {
-		if (! preferences.showsFileName())
+		if (! preferences.showsLanguageIcon())
 			return Language.UNKNOWN;
 		
 		return Language.fromFileName(file.getName());
 	}
 
 	private String largeImageTextOf(UserPreferences preferences, IFile file) {
-		if (! preferences.showsFileName())
+		if (! preferences.showsLanguageIcon())
 			return "";
 		
 		Language language = Language.fromFileName(file.getName());

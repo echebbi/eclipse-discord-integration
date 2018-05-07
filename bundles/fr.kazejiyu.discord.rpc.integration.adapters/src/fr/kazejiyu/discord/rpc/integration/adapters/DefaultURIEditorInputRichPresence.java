@@ -97,14 +97,14 @@ public class DefaultURIEditorInputRichPresence implements EditorInputRichPresenc
 	}
 
 	private Language languageOf(UserPreferences preferences, File file) {
-		if (! preferences.showsFileName())
+		if (! preferences.showsLanguageIcon())
 			return Language.UNKNOWN;
 		
 		return Language.fromFileName(file.getName());
 	}
 
 	private String largeImageTextOf(UserPreferences preferences, File file) {
-		if (! preferences.showsFileName())
+		if (! preferences.showsLanguageIcon())
 			return "";
 		
 		Language language = Language.fromFileName(file.getName());
