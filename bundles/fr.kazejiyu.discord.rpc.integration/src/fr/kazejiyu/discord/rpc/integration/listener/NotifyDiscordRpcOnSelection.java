@@ -53,7 +53,7 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 	private ProjectPreferences lastSelectedProjectPreferences = null;
 	private SettingChangeListener lastSelectedProjectListener = null;
 	
-	private long timeOnNewProject = 0;
+	private long timeOnNewProject = System.currentTimeMillis() / 1000;
 	
 	private final long timeOnStartup = System.currentTimeMillis() / 1000;
 	
