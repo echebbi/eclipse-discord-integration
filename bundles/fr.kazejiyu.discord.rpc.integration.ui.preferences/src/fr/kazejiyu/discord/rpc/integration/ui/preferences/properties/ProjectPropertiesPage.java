@@ -105,7 +105,7 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 
 	private void setMissingPropertiesToDefault(IResource resource) throws CoreException {
 		if (resource.getPersistentProperty(USE_PROJECT_SETTINGS.qualifiedName()) == null)
-			resource.setPersistentProperty(USE_PROJECT_SETTINGS.qualifiedName(), "true");
+			resource.setPersistentProperty(USE_PROJECT_SETTINGS.qualifiedName(), "false");
 		if (resource.getPersistentProperty(SHOW_PROJECT_NAME.qualifiedName()) == null)
 			resource.setPersistentProperty(SHOW_PROJECT_NAME.qualifiedName(), "true");
 		if (resource.getPersistentProperty(SHOW_FILE_NAME.qualifiedName()) == null)

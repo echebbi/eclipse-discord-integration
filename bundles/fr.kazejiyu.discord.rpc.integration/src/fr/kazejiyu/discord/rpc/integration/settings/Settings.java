@@ -19,6 +19,8 @@ import fr.kazejiyu.discord.rpc.integration.Activator;
 /**
  * Constants used to idendify the different available settings.
  * 
+ * TODO [Refactor] Add a field specifying setting's default value
+ * 
  * @author Emmanuel CHEBBI
  */
 public enum Settings {
