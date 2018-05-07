@@ -65,7 +65,7 @@ public class ProjectPreferences implements UserPreferences {
 	
 	/** @return whether the project should use global or project preferences */
 	public boolean useProjectSettings() {
-		return preferences.getBoolean(USE_PROJECT_SETTINGS.property(), true);
+		return preferences.getBoolean(USE_PROJECT_SETTINGS.property(), false);
 	}
 	
 	@Override
