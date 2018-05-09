@@ -29,3 +29,8 @@ If Discord is not showing anything, ensure that Eclipse IDE is detected as a gam
 ## Work in Progress
 
 **Disclaimer**: The work is still in progress and the plug-in is not available yet. The code will also be refactored and the API is likely to change.
+
+## Thanks
+
+- [PSNRigner](https://github.com/PSNRigner) for [its Java implementation](https://github.com/PSNRigner/discord-rpc-java) of Discord RPC.
+- [Lorenzo Bettini](https://github.com/LorenzoBettini) for his explanations on [how to publish a p2 composite repository on Bintray](http://www.lorenzobettini.it/2016/02/publish-an-eclipse-p2-composite-repository-on-bintray/).
