@@ -20,7 +20,7 @@ The plug-in can be installed from the following update site:
 
 To use it from Eclipse IDE, click on `Help` > `Install new software...` and then paste the above URL.
 
-**Note**: version 0.y.z should be considered as beta. The 1.0.0 release will be deployed will be deployed once the plug-in is proved stable.
+**Note**: version 0.y.z should be considered as beta. The 1.0.0 release will be deployed once the plug-in is proved stable.
 
 ## Troubleshooting
 
