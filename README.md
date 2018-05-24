@@ -22,9 +22,23 @@ To use it from Eclipse IDE, click on `Help` > `Install new software...` and then
 
 **Note**: version 0.y.z should be considered as beta. The 1.0.0 release will be deployed once the plug-in is proved stable.
 
+## Supported OS
+
+ - [x] Windows
+ - [x] Linux
+ - [ ] macOS
+ 
+ The [library currently used to send Discord RPC information](https://github.com/PSNRigner/discord-rpc-java) does not support macOS yet. I am working on a workaround.
+
 ## Troubleshooting
 
+### Discord does not detect Eclipse IDE as a game
+
 If Discord is not showing anything, ensure that Eclipse IDE is detected as a game. To this end, open Discord `User Settings` then go the `Games` tab. Click on the `Add it!` button and then select Eclipse IDE.
+
+### Discord takes some time to update
+
+Discord is updated each time the current selection in Eclipse IDE changes. However, Discord can take up to 15s to update. Unfortunaly, this setting is server-side: Discord limits how fast the Rich Presence can be updated, and we have no way to change this.
 
 ## Work in Progress
 
