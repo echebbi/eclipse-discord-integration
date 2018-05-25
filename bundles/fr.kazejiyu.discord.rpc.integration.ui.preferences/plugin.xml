@@ -21,11 +21,11 @@
             class="fr.kazejiyu.discord.rpc.integration.ui.preferences.properties.ProjectPropertiesPage"
             id="fr.kazejiyu.discord.rpc.integration.ui.preferences.properties.projectPropertiesPage"
             name="Discord Rich Presence"
-            nameFilter="*">
+            selectionFilter="single">
          <enabledWhen>
-            <instanceof
-                  value="org.eclipse.core.resources.IProject">
-            </instanceof>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+            </adapt>
          </enabledWhen>
       </page>
    </extension>

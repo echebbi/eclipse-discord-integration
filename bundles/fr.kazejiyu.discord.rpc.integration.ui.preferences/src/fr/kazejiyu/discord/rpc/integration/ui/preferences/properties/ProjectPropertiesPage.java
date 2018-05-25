@@ -15,14 +15,15 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSE
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_STARTUP;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_ELAPSED_TIME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_FILE_NAME;
-import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_LANGUAGE_ICON;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.USE_PROJECT_SETTINGS;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.swt.SWT;
@@ -65,10 +66,9 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 	
 	@Override
 	protected Control createContents(Composite parent) {
-		if (!(getElement() instanceof IProject))
+		if (! resolveCurrentProject())
 			return new Composite(parent, SWT.NONE);
 		
-		project = (IProject) getElement();
 		IScopeContext context = new ProjectScope(project);
 		preferences = context.getNode("fr.kazejiyu.discord.rpc.integration");
 		
@@ -101,6 +101,22 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 		} catch (CoreException e) { /* Should never happen */ }
 		
 		return composite;
+	}
+	
+	/**
+	 * Sets {@link #project} to the value of the current project.
+	 * 
+	 * @return {@code true} if the current project has been resolved successfully,
+	 * 		   {@code false} otherwise.
+	 */
+	private boolean resolveCurrentProject() {
+		final IAdaptable adaptable = getElement();
+		
+		if (adaptable == null)
+			return false;
+		
+		project = adaptable.getAdapter(IProject.class);
+		return project != null;
 	}
 
 	private void setMissingPropertiesToDefault(IResource resource) throws CoreException {
