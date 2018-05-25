@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>fr.kazejiyu.discord.rpc.integration</groupId>
 		<artifactId>fr.kazejiyu.discord.rpc.integration.releng</artifactId>
-		<version>0.8.0</version>
+		<version>0.8.1</version>
 	</parent>
 
 	<artifactId>fr.kazejiyu.discord.rpc.integration.p2</artifactId>

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
     <groupId>fr.kazejiyu.discord.rpc.integration</groupId>
 	<artifactId>fr.kazejiyu.discord.rpc.integration.configuration</artifactId>
-    <version>0.8.0</version>
+    <version>0.8.1</version>
 	<packaging>pom</packaging>
 
 	<properties>
@@ -38,7 +38,7 @@
                         <artifact>
                             <groupId>fr.kazejiyu.discord.rpc.integration</groupId>
                             <artifactId>fr.kazejiyu.discord.rpc.integration.target</artifactId>
-                            <version>0.8.0</version>
+                            <version>0.8.1</version>
                         </artifact>
                     </target>
 					<environments>
