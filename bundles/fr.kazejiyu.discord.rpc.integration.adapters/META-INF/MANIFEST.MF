@@ -9,3 +9,4 @@ Require-Bundle: fr.kazejiyu.discord.rpc.integration,
  org.eclipse.ui.workbench,
  org.eclipse.ui.ide;bundle-version="3.13.1",
  org.eclipse.core.resources
+Bundle-Vendor: Emmanuel CHEBBI

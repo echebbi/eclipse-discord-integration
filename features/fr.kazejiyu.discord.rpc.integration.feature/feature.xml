@@ -332,6 +332,10 @@ look for such a notice.
 You may add additional accurate notices of copyright ownership.
    </license>
 
+   <url>
+      <update label="Discord Rich Presence for Eclipse IDE All Versions" url="https://dl.bintray.com/kazejiyu/eclipse-discord-integration/updates/"/>
+   </url>
+
    <requires>
       <import plugin="org.eclipse.ui.workbench"/>
       <import plugin="org.eclipse.ui.ide" version="3.13.1" match="greaterOrEqual"/>

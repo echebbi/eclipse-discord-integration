@@ -11,3 +11,4 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: fr.kazejiyu.discord.rpc.integration.ui.preferences
 Bundle-ActivationPolicy: lazy
+Bundle-Vendor: Emmanuel CHEBBI

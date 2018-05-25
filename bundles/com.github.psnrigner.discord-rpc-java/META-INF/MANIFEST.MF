@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Discord-rpc-java
+Bundle-Name: discord-rpc-java
 Bundle-SymbolicName: com.github.psnrigner.discord-rpc-java
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.5
 Bundle-ClassPath: discord-rpc-java-1.0.4.jar,
  discord-rpc-java-1.0.4-sources.jar,
  discord-rpc-java-1.0.4-javadoc.jar
@@ -90,3 +90,4 @@ Export-Package: com.github.psnrigner.discordrpcjava,
  org.objectweb.asm.util
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: com.github.psnrigner.discord-rpc-java
+Bundle-Vendor: PSNRigner
