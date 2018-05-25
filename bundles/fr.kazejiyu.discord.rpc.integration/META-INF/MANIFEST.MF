@@ -16,3 +16,4 @@ Export-Package: fr.kazejiyu.discord.rpc.integration.core,
  fr.kazejiyu.discord.rpc.integration.languages,
  fr.kazejiyu.discord.rpc.integration.settings
 Automatic-Module-Name: fr.kazejiyu.discord.rpc.integration
+Bundle-Vendor: Emmanuel CHEBBI

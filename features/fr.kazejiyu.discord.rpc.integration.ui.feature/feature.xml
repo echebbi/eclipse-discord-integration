@@ -2,7 +2,8 @@
 <feature
       id="fr.kazejiyu.discord.rpc.integration.ui.feature"
       label="Discord Rich Presence UI"
-      version="0.8.0">
+      version="0.8.0"
+      provider-name="Emmanuel CHEBBI">
 
    <description url="https://github.com/KazeJiyu/eclipse-discord-integration">
       Adds pages to Eclipse Preferences to customize the information shown in Discord.
@@ -328,6 +329,10 @@ to
 look for such a notice.
 You may add additional accurate notices of copyright ownership.
    </license>
+
+   <url>
+      <update label="Discord Rich Presence for Eclipse IDE All Versions" url="https://dl.bintray.com/kazejiyu/eclipse-discord-integration/updates/"/>
+   </url>
 
    <requires>
       <import plugin="org.eclipse.ui"/>
