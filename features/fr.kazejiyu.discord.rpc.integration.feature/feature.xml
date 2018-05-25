@@ -2,7 +2,7 @@
 <feature
       id="fr.kazejiyu.discord.rpc.integration.feature"
       label="Discord Rich Presence"
-      version="0.8.0"
+      version="0.8.1"
       provider-name="Emmanuel CHEBBI">
 
    <description url="https://github.com/KazeJiyu/eclipse-discord-integration">
