@@ -337,34 +337,34 @@ You may add additional accurate notices of copyright ownership.
    </url>
 
    <requires>
-      <import plugin="org.eclipse.ui.workbench"/>
-      <import plugin="org.eclipse.ui.ide" version="3.13.1" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="com.github.psnrigner.discord-rpc-java" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ui.editors" version="3.11.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.core.resources" version="3.12.0" match="greaterOrEqual"/>
+      <import plugin="fr.kazejiyu.discord.rpc.integration" version="0.8.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.workbench" version="3.107.0" match="compatible"/>
+      <import plugin="org.eclipse.ui.ide" version="3.11.0" match="compatible"/>
+      <import plugin="org.eclipse.core.resources" version="3.10.0" match="compatible"/>
+      <import plugin="org.eclipse.ui" version="3.107.0" match="compatible"/>
+      <import plugin="org.eclipse.core.runtime" version="3.11.0" match="compatible"/>
+      <import plugin="com.github.psnrigner.discord-rpc-java" version="1.0.5" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.editors" version="3.9.0" match="compatible"/>
    </requires>
 
    <plugin
          id="fr.kazejiyu.discord.rpc.integration.adapters"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="0.8.1"
          unpack="false"/>
 
    <plugin
          id="com.github.psnrigner.discord-rpc-java"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="1.0.5"/>
 
    <plugin
          id="fr.kazejiyu.discord.rpc.integration"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="0.8.1"
          unpack="false"/>
 
 </feature>
