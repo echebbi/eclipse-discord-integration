@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Eclipse Discord Integration
+Bundle-Name: Discord Rich Presence for Eclipse IDE
 Bundle-SymbolicName: fr.kazejiyu.discord.rpc.integration;singleton:=true
 Bundle-Version: 0.8.2
 Bundle-Activator: fr.kazejiyu.discord.rpc.integration.Activator

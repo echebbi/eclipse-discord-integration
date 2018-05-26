@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Discord Integration Default Adapters
+Bundle-Name: Discord Rich Presence for Eclipse IDE — Default Adapters
 Bundle-SymbolicName: fr.kazejiyu.discord.rpc.integration.adapters;singleton:=true
 Bundle-Version: 0.8.2
 Automatic-Module-Name: fr.kazejiyu.discord.rpc.integration.adapters
