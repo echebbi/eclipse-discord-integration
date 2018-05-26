@@ -2,7 +2,7 @@
 <feature
       id="fr.kazejiyu.discord.rpc.integration.ui.feature"
       label="Discord Rich Presence UI"
-      version="0.8.1"
+      version="0.8.2"
       provider-name="Emmanuel CHEBBI">
 
    <description url="https://github.com/KazeJiyu/eclipse-discord-integration">
@@ -345,7 +345,7 @@ You may add additional accurate notices of copyright ownership.
          id="fr.kazejiyu.discord.rpc.integration.ui.preferences"
          download-size="0"
          install-size="0"
-         version="0.8.1"
+         version="0.8.2"
          unpack="false"/>
 
 </feature>
