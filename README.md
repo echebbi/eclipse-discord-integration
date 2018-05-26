@@ -48,7 +48,7 @@ Currently, there is no option to prevent this once the plug-in is started. Howev
 
 1. Open Eclipse Preferences (`Help` > `Preferences`)
 2. Open the _Startup and Shutdown_ page (`Window` > `Startup and Shutdown`)
-3. Uncheck _Eclipse Discord Integration_
+3. Uncheck _Discord Rich Presence for Eclipse IDE_
 4. Reboot Eclipse IDE
 
 From that time on, Discord won't be notified anymore by Eclipse IDE. In order to re-activate Rich Presence, follow the steps above and check _Eclipse Discord Integration_ again.
