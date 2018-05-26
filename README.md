@@ -61,3 +61,4 @@ From that time on, Discord won't be notified anymore by Eclipse IDE. In order to
 
 - [PSNRigner](https://github.com/PSNRigner) for [its Java implementation](https://github.com/PSNRigner/discord-rpc-java) of Discord RPC.
 - [Lorenzo Bettini](https://github.com/LorenzoBettini) for his explanations on [how to publish a p2 composite repository on Bintray](http://www.lorenzobettini.it/2016/02/publish-an-eclipse-p2-composite-repository-on-bintray/).
+ - [HelloWorld017](https://github.com/HelloWorld017/) for [his adaptation](https://github.com/HelloWorld017/fileicons-render) of [programming language icons](https://github.com/file-icons/atom). These icons are displayed on Discord according to the programming language of the current file.
