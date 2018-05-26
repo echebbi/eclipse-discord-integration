@@ -40,9 +40,22 @@ If Discord is not showing anything, ensure that Eclipse IDE is detected as a gam
 
 Discord is updated each time the current selection in Eclipse IDE changes. However, Discord can take up to 15s to update. Unfortunaly, this setting is server-side: Discord limits how fast the Rich Presence can be updated, and we have no way to change this.
 
+## Deactivate Discord Rich Presence
+
+Once the plug-in is installed, Discord Rich Presence is automatically started on Eclipse startup. As a result, Discord displays **Playing Eclipse IDE** as a status message as soon as Eclipse is opened. This behavior may not be desirable.
+
+Currently, there is no option to prevent this once the plug-in is started. However, it is possible to deactivate it: this way, the plug-in won't be launched at Eclipse startup. To this end:
+
+1. Open Eclipse Preferences (`Help` > `Preferences`)
+2. Open the _Startup and Shutdown_ page (`Window` > `Startup and Shutdown`)
+3. Uncheck _Eclipse Discord Integration_
+4. Reboot Eclipse IDE
+
+From that time on, Discord won't be notified anymore by Eclipse IDE. In order to re-activate Rich Presence, follow the steps above and check _Eclipse Discord Integration_ again.
+
 ## Work in Progress
 
-**Disclaimer**: The work is still in progress and the plug-in is not available yet. The code will also be refactored and the API is likely to change.
+**Disclaimer**: The work is still in progress. The code will also be refactored and the API is likely to change.
 
 ## Thanks
 
