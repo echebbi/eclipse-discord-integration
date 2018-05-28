@@ -9,6 +9,7 @@
 **********************************************************************/
 package fr.kazejiyu.discord.rpc.integration.ui.preferences.properties;
 
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.PROJECT_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_FILE;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_PROJECT;
@@ -36,6 +37,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPropertyPage;
 import org.eclipse.ui.dialogs.PropertyPage;
 import org.osgi.service.prefs.BackingStoreException;
@@ -63,6 +65,9 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 	private Button resetOnStartup;
 	private Button resetOnProjectSelection;
 	private Button resetOnFileSelection;
+	
+	private Text projectName;
+	private Label projectNameLabel;
 	
 	@Override
 	protected Control createContents(Composite parent) {
@@ -132,11 +137,14 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 			resource.setPersistentProperty(SHOW_ELAPSED_TIME.qualifiedName(), "true");
 		if (resource.getPersistentProperty(RESET_ELAPSED_TIME.qualifiedName()) == null)
 			resource.setPersistentProperty(RESET_ELAPSED_TIME.qualifiedName(), RESET_ELAPSED_TIME_ON_NEW_PROJECT.property());
+		if (resource.getPersistentProperty(PROJECT_NAME.qualifiedName()) == null)
+			resource.setPersistentProperty(PROJECT_NAME.qualifiedName(), "");
 	}
 	
 	@Override
 	public void performDefaults() {
 		super.performDefaults();
+		projectName.setText("");
 		showProjectName.setSelection(true);
 		showFileName.setSelection(true);
 		showElapsedTime.setSelection(true);
@@ -153,6 +161,7 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 	@Override
 	public boolean performOk() {
 		try {
+			project.setPersistentProperty(PROJECT_NAME.qualifiedName(), projectName.getText());
 			project.setPersistentProperty(USE_PROJECT_SETTINGS.qualifiedName(), useProjectSettings.getSelection() + "");
 			project.setPersistentProperty(SHOW_PROJECT_NAME.qualifiedName(), showProjectName.getSelection() + "");
 			project.setPersistentProperty(SHOW_FILE_NAME.qualifiedName(), showFileName.getSelection() + "");
@@ -166,6 +175,7 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 			if (resetOnFileSelection.getSelection())
 				project.setPersistentProperty(RESET_ELAPSED_TIME.qualifiedName(), RESET_ELAPSED_TIME_ON_NEW_FILE.property());
 
+			preferences.put(PROJECT_NAME.property(), projectName.getText());
 			preferences.putBoolean(USE_PROJECT_SETTINGS.property(), useProjectSettings.getSelection());
 			preferences.putBoolean(SHOW_PROJECT_NAME.property(), showProjectName.getSelection());
 			preferences.putBoolean(SHOW_FILE_NAME.property(), showFileName.getSelection());
@@ -223,12 +233,31 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 	}
 
 	private void addPrivacySection(Composite parent) throws CoreException {
+		
+		// PROJECT NAME
+		
+		Group projectNameGroup = new Group(parent, SWT.NULL);
+		projectNameGroup.setText("Display");
+		GridLayout gridLayout = new GridLayout(2, false);
+		projectNameGroup.setLayout(gridLayout);
+		projectNameGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		projectNameLabel = new Label(projectNameGroup, SWT.NULL);
+		projectNameLabel.setText("Name displayed for project: ");
+		
+		projectName = new Text(projectNameGroup, SWT.SINGLE | SWT.BORDER);
+		projectName.setText(project.getPersistentProperty(PROJECT_NAME.qualifiedName()));
+		GridData projectNameData = new GridData();
+		projectNameData.grabExcessHorizontalSpace = true;
+		projectNameData.horizontalAlignment = SWT.FILL;
+		projectName.setLayoutData(projectNameData);
+		
+		// PRIVACY GROUP
+		
 		Group privacy = new Group(parent, SWT.NONE);
 		privacy.setText("Privacy");
-		GridLayout gridLayout = new GridLayout();
-		gridLayout.numColumns = 1;
-		privacy.setLayout(gridLayout);
-		privacy.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		privacy.setLayout(new GridLayout());
+		privacy.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	
 
 		showProjectName = new Button(privacy, SWT.CHECK);
 		showProjectName.setText("Show project name");

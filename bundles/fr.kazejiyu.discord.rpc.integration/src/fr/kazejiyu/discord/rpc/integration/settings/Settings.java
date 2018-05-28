@@ -41,7 +41,9 @@ public enum Settings {
 	
 	SHOW_LANGUAGE_ICON("SHOW_LANGUAGE_ICON"),
 	
-	USE_PROJECT_SETTINGS("USE_PROJECT_SETTINGS");
+	USE_PROJECT_SETTINGS("USE_PROJECT_SETTINGS"),
+	
+	PROJECT_NAME("PROJECT_NAME");
 	
 	/** A key identifying the setting */
 	private final String property;
