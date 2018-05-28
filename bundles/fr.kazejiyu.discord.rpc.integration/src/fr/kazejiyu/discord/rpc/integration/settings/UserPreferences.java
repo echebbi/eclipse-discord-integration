@@ -9,6 +9,8 @@
 **********************************************************************/
 package fr.kazejiyu.discord.rpc.integration.settings;
 
+import java.util.Optional;
+
 /**
  * User preferences regarding the way information are shown in Discord.
  * 
@@ -36,5 +38,8 @@ public interface UserPreferences {
 	
 	/** @return whether the name of the current project should be shown in Discord */
 	boolean resetsElapsedTimeOnNewFile();
+	
+	/** @return the name of a given project, if the user specified one */
+	Optional<String> getProjectName();
 
 }
