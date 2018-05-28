@@ -71,4 +71,14 @@ public interface SettingChangeListener {
 	 */
 	void elapsedTimeResetMomentChanged(Moment oldMoment, Moment newMoment);
 	
+	/**
+	 * Called when the user choose to display a new name for a given project.
+	 * 
+	 * @param oldName
+	 * 			The previous name. May be {@code null} or empty.
+	 * @param newName
+	 * 			The new name to display
+	 */
+	void projectNameChanged(String oldName, String newName);
+	
 }

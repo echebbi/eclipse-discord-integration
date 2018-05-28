@@ -9,6 +9,7 @@
 **********************************************************************/
 package fr.kazejiyu.discord.rpc.integration.settings;
 
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.PROJECT_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_FILE;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_PROJECT;
@@ -22,6 +23,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
@@ -101,6 +103,16 @@ public class ProjectPreferences implements UserPreferences {
 	@Override
 	public boolean resetsElapsedTimeOnNewFile() {
 		return preferences.get(RESET_ELAPSED_TIME.property(), RESET_ELAPSED_TIME_ON_NEW_PROJECT.property()).equals(RESET_ELAPSED_TIME_ON_NEW_FILE.property());
+	}
+	
+	@Override
+	public Optional<String> getProjectName() {
+		String name = preferences.get(PROJECT_NAME.property(), "");
+		
+		if (name == null || name.trim().isEmpty())
+			return Optional.empty();
+		
+		return Optional.of(name);
 	}
 
 	/**

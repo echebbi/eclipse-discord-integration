@@ -54,5 +54,10 @@ class RunOnSettingChange implements SettingChangeListener {
 	public void elapsedTimeResetMomentChanged(Moment oldMoment, Moment newMoment) {
 		updateDiscord.run();
 	}
+	
+	@Override
+	public void projectNameChanged(String oldName, String newName) {
+		updateDiscord.run();
+	}
 
 }

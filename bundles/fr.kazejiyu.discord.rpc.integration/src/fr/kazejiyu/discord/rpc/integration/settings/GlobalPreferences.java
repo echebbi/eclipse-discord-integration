@@ -15,12 +15,13 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSE
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_STARTUP;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_ELAPSED_TIME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_FILE_NAME;
-import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_LANGUAGE_ICON;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
 import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -91,6 +92,11 @@ public class GlobalPreferences implements UserPreferences {
 		return store.getString(RESET_ELAPSED_TIME.property()).equals(RESET_ELAPSED_TIME_ON_NEW_FILE.property());
 	}
 	
+	@Override
+	public Optional<String> getProjectName() {
+		return Optional.empty();
+	}
+	
 	/**
 	 * Returns the user preferences that should be applied for {@code project}.<br>
 	 * <br>
@@ -106,10 +112,19 @@ public class GlobalPreferences implements UserPreferences {
 	 */
 	public UserPreferences getApplicablePreferencesFor(IProject project) {
 		try {
-			ProjectPreferences projectPreferences = new ProjectPreferences(project);
+			final ProjectPreferences projectPreferences = new ProjectPreferences(project);
 			
 			if (projectPreferences.useProjectSettings())
 				return projectPreferences;
+			
+			// TODO [Refactor] Create a dedicated class ?
+			return new GlobalPreferences() {
+				
+				@Override
+				public Optional<String> getProjectName() {
+					return projectPreferences.getProjectName();
+				}
+			};
 		
 		} catch (IllegalArgumentException e) {
 			// The project is not valid, return default preferences
