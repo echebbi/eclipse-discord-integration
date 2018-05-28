@@ -90,7 +90,10 @@ public class DefaultFileEditorInputRichPresence implements EditorInputRichPresen
 		if (! preferences.showsProjectName())
 			return "";
 		
-		return "Working on " + ((project != null) ? project.getName() : "an unknown project");
+		String projectName = preferences.getProjectName().orElse((project != null) ? project.getName() 
+																				   : "an unknown project");
+		
+		return "Working on " + projectName;
 	}
 
 	private Language languageOf(UserPreferences preferences, IFile file) {
