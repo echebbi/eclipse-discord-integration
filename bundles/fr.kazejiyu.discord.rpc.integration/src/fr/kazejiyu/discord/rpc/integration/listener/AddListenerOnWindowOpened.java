@@ -28,7 +28,7 @@ public class AddListenerOnWindowOpened<T extends ISelectionListener & IPartListe
 	private final T listener;
 	
 	/**
-	 * Creates a new instance.
+	 * Creates a object charged of adding a given listener to each window that opens.
 	 * 
 	 * @param listener
 	 * 			The listener that should be added to each window that opens.

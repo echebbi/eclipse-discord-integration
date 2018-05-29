@@ -43,15 +43,20 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	
 	@Override
 	public void earlyStartup() {
-		setDefaultPreferencesValue();
-		
-		rpcNotifier = new NotifyDiscordRpcOnSelection();
-		final IWorkbench workbench = PlatformUI.getWorkbench();
-		
-		workbench.addWindowListener(new AddListenerOnWindowOpened<NotifyDiscordRpcOnSelection>(rpcNotifier));
-
-		workbench.getDisplay()
-				 .asyncExec(listenForSelectionInOpenedWindows(workbench));
+		try {
+			setDefaultPreferencesValue();
+			
+			rpcNotifier = new NotifyDiscordRpcOnSelection();
+			final IWorkbench workbench = PlatformUI.getWorkbench();
+			
+			workbench.addWindowListener(new AddListenerOnWindowOpened<>(rpcNotifier));
+	
+			workbench.getDisplay()
+					 .asyncExec(listenForSelectionInOpenedWindows(workbench));
+			
+		} catch (Exception e) {
+			Plugin.logException("Unable to start the Discord Rich Presence for Eclipse IDE plug-in", e);
+		}
 	}
 	
 	/** Sets default values for plug-in's Preferences */
