@@ -12,6 +12,8 @@ Here is an example of the Rich Presence Integration:
   <img alt="Example of Rich Presence Integration" src="https://github.com/KazeJiyu/fr.kazejiyu.io/blob/master/repos/eclipse-discord-integration/rich-presence-screenshot.jpg"/>
 </div>
 
+> **!** Please [take a look at the Wiki](https://github.com/KazeJiyu/eclipse-discord-integration/wiki) for further information about installation, use and customizations.
+
 ## Installation
 
 The plug-in can be installed from the following update site:
@@ -20,7 +22,7 @@ The plug-in can be installed from the following update site:
 
 To use it from Eclipse IDE, click on `Help` > `Install new software...` and then paste the above URL.
 
-**Note**: version 0.y.z should be considered as beta. The 1.0.0 release will be deployed once the plug-in is proved stable.
+> **Note**: version 0.y.z should be considered as beta. The 1.0.0 release will be deployed once the plug-in is proved stable.
 
 ## Supported OS
 
@@ -46,8 +48,8 @@ Once the plug-in is installed, Discord Rich Presence is automatically started on
 
 Currently, there is no option to prevent this once the plug-in is started. However, it is possible to deactivate it: this way, the plug-in won't be launched at Eclipse startup. To this end:
 
-1. Open Eclipse Preferences (`Help` > `Preferences`)
-2. Open the _Startup and Shutdown_ page (`Window` > `Startup and Shutdown`)
+1. Open Eclipse Preferences (`Window` > `Preferences`)
+2. Open the _Startup and Shutdown_ page (`General` > `Startup and Shutdown`)
 3. Uncheck _Discord Rich Presence for Eclipse IDE_
 4. Reboot Eclipse IDE
 
