@@ -24,6 +24,7 @@ import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
 
+import fr.kazejiyu.discord.rpc.integration.Plugin;
 import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcProxy;
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.extensions.DiscordIntegrationExtensions;
@@ -109,19 +110,24 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 		if (lastSelectedPart == null)
 			return;
 		
-		EditorPart editor = (EditorPart) lastSelectedPart;
-		
-		Optional<EditorInputRichPresence> maybeUserAdapter = extensions.findAdapterFor(editor.getEditorInput());
-		
-		EditorInputRichPresence adapter = maybeUserAdapter.orElseGet(defaultAdapterFor(editor.getEditorInput()));
-		
-		Optional<RichPresence> maybePresence = adapter.createRichPresence(preferences, editor.getEditorInput());
-		maybePresence.map(withStartTimeStamp())
-					 .map(withLanguageIcon())
-					 .map(listeningForChangesInProjectPreferences())
-					 .ifPresent(discord::show);
-		
-		maybePresence.ifPresent(this::updateActiveProject);
+		try {
+			EditorPart editor = (EditorPart) lastSelectedPart;
+			
+			Optional<EditorInputRichPresence> maybeUserAdapter = extensions.findAdapterFor(editor.getEditorInput());
+			
+			EditorInputRichPresence adapter = maybeUserAdapter.orElseGet(defaultAdapterFor(editor.getEditorInput()));
+			
+			Optional<RichPresence> maybePresence = adapter.createRichPresence(preferences, editor.getEditorInput());
+			maybePresence.map(withStartTimeStamp())
+						 .map(withLanguageIcon())
+						 .map(listeningForChangesInProjectPreferences())
+						 .ifPresent(discord::show);
+			
+			maybePresence.ifPresent(this::updateActiveProject);
+			
+		} catch (Exception e) {
+			Plugin.logException("An error occured while trying to udpate Discord", e);
+		}
 	}
 
 	/** @return a built-in adapter handling {@code input} */
