@@ -74,8 +74,10 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 		
 		if (lastSelectedPart == null)
 			showNoActivity();
-		else
+		else {
+			timeOnSelection = timeOnStartup;
 			updateDiscord();
+		}
 	}
 	
 	/** Sets {@link #lastSelectedPart} to workbench's active editor, if any.
