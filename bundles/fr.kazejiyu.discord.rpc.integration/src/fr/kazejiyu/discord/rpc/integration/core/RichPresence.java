@@ -149,7 +149,6 @@ public class RichPresence {
 	 * 
 	 * @return the current instance, enabling method chaining
 	 */
-	
 	public RichPresence withStartTimestamp(long timestamp) {
 		this.startTimestamp = timestamp;
 		return this;
@@ -193,7 +192,6 @@ public class RichPresence {
 	 * 
 	 * @return the current instance, enabling method chaining
 	 */
-	
 	public RichPresence withLanguage(Language language) {
 		this.language = language;
 		return this;
