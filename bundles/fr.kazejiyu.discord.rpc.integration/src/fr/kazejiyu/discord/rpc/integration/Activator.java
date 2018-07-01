@@ -13,8 +13,8 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSE
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_PROJECT;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_ELAPSED_TIME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_FILE_NAME;
-import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_LANGUAGE_ICON;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
 
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.IWorkbench;
@@ -55,7 +55,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 					 .asyncExec(listenForSelectionInOpenedWindows(workbench));
 			
 		} catch (Exception e) {
-			Plugin.logException("Unable to start the Discord Rich Presence for Eclipse IDE plug-in", e);
+			Plugin.logException("An error occurred while starting the Discord Rich Presence for Eclipse IDE plug-in", e);
 		}
 	}
 	

@@ -11,7 +11,7 @@
     </parent>
     
 	<modules>
-        <module>com.github.psnrigner.discord-rpc-java</module>
+        <module>java-discord-rpc</module>
         <module>fr.kazejiyu.discord.rpc.integration</module>
         <module>fr.kazejiyu.discord.rpc.integration.adapters</module>
         <module>fr.kazejiyu.discord.rpc.integration.ui.preferences</module>
