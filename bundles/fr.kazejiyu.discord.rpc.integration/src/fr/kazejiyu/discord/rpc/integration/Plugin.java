@@ -19,6 +19,11 @@ public class Plugin {
 		// does not make sense to instantiate it
 	}
 	
+	public static void log(String message) {
+		IStatus status = new Status(IStatus.INFO, ID, message);
+		StatusManager.getManager().handle(status);
+	}
+	
 	/**
 	 * Logs a specific Exception in Eclipse <i>Error Log</i> view.<br>
 	 * <br>
