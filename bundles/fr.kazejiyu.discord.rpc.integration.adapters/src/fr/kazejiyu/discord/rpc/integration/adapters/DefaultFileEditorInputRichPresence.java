@@ -27,7 +27,7 @@ import fr.kazejiyu.discord.rpc.integration.settings.UserPreferences;
 /**
  * Default implementation of {@link EditorInputRichPresence}.<br>
  * <br>
- * This implementation only operates on {@link IFileEditorInput} instances and set Rich Presence as follows:
+ * This implementation only operates on {@link IFileEditorInput} instances and sets Rich Presence as follows:
  * 
  * <table style="border: 1px solid black ; border-collapse: collapse">
  * 	<tr style="border: 1px solid black">
@@ -90,10 +90,18 @@ public class DefaultFileEditorInputRichPresence implements EditorInputRichPresen
 		if (! preferences.showsProjectName())
 			return "";
 		
-		String projectName = preferences.getProjectName().orElse((project != null) ? project.getName() 
-																				   : "an unknown project");
+		String projectName = preferences.getProjectName()
+									    .orElse(nameOf(project));
 		
 		return "Working on " + projectName;
+	}
+
+	/** @return either the name of the project, or "an unknown project" is project == null */
+	private String nameOf(IProject project) {
+		if (project == null)
+			return "an unknown project";
+		
+		return project.getName(); 
 	}
 
 	private Language languageOf(UserPreferences preferences, IFile file) {

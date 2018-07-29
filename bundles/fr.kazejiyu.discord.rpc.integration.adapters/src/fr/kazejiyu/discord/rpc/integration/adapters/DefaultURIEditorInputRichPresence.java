@@ -28,7 +28,7 @@ import fr.kazejiyu.discord.rpc.integration.settings.UserPreferences;
 /**
  * Default implementation of {@link EditorInputRichPresence}.<br>
  * <br>
- * This implementation only operates on {@link IURIEditorInput} instances and set Rich Presence as follows:
+ * This implementation only operates on {@link IURIEditorInput} instances and sets Rich Presence as follows:
  * 
  * <table style="border: 1px solid black ; border-collapse: collapse">
  * 	<tr style="border: 1px solid black">

@@ -16,7 +16,6 @@ import java.util.function.Supplier;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
@@ -72,9 +71,9 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 		PlatformUI.getWorkbench().getDisplay().syncExec(this::findActivePart);
 		preferences.addSettingChangeListener(new RunOnSettingChange(this::updateDiscord));
 		
-		if (lastSelectedPart == null)
+		if (lastSelectedPart == null) {
 			showNoActivity();
-		else {
+		} else {
 			timeOnSelection = timeOnStartup;
 			updateDiscord();
 		}
@@ -115,25 +114,24 @@ public class NotifyDiscordRpcOnSelection implements ISelectionListener, IPartLis
 		try {
 			EditorPart editor = (EditorPart) lastSelectedPart;
 			
-			Optional<EditorInputRichPresence> maybeUserAdapter = extensions.findAdapterFor(editor.getEditorInput());
+			EditorInputRichPresence adapter = extensions.findAdapterFor(editor.getEditorInput())
+														.orElseGet(defaultAdapter());
 			
-			EditorInputRichPresence adapter = maybeUserAdapter.orElseGet(defaultAdapterFor(editor.getEditorInput()));
+			Optional<RichPresence> presence = adapter.createRichPresence(preferences, editor.getEditorInput());
+			presence.map(withStartTimeStamp())
+					.map(withLanguageIcon())
+					.map(listeningForChangesInProjectPreferences())
+					.ifPresent(discord::show);
 			
-			Optional<RichPresence> maybePresence = adapter.createRichPresence(preferences, editor.getEditorInput());
-			maybePresence.map(withStartTimeStamp())
-						 .map(withLanguageIcon())
-						 .map(listeningForChangesInProjectPreferences())
-						 .ifPresent(discord::show);
-			
-			maybePresence.ifPresent(this::updateActiveProject);
+			presence.ifPresent(this::updateActiveProject);
 			
 		} catch (Exception e) {
 			Plugin.logException("An error occured while trying to udpate Discord", e);
 		}
 	}
 
-	/** @return a built-in adapter handling {@code input} */
-	private Supplier<EditorInputRichPresence> defaultAdapterFor(IEditorInput input) {
+	/** @return a built-in adapter that sends nothing to Discord */
+	private Supplier<EditorInputRichPresence> defaultAdapter() {
 		return UnknownInputRichPresence::new;
 	}
 	
