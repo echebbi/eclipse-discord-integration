@@ -78,13 +78,35 @@ public enum Language {
 	/** Used for languages using on file extension (.cpp, .xml, .json, ...) */
 	private final Collection<String> extensions;
 	
-	/** Used for languages using file name (Dockerfile, pom.xml, ...) */
+	/** Used for languages using special files (Dockerfile, pom.xml, ...) */
 	private final Collection<String> fileNames;
 	
+	/**
+	 * Defines a new language.
+	 * 
+	 * @param key
+	 * 			The identifier of the language as registered in the Discord Application
+	 * @param name
+	 * 			The string shown in Discord's interface
+	 * @param extensions
+	 * 			The file extensions of the language
+	 */
 	private Language(String key, String name, String... extensions) {
 		this(key, name, asList(extensions), emptyList());
 	}
 	
+	/**
+	 * Defines a new language.
+	 * 
+	 * @param key
+	 * 			The identifier of the language as registered in the Discord Application
+	 * @param name
+	 * 			The string shown in Discord's interface
+	 * @param extensions
+	 * 			The file extensions of the language
+	 * @param fileNames
+	 * 			Names of special files related to the language
+	 */
 	private Language(String key, String name, List<String> extensions, List<String> fileNames) {
 		this.key = key;
 		this.name = name;
@@ -129,7 +151,7 @@ public enum Language {
 		return UNKNOWN;
 	}
 
-	/** @return the extension, without the final dot, of {@code fileName} */
+	/** @return the extension, in lower case and without the final dot, of {@code fileName} */
 	private static String extensionOf(String fileName) {
 		int dotIndex = fileName.lastIndexOf('.');
 		
@@ -137,7 +159,6 @@ public enum Language {
 			return "";
 		
 		String extension = fileName.substring(dotIndex + 1);
-		extension = extension.toLowerCase();
-		return extension;
+		return extension.toLowerCase();
 	}
 }

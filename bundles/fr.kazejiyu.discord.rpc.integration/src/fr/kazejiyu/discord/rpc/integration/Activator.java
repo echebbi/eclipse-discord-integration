@@ -29,8 +29,8 @@ import fr.kazejiyu.discord.rpc.integration.listener.NotifyDiscordRpcOnSelection;
 /**
  * This class, activated on Eclipse's start-up:
  * <ul>
- * 	<li>connects Eclipse to any currently opened Discord session,</li>
- * 	<li>adds listener making able to notify Discord when Eclipse's current selection changes.</li>
+ * 	<li>connects Eclipse to any currently opened Discord session,
+ * 	<li>adds listener making able to notify Discord when Eclipse's current selection changes.
  * </ul>
  */
 public class Activator extends AbstractUIPlugin implements IStartup {

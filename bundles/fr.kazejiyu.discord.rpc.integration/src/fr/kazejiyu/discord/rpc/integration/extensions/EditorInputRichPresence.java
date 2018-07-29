@@ -67,6 +67,12 @@ public interface EditorInputRichPresence extends Comparable<EditorInputRichPrese
 	 */
 	Optional<RichPresence> createRichPresence(GlobalPreferences preferences, IEditorInput input);
 
+	/**
+	 * Compares this with an other {@code EditorInputRichPresence} based on their priority.
+	 * 
+	 * @return a negative integer, zero, or a positive integer as this object's priority is less than, 
+	 * 		   equal to, or greater than the specified object's priority.
+	 */
 	@Override
 	default int compareTo(EditorInputRichPresence rhs) {
 		if (this.getPriority() < rhs.getPriority())
