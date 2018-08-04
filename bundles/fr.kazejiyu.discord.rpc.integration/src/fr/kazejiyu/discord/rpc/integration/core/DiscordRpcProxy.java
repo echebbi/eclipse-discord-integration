@@ -15,24 +15,18 @@ import club.minnced.discord.rpc.DiscordRichPresence;
 import fr.kazejiyu.discord.rpc.integration.languages.Language;
 
 /**
- * Manages the communication with Discord.<br>
+ * Sends {@link RichPresence}s to Discord.<br>
  * <br>
- * Instances of this class are aimed to send Rich Presence information
- * to a Discord client so that it can show it.<br>
+ * The information detailed by the presence (state, image, etc.) are then shown in Discord's UI.
  * 
  * @author Emmanuel CHEBBI
  */
-public class DiscordRpcProxy {
+public class DiscordRpcProxy implements DiscordRpcLifecycle {
 	
-	/** Identifies the Eclipse Integration Discord application */
+	/** Identifies the Discord Rich Presence for Eclipse IDE application */
 	private static final String APPLICATION_ID = "413038514616139786";
 	
-	/** Cache last presence so that it's easier to update it later */
-	private RichPresence lastPresence = null;
-	
-	/**
-	 * Initialises the connection to Discord session.
-	 */
+	@Override
 	public void initialize() {
 		DiscordRPC.INSTANCE.Discord_Initialize(APPLICATION_ID, createHandlers(), true, "");
 	}
@@ -42,16 +36,8 @@ public class DiscordRpcProxy {
 		return new DiscordEventHandlers();
 	}
 	
-	/**
-	 * Shows given presence on Discord.
-	 * 
-	 * @param rp
-	 * 			Contains the elements to show on Discord.
-	 * 			Must not be {@code null}.
-	 */
+	@Override
 	public void show(RichPresence rp) {
-		lastPresence = new RichPresence(rp);
-		
 		DiscordRichPresence presence = new DiscordRichPresence();
 		
 		rp.getState().ifPresent(state -> presence.state = state);
@@ -64,47 +50,12 @@ public class DiscordRpcProxy {
 		DiscordRPC.INSTANCE.Discord_RunCallbacks();
 	}
 	
-	/**
-	 * Changes the details shown in Discord, keeping the other information.<br>
-	 * <br>
-	 * Passing either an empty String or {@code null} will hide the details field. 
-	 * 
-	 * @param details
-	 * 			The new details to show.
-	 */
-	public void updateDetails(String details) {
-		show(lastPresence.withDetails(details));
+	@Override
+	public void showNothing() {
+		show(new ImmutableRichPresence());
 	}
 	
-	/**
-	 * Changes the state shown in Discord, keeping the other information.<br>
-	 * <br>
-	 * Passing either an empty String or {@code null} will hide the state field. 
-	 * 
-	 * @param state
-	 * 			The new state to show.
-	 */
-	public void updateState(String state) {
-		show(lastPresence.withState(state));
-	}
-	
-	/**
-	 * Changes the elapsed time shown in Discord, keeping the other information.<br>
-	 * <br>
-	 * Passing a negative timestamp will hide the elapsed time field. 
-	 * 
-	 * @param start
-	 * 			The start timestamp.
-	 */
-	public void updateStartTimestamp(long start) {
-		show(lastPresence.withStartTimestamp(start));
-	}
-	
-	/**
-	 * Shutdowns the connection to Discord session.<br>
-	 * <br>
-	 * If this method is called while the connection has already being closed, it has no effect.
-	 */
+	@Override
 	public void shutdown() {
 		DiscordRPC.INSTANCE.Discord_Shutdown();
 	}

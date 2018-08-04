@@ -14,11 +14,12 @@ import java.util.Optional;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
+import fr.kazejiyu.discord.rpc.integration.core.ImmutableRichPresence;
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
 
 /**
- * Extracts {@link RichPresence} from an {@link IEditorInput}.<br>
+ * Extracts {@link ImmutableRichPresence} from an {@link IEditorInput}.<br>
  * <br>
  * This interface should be implemented by clients who aim to define
  * the information shown in Discord for their own editor.

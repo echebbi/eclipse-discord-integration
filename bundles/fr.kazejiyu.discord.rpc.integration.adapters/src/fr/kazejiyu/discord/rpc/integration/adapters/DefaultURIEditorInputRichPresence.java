@@ -19,6 +19,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IURIEditorInput;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 
+import fr.kazejiyu.discord.rpc.integration.core.ImmutableRichPresence;
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
 import fr.kazejiyu.discord.rpc.integration.languages.Language;
@@ -72,12 +73,11 @@ public class DefaultURIEditorInputRichPresence implements EditorInputRichPresenc
 		URI fileURI = uriInput.getURI();
 		File file = new File(fileURI.getPath());
 		
-		RichPresence presence = new RichPresence();
-		
-		presence.withDetails(detailsOf(preferences, file));
-		presence.withState(stateOf(preferences));
-		presence.withLanguage(languageOf(preferences, file));
-		presence.withLargeImageText(largeImageTextOf(preferences, file));
+		ImmutableRichPresence presence = new ImmutableRichPresence()
+				.withDetails(detailsOf(preferences, file))
+				.withState(stateOf(preferences))
+				.withLanguage(languageOf(preferences, file))
+				.withLargeImageText(largeImageTextOf(preferences, file));
 		
 		return Optional.of(presence);
 	}

@@ -13,6 +13,7 @@ import java.util.Optional;
 
 import org.eclipse.ui.IEditorInput;
 
+import fr.kazejiyu.discord.rpc.integration.core.ImmutableRichPresence;
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
 import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
@@ -38,7 +39,7 @@ public class UnknownInputRichPresence implements EditorInputRichPresence {
 
 	@Override
 	public Optional<RichPresence> createRichPresence(GlobalPreferences preferences, IEditorInput input) {
-		return Optional.of(new RichPresence());
+		return Optional.of(new ImmutableRichPresence());
 	}
 
 }
