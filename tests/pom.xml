@@ -1,0 +1,62 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>tests</artifactId>
+	<packaging>pom</packaging>
+    
+    <parent>
+        <groupId>fr.kazejiyu.discord.rpc.integration</groupId>
+        <artifactId>fr.kazejiyu.discord.rpc.integration.root</artifactId>
+        <version>0.8.4</version>
+    </parent>
+    
+	<modules>
+        <module>org.assertj</module>
+        <module>fr.kazejiyu.discord.rpc.integration.tests</module>
+	</modules>
+
+    <properties>
+        <jacoco-version>0.8.1</jacoco-version>
+    </properties>
+
+    <build>
+        <plugins>
+            <!-- Executes JUnit tests -->
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-surefire-plugin</artifactId>
+                <version>${tycho.version}</version>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <!-- mvn -Pjacoco to activate code coverage -->
+        <profile>
+            <id>jacoco</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${jacoco-version}</version>
+                        <configuration>
+                            <excludes>
+                            </excludes>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

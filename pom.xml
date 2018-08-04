@@ -10,10 +10,11 @@
 		<module>bundles</module>
 		<module>features</module>
 		<module>releng</module>
+        <module>tests</module>
 	</modules>
 
 	<properties>
-		<tycho.version>1.0.0</tycho.version>
+		<tycho.version>1.2.0</tycho.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
