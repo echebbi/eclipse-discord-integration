@@ -16,6 +16,8 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_FILE_NA
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_LANGUAGE_ICON;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
 
+import org.eclipse.ui.IPartListener2;
+import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
@@ -31,40 +33,48 @@ import fr.kazejiyu.discord.rpc.integration.listener.FileChangeListener;
 /**
  * This class, activated on Eclipse's start-up:
  * <ul>
- * 	<li>connects Eclipse to any currently opened Discord session,
+ * 	<li>connects Eclipse IDE to any currently opened Discord session,
  * 	<li>adds listener making able to notify Discord when Eclipse's current selection changes.
  * </ul>
  */
 public class Activator extends AbstractUIPlugin implements IStartup {
 
-	// The plug-in ID
 	public static final String PLUGIN_ID = "fr.kazejiyu.discord.rpc.integration"; //$NON-NLS-1$
 
 	/** Listens current selection then notify Discord'RPC */
 	private FileChangeListener fileChange;
 
+	/** Used to send rich presence to Discord */
 	private PreferredDiscordRpc discord;
 	
 	@Override
 	public void earlyStartup() {
 		try {
 			setDefaultPreferencesValue();
-		
-			discord = new PreferredDiscordRpc();
-			
-			fileChange = new FileChangeListener(discord);
-			fileChange.notifyDiscordWithActivePart();
-			
-			final IWorkbench workbench = PlatformUI.getWorkbench();
-			
-			workbench.addWindowListener(new AddListenerOnWindowOpened<>(fileChange));
-	
-			workbench.getDisplay()
-					 .asyncExec(listenForSelectionInOpenedWindows(workbench));
+			connectToDiscord();
+			listenForSelectionChanges(fileChange);
 			
 		} catch (Exception e) {
 			Plugin.logException("An error occurred while starting the Discord Rich Presence for Eclipse IDE plug-in", e);
 		}
+	}
+
+	/** Initialises the connection to Discord and shows active editor, if any */
+	private void connectToDiscord() {
+		discord = new PreferredDiscordRpc();
+		
+		fileChange = new FileChangeListener(discord);
+		fileChange.notifyDiscordWithActivePart();
+	}
+
+	/** Sets up listeners so that the given listener is notified each time a new part is selected */
+	private <T extends ISelectionListener & IPartListener2> void listenForSelectionChanges(T listener) {
+		final IWorkbench workbench = PlatformUI.getWorkbench();
+		
+		workbench.addWindowListener(new AddListenerOnWindowOpened<>(listener));
+
+		workbench.getDisplay()
+				 .asyncExec(listenForSelectionInOpenedWindows(workbench));
 	}
 	
 	@Override

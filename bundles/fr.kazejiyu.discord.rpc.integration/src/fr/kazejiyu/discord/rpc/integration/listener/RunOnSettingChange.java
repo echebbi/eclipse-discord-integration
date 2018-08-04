@@ -9,6 +9,8 @@
 **********************************************************************/
 package fr.kazejiyu.discord.rpc.integration.listener;
 
+import static java.util.Objects.requireNonNull;
+
 import fr.kazejiyu.discord.rpc.integration.settings.Moment;
 import fr.kazejiyu.discord.rpc.integration.settings.SettingChangeListener;
 
@@ -19,45 +21,52 @@ import fr.kazejiyu.discord.rpc.integration.settings.SettingChangeListener;
  */
 public class RunOnSettingChange implements SettingChangeListener {
 
-	private final Runnable updateDiscord;
+	private final Runnable runnable;
 	
-	public RunOnSettingChange(Runnable updateDiscord) {
-		this.updateDiscord = updateDiscord;
+	/**
+	 * Creates a new listener.
+	 * 
+	 * @param runnable
+	 * 			The instance to run each time a setting changes.
+	 * 			Must not be null.
+	 */
+	public RunOnSettingChange(Runnable runnable) {
+		this.runnable = requireNonNull(runnable, "Cannot run a null runnable");
 	}
 	
 	@Override
 	public void useProjectProperties(boolean use) {
-		updateDiscord.run();
+		runnable.run();
 	}
 
 	@Override
 	public void fileNameVisibilityChanged(boolean isVisible) {
-		updateDiscord.run();
+		runnable.run();
 	}
 
 	@Override
 	public void projectNameVisibilityChanged(boolean isVisible) {
-		updateDiscord.run();
+		runnable.run();
 	}
 	
 	@Override
 	public void languageIconVisibilityChanged(boolean isVisible) {
-		updateDiscord.run();
+		runnable.run();
 	}
 
 	@Override
 	public void elapsedTimeVisibilityChanged(boolean isVisible) {
-		updateDiscord.run();
+		runnable.run();
 	}
 
 	@Override
 	public void elapsedTimeResetMomentChanged(Moment oldMoment, Moment newMoment) {
-		updateDiscord.run();
+		runnable.run();
 	}
 	
 	@Override
 	public void projectNameChanged(String oldName, String newName) {
-		updateDiscord.run();
+		runnable.run();
 	}
 
 }

@@ -9,6 +9,8 @@
 **********************************************************************/
 package fr.kazejiyu.discord.rpc.integration.listener;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -33,7 +35,11 @@ import fr.kazejiyu.discord.rpc.integration.settings.ProjectPreferences;
 import fr.kazejiyu.discord.rpc.integration.settings.SettingChangeListener;
 
 /**
- * Listens for selected part to change.
+ * Listens for selected part to change.<br>
+ * <br>
+ * Each a new {@link EditorPart} is selected, a corresponding {@link RichPresence}
+ * is created and then forward to a {@link DiscordRpcLifecycle} instance in order to
+ * be shown in Discord's UI.
  */
 public class FileChangeListener implements ISelectionListener, IPartListener2 {
 	
@@ -49,14 +55,25 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
 	/** Manages extension points */
 	private DiscordIntegrationExtensions extensions = new DiscordIntegrationExtensions();
 	
+	// Used to watch project's preferences
 	private IProject lastSelectedProject = null;
 	private ProjectPreferences lastSelectedProjectPreferences = null;
 	private SettingChangeListener lastSelectedProjectListener = null;
 	
+	/**
+	 * Creates a new instances able to listen for the active editor to change.
+	 * 
+	 * @param discord
+	 * 			Will be notified with a new {@link RichPresence} instance each time
+	 * 			the active editor changes. Must not be null.
+	 */
 	public FileChangeListener(DiscordRpcLifecycle discord) {
-		this.discord = discord;
+		this.discord = requireNonNull(discord, "The Discord proxy must not be null");
 	}
 
+	/**
+	 * Searches for the current active part then updates Discord with the corresponding presence. 
+	 */
 	public void notifyDiscordWithActivePart() {
 		PlatformUI.getWorkbench().getDisplay().syncExec(this::findActivePart);
 		updateDiscord();
@@ -80,7 +97,10 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
 		lastSelectedPart = part;
 		updateDiscord();
 	}
-		
+	
+	/**
+	 * Sends to Discord a new {@link RichPresence} corresponding to the last selected editor part.
+	 */
 	public void updateDiscord() {
 		try {
 			if (lastSelectedPart == null)
