@@ -1,6 +1,6 @@
 # Discord Rich Presence for Eclipse IDE
 
-![Build Status](https://travis-ci.org/KazeJiyu/eclipse-discord-integration.svg?branch=master) [![Managed with TAIGA.io](https://img.shields.io/badge/managed%20with-TAIGA.io-brightgreen.svg)](https://tree.taiga.io/project/kazejiyu-eclipse-discord-integration/) [ ![Download](https://api.bintray.com/packages/kazejiyu/eclipse-discord-integration/releases/images/download.svg) ](https://bintray.com/kazejiyu/eclipse-discord-integration/releases/_latestVersion)
+![Build Status](https://travis-ci.org/KazeJiyu/eclipse-discord-integration.svg?branch=master) [![codecov](https://codecov.io/gh/KazeJiyu/eclipse-discord-integration/branch/master/graph/badge.svg)](https://codecov.io/gh/KazeJiyu/eclipse-discord-integration) [![Managed with TAIGA.io](https://img.shields.io/badge/managed%20with-TAIGA.io-brightgreen.svg)](https://tree.taiga.io/project/kazejiyu-eclipse-discord-integration/) [ ![Download](https://api.bintray.com/packages/kazejiyu/eclipse-discord-integration/releases/images/download.svg) ](https://bintray.com/kazejiyu/eclipse-discord-integration/releases/_latestVersion)
 
 ## Presentation
 
