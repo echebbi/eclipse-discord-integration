@@ -20,7 +20,8 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.ui.IEditorInput;
 
-import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
+import fr.kazejiyu.discord.rpc.integration.Plugin;
+import fr.kazejiyu.discord.rpc.integration.core.ImmutableRichPresence;
 
 /**
  * Manages plug-in's extensions.<br>
@@ -43,7 +44,7 @@ public class DiscordIntegrationExtensions {
 	}
 
 	/**
-	 * Returns an adapter able to turn {@code input} into a {@link RichPresence}
+	 * Returns an adapter able to turn {@code input} into a {@link ImmutableRichPresence}
 	 * instance.<br>
 	 * <br>
 	 * The adapter is one of the adapters registered to the
@@ -86,7 +87,7 @@ public class DiscordIntegrationExtensions {
 			return element.createExecutableExtension("class");
 
 		} catch (CoreException e) {
-			e.printStackTrace();
+			Plugin.logException("Unable to create a new instance for the " + element.getName() + " extension", e);
 			return null;
 		}
 	}

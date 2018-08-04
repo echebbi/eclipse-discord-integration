@@ -22,9 +22,11 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.framework.BundleContext;
 
+import fr.kazejiyu.discord.rpc.integration.core.PreferredDiscordRpc;
 import fr.kazejiyu.discord.rpc.integration.listener.AddListenerOnWindowOpened;
-import fr.kazejiyu.discord.rpc.integration.listener.NotifyDiscordRpcOnSelection;
+import fr.kazejiyu.discord.rpc.integration.listener.FileChangeListener;
 
 /**
  * This class, activated on Eclipse's start-up:
@@ -39,23 +41,39 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	public static final String PLUGIN_ID = "fr.kazejiyu.discord.rpc.integration"; //$NON-NLS-1$
 
 	/** Listens current selection then notify Discord'RPC */
-	private NotifyDiscordRpcOnSelection rpcNotifier;
+	private FileChangeListener fileChange;
+
+	private PreferredDiscordRpc discord;
 	
 	@Override
 	public void earlyStartup() {
 		try {
 			setDefaultPreferencesValue();
+		
+			discord = new PreferredDiscordRpc();
 			
-			rpcNotifier = new NotifyDiscordRpcOnSelection();
+			fileChange = new FileChangeListener(discord);
+			fileChange.notifyDiscordWithActivePart();
+			
 			final IWorkbench workbench = PlatformUI.getWorkbench();
 			
-			workbench.addWindowListener(new AddListenerOnWindowOpened<>(rpcNotifier));
+			workbench.addWindowListener(new AddListenerOnWindowOpened<>(fileChange));
 	
 			workbench.getDisplay()
 					 .asyncExec(listenForSelectionInOpenedWindows(workbench));
 			
 		} catch (Exception e) {
 			Plugin.logException("An error occurred while starting the Discord Rich Presence for Eclipse IDE plug-in", e);
+		}
+	}
+	
+	@Override
+	public void stop(BundleContext context) throws Exception {
+		try {
+			discord.shutdown();
+		}
+		finally {
+			super.stop(context);
 		}
 	}
 	
@@ -69,15 +87,15 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	}
 	
 	
-	/** Adds {@code rpcNotifier} as an {@code ISelectionListener} to each opened window. */
+	/** Adds {@code fileChange} as an {@code ISelectionListener} to each opened window. */
 	private Runnable listenForSelectionInOpenedWindows(IWorkbench workbench) {
 		return () -> {
 			for (IWorkbenchWindow window : workbench.getWorkbenchWindows()) {
 				if (window != null) {
-					window.getSelectionService().addSelectionListener(rpcNotifier);
+					window.getSelectionService().addSelectionListener(fileChange);
 					
 					for (IWorkbenchPage page : window.getPages()) {
-						page.addPartListener(rpcNotifier);
+						page.addPartListener(fileChange);
 					}
 				}
 			}

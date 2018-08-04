@@ -17,7 +17,7 @@ import fr.kazejiyu.discord.rpc.integration.settings.SettingChangeListener;
  * 
  * @author Emmanuel CHEBBI
  */
-class RunOnSettingChange implements SettingChangeListener {
+public class RunOnSettingChange implements SettingChangeListener {
 
 	private final Runnable updateDiscord;
 	

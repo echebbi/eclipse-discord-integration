@@ -18,6 +18,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 
+import fr.kazejiyu.discord.rpc.integration.core.ImmutableRichPresence;
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
 import fr.kazejiyu.discord.rpc.integration.languages.Language;
@@ -63,18 +64,18 @@ public class DefaultFileEditorInputRichPresence implements EditorInputRichPresen
 		if (!(input instanceof IFileEditorInput))
 			throw new IllegalArgumentException("input must be an instance of " + IFileEditorInput.class);
 		
-		RichPresence presence = new RichPresence();
 		IFileEditorInput fileInput = (IFileEditorInput) input;
 		IFile file = fileInput.getFile();
 		IProject project = file.getProject();
 		
 		UserPreferences applicablePreferences = preferences.getApplicablePreferencesFor(project);
 		
-		presence.withProject(project);
-		presence.withDetails(detailsOf(applicablePreferences, file));
-		presence.withState(stateOf(applicablePreferences, project));
-		presence.withLanguage(languageOf(applicablePreferences, file));
-		presence.withLargeImageText(largeImageTextOf(applicablePreferences, file));
+		ImmutableRichPresence presence = new ImmutableRichPresence()
+				.withProject(project)
+				.withDetails(detailsOf(applicablePreferences, file))
+				.withState(stateOf(applicablePreferences, project))
+				.withLanguage(languageOf(applicablePreferences, file))
+				.withLargeImageText(largeImageTextOf(applicablePreferences, file));
 		
 		return Optional.of(presence);
 	}

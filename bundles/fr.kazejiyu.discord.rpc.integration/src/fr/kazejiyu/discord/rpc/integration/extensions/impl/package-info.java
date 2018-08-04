@@ -1,5 +1,5 @@
 /**
- * Default implementations for {@link fr.kazejiyu.discord.rpc.integration.core.RichPresence RichPresence}
+ * Default implementations for {@link fr.kazejiyu.discord.rpc.integration.core.ImmutableRichPresence RichPresence}
  * interface.
  * 
  * @author Emmanuel CHEBBI
