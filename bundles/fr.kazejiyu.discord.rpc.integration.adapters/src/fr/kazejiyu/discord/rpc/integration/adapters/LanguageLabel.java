@@ -19,6 +19,10 @@ import fr.kazejiyu.discord.rpc.integration.languages.Language;
  */
 class LanguageLabel {
 	
+	private LanguageLabel() {
+		// utility class
+	}
+	
 	static String labelOf(Language language, String fileName) {
 		if (language == UNKNOWN)
 			return "";

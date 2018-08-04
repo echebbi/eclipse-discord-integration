@@ -31,9 +31,9 @@ public class PreferredDiscordRpc implements DiscordRpcLifecycle {
 
 	/** User's preferences */
 	private final GlobalPreferences preferences;
-	
+
+	// Used to manage elapsed time
 	private IProject lastSelectedProject = null;
-	
 	private SelectionTimes times = new SelectionTimes();
 	
 	/**
