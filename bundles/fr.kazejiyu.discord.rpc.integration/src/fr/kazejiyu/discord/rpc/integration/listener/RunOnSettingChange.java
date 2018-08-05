@@ -19,7 +19,7 @@ import fr.kazejiyu.discord.rpc.integration.settings.SettingChangeListener;
  * 
  * @author Emmanuel CHEBBI
  */
-public class RunOnSettingChange implements SettingChangeListener {
+class RunOnSettingChange implements SettingChangeListener {
 
 	private final Runnable runnable;
 	
@@ -30,7 +30,7 @@ public class RunOnSettingChange implements SettingChangeListener {
 	 * 			The instance to run each time a setting changes.
 	 * 			Must not be null.
 	 */
-	public RunOnSettingChange(Runnable runnable) {
+	RunOnSettingChange(Runnable runnable) {
 		this.runnable = requireNonNull(runnable, "Cannot run a null runnable");
 	}
 	

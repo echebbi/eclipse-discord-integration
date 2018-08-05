@@ -7,7 +7,7 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 **********************************************************************/
-package fr.kazejiyu.discord.rpc.integration.extensions;
+package fr.kazejiyu.discord.rpc.integration.extensions.impl;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -22,6 +22,7 @@ import org.eclipse.ui.IEditorInput;
 
 import fr.kazejiyu.discord.rpc.integration.Plugin;
 import fr.kazejiyu.discord.rpc.integration.core.ImmutableRichPresence;
+import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
 
 /**
  * Manages plug-in's extensions.<br>

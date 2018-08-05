@@ -13,6 +13,8 @@
 	<modules>
         <module>org.assertj</module>
         <module>fr.kazejiyu.discord.rpc.integration.tests</module>
+        <module>fr.kazejiyu.discord.rpc.integration.adapters.tests</module>
+        <module>fr.kazejiyu.discord.rpc.integration.tests.report</module>
 	</modules>
 
     <properties>
@@ -45,6 +47,9 @@
                         <version>${jacoco-version}</version>
                         <configuration>
                             <excludes>
+                                <!-- Ignore Main classes -->
+                                <exclude>**/integration/Plugin.class</exclude>
+                                <exclude>**/integration/Activator.class</exclude>
                             </excludes>
                         </configuration>
                         <executions>

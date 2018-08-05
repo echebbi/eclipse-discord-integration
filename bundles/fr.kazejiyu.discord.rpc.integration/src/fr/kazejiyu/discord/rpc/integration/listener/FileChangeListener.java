@@ -17,6 +17,7 @@ import java.util.function.Supplier;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
@@ -27,8 +28,8 @@ import org.eclipse.ui.part.EditorPart;
 import fr.kazejiyu.discord.rpc.integration.Plugin;
 import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcLifecycle;
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
-import fr.kazejiyu.discord.rpc.integration.extensions.DiscordIntegrationExtensions;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
+import fr.kazejiyu.discord.rpc.integration.extensions.impl.DiscordIntegrationExtensions;
 import fr.kazejiyu.discord.rpc.integration.extensions.impl.UnknownInputRichPresence;
 import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
 import fr.kazejiyu.discord.rpc.integration.settings.ProjectPreferences;
@@ -91,7 +92,7 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
 
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		if (!(part instanceof EditorPart) || part.equals(lastSelectedPart))
+		if (!(part instanceof IEditorPart) || part.equals(lastSelectedPart))
 			return;
 		
 		lastSelectedPart = part;
@@ -101,12 +102,12 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
 	/**
 	 * Sends to Discord a new {@link RichPresence} corresponding to the last selected editor part.
 	 */
-	public void updateDiscord() {
+	private void updateDiscord() {
 		try {
 			if (lastSelectedPart == null)
 				return;
 			
-			EditorPart editor = (EditorPart) lastSelectedPart;
+			IEditorPart editor = (IEditorPart) lastSelectedPart;
 			
 			EditorInputRichPresence adapter = extensions.findAdapterFor(editor.getEditorInput())
 														.orElseGet(defaultAdapter());

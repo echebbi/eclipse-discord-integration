@@ -13,7 +13,9 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Programming languages handled by the plug-in.
@@ -41,7 +43,7 @@ public enum Language {
 	FORTRAN90("fortran", "Fortran 90", "f90"),
 	FORTRAN95("fortran", "Fortran 95", "f95"),
 	FORTRAN03("fortran", "Fortran 2003", "f03"),
-	GIT("git", "Git", "git", "gitignore"),
+	GIT("git", "Git", asList("git"), asList(".gitignore", ".gitattributes", ".gitmodules")),
 	GO("go", "Go", "go"),
 	GRADLE("gradle", "Gradle", "gradle"),
 	GROOVY("groovy", "Groovy", "groovy", "gvy", "gy", "gsh"),
@@ -75,7 +77,7 @@ public enum Language {
 	/** Human-readable name of the language */
 	private final String name;
 	
-	/** Used for languages using on file extension (.cpp, .xml, .json, ...) */
+	/** Used for languages using file extension (.cpp, .xml, .json, ...) */
 	private final Collection<String> extensions;
 	
 	/** Used for languages using special files (Dockerfile, pom.xml, ...) */
@@ -124,6 +126,16 @@ public enum Language {
 		return this.name;
 	}
 	
+	/** @return the extensions associated with this language */
+	public Set<String> getExtensions() {
+		return new LinkedHashSet<>(this.extensions);
+	}
+	
+	/** @return the name of the files associated with this language */
+	public Set<String> getFileNames() {
+		return new LinkedHashSet<>(this.fileNames);
+	}
+	
 	/**
 	 * Returns the language corresponding to the given file name.<br>
 	 * <br>
@@ -155,7 +167,7 @@ public enum Language {
 	private static String extensionOf(String fileName) {
 		int dotIndex = fileName.lastIndexOf('.');
 		
-		if (dotIndex < 0 || fileName.length() <= dotIndex + 1)
+		if (dotIndex <= 0 || fileName.length() <= dotIndex + 1)
 			return "";
 		
 		String extension = fileName.substring(dotIndex + 1);
