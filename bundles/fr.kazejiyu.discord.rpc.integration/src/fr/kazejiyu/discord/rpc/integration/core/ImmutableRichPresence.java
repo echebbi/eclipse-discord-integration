@@ -250,6 +250,9 @@ public final class ImmutableRichPresence implements RichPresence {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((details == null) ? 0 : details.hashCode());
+		result = prime * result + ((language == null) ? 0 : language.hashCode());
+		result = prime * result + ((largeImageText == null) ? 0 : largeImageText.hashCode());
+		result = prime * result + ((project == null) ? 0 : project.hashCode());
 		result = prime * result + (int) (startTimestamp ^ (startTimestamp >>> 32));
 		result = prime * result + ((state == null) ? 0 : state.hashCode());
 		return result;
@@ -269,6 +272,18 @@ public final class ImmutableRichPresence implements RichPresence {
 				return false;
 		} else if (!details.equals(other.details))
 			return false;
+		if (language != other.language)
+			return false;
+		if (largeImageText == null) {
+			if (other.largeImageText != null)
+				return false;
+		} else if (!largeImageText.equals(other.largeImageText))
+			return false;
+		if (project == null) {
+			if (other.project != null)
+				return false;
+		} else if (!project.equals(other.project))
+			return false;
 		if (startTimestamp != other.startTimestamp)
 			return false;
 		if (state == null) {
@@ -278,5 +293,5 @@ public final class ImmutableRichPresence implements RichPresence {
 			return false;
 		return true;
 	}
-	
+
 }

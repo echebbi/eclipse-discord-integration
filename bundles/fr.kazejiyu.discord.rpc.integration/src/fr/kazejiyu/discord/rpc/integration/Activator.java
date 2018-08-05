@@ -62,6 +62,8 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	/** Initialises the connection to Discord and shows active editor, if any */
 	private void connectToDiscord() {
 		discord = new PreferredDiscordRpc();
+		discord.initialize();
+		discord.showNothing();
 		
 		fileChange = new FileChangeListener(discord);
 		fileChange.notifyDiscordWithActivePart();

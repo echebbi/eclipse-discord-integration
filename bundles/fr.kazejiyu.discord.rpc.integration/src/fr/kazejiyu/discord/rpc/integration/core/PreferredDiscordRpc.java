@@ -57,9 +57,6 @@ public class PreferredDiscordRpc implements DiscordRpcLifecycle {
 	public PreferredDiscordRpc(DiscordRpcLifecycle discord, GlobalPreferences preferences) {
 		this.discord = requireNonNull(discord, "Discord proxy must not be null");
 		this.preferences = requireNonNull(preferences, "Preferences must not be null");
-		
-		this.discord.initialize();
-		this.showNothing();
 	}
 	
 	@Override
@@ -76,13 +73,15 @@ public class PreferredDiscordRpc implements DiscordRpcLifecycle {
 	public void show(RichPresence presence) {
 		updateTimesOnSelection(presence);
 
-		presence = new PreferredRichPresence(
-				preferences.getApplicablePreferencesFor(presence.getProject().orElse(null)), presence, times
+		RichPresence presenceFollowingPreferences = new PreferredRichPresence(
+			preferences.getApplicablePreferencesFor(presence.getProject().orElse(null)), 
+			presence, 
+			times
 		);
 		
-		discord.show(presence);
+		discord.show(presenceFollowingPreferences);
 
-		updateLastSelectedProject(presence);
+		updateLastSelectedProject(presenceFollowingPreferences);
 	}
 	
 	@Override

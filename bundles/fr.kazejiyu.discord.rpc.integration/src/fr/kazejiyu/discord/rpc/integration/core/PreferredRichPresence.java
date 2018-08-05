@@ -9,6 +9,8 @@
 **********************************************************************/
 package fr.kazejiyu.discord.rpc.integration.core;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.Optional;
 
 import org.eclipse.core.resources.IProject;
@@ -17,26 +19,46 @@ import fr.kazejiyu.discord.rpc.integration.languages.Language;
 import fr.kazejiyu.discord.rpc.integration.settings.UserPreferences;
 
 /**
- * A {@link ImmutableRichPresence} that cares about {@link UserPreferences}. 
+ * A {@link RichPresence} that cares about {@link UserPreferences}.<br>
+ * <br>
+ * An instance of this class decorates another {@link RichPresence} and enhances it
+ * in order to in order to follow user's preferences:
+ * <ul>
+ * 	<li>hide the {@link Language},
+ * 	<li>select the right start timestamp.
+ * </ul>
  */
-public class PreferredRichPresence implements RichPresence {
+final class PreferredRichPresence implements RichPresence {
 	
+	/** Used to determine which information the user wants to hide */
 	private final UserPreferences preferences;
 	
+	/** The original, decorated presence */
 	private final RichPresence presence;
 	
+	/** Provides access to the different timestamps */
 	private final SelectionTimes times;
 
-	public PreferredRichPresence(UserPreferences prefs, RichPresence presence, SelectionTimes times) {
-		this.preferences = prefs;
-		this.presence = presence;
-		this.times = times;
+	/**
+	 * Creates a new {@link RichPresence} caring about user's preferences.
+	 * 
+	 * @param prefs
+	 * 			The preferences to follow. Must not be null.
+	 * @param presence
+	 * 			The original presence to decorate. Must not be null.
+	 * @param times
+	 * 			The available timestamps. Must not be null.
+	 */
+	PreferredRichPresence(UserPreferences prefs, RichPresence presence, SelectionTimes times) {
+		this.preferences = requireNonNull(prefs, "The preferences must not be null");
+		this.presence = requireNonNull(presence, "The decorated presence must not be null");
+		this.times = requireNonNull(times, "The times must not be null");
 	}
 	
 	@Override
 	public Optional<Language> getLanguage() {
 		if (! preferences.showsLanguageIcon())
-			return Optional.of(Language.UNKNOWN);
+			return Optional.empty();
 		
 		return presence.getLanguage();
 	}

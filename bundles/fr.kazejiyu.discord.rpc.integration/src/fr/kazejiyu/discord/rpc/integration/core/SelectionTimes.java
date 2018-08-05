@@ -20,7 +20,7 @@ public class SelectionTimes {
 	
 	private final long timeOnNewSelection;
 	
-	public SelectionTimes() {
+	protected SelectionTimes() {
 		this.timeOnStartup = this.timeOnNewProject = this.timeOnNewSelection = System.currentTimeMillis() / 1000;
 	}
 	
