@@ -19,7 +19,6 @@
 <unit id="org.junit.platform.launcher" version="1.1.0.v20180327-1502"/>
 <unit id="org.junit.platform.runner" version="1.1.0.v20180327-1502"/>
 <unit id="org.junit.platform.suite.api" version="1.1.0.v20180327-1502"/>
-<<<<<<< HEAD
 <unit id="org.mockito" version="2.13.0.v20180426-1843"/>
 <unit id="org.objenesis" version="2.6.0.v20180420-1519"/>
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20180606145124/repository"/>
