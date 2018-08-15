@@ -45,6 +45,15 @@ public enum Settings {
 	
 	PROJECT_NAME("PROJECT_NAME");
 	
+	private static final Map<String, Settings> propertyToSetting = new HashMap<>();
+
+	static
+    {
+        for (Settings setting : Settings.values()) {
+        	propertyToSetting.put(setting.property, setting);
+        }
+    }
+	
 	/** A key identifying the setting */
 	private final String property;
 	
@@ -64,14 +73,5 @@ public enum Settings {
 	public static Settings fromProperty(String property) {
 		return propertyToSetting.get(property);
 	}
-	
-	private static final Map<String, Settings> propertyToSetting = new HashMap<>();
-
-	static
-    {
-        for (Settings setting : Settings.values()) {
-        	propertyToSetting.put(setting.property, setting);
-        }
-    }
 
 }

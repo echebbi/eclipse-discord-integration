@@ -22,13 +22,12 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.USE_PROJECT_
 import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 
 import fr.kazejiyu.discord.rpc.integration.Activator;
@@ -44,9 +43,7 @@ public class ProjectPreferences implements UserPreferences {
 	/** Used to retrieve the preferences */
 	private final IEclipsePreferences preferences;
 	
-	private final IPreferenceChangeListener listener;
-	
-	private final List<SettingChangeListener> listeners = new ArrayList<>();
+	private final Collection<SettingChangeListener> listeners = new ArrayList<>();
 
 	/**
 	 * Creates a new instance aimed to check Discord preferences for {@code project}.
@@ -61,8 +58,7 @@ public class ProjectPreferences implements UserPreferences {
 		if (preferences == null)
 			throw new IllegalArgumentException("Cannot find preferences for plug-in " + Activator.PLUGIN_ID + " in project " + project);
 
-		this.listener = new ProjectPreferencesListener(listeners);
-		this.preferences.addPreferenceChangeListener(this.listener);
+		this.preferences.addPreferenceChangeListener(new ProjectPreferencesListener(listeners));
 	}
 	
 	/** @return whether the project should use global or project preferences */
