@@ -336,6 +336,10 @@ You may add additional accurate notices of copyright ownership.
       <update label="Discord Rich Presence for Eclipse IDE All Versions" url="https://dl.bintray.com/kazejiyu/eclipse-discord-integration/updates/"/>
    </url>
 
+   <includes
+         id="java.discord.rpc.feature"
+         version="2.0.0"/>
+
    <requires>
       <import plugin="org.eclipse.ui.workbench" version="3.107.0" match="compatible"/>
       <import plugin="org.eclipse.ui.ide" version="3.11.0" match="compatible"/>
@@ -343,7 +347,7 @@ You may add additional accurate notices of copyright ownership.
       <import plugin="org.eclipse.ui" version="3.107.0" match="compatible"/>
       <import plugin="org.eclipse.core.runtime" version="3.11.0" match="compatible"/>
       <import plugin="org.eclipse.ui.editors" version="3.9.0" match="compatible"/>
-      <import plugin="java-discord-rpc"/>
+      <import plugin="java-discord-rpc" version="2.0.0" match="compatible"/>
    </requires>
 
    <plugin
@@ -359,11 +363,5 @@ You may add additional accurate notices of copyright ownership.
          install-size="0"
          version="0.8.4"
          unpack="false"/>
-
-   <plugin
-         id="java-discord-rpc"
-         download-size="0"
-         install-size="0"
-         version="2.0.0"/>
 
 </feature>
