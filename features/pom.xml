@@ -11,6 +11,7 @@
     </parent>
     
 	<modules>
+        <module>java-discord-rpc.feature</module>
         <module>fr.kazejiyu.discord.rpc.integration.feature</module>
         <module>fr.kazejiyu.discord.rpc.integration.ui.feature</module>
 	</modules>
