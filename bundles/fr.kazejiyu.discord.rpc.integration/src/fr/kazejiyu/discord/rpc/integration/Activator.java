@@ -15,6 +15,7 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_ELAPSED
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_FILE_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_LANGUAGE_ICON;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_RICH_PRESENCE;
 
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.ISelectionListener;
@@ -26,9 +27,12 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcProxy;
 import fr.kazejiyu.discord.rpc.integration.core.PreferredDiscordRpc;
 import fr.kazejiyu.discord.rpc.integration.listener.AddListenerOnWindowOpened;
+import fr.kazejiyu.discord.rpc.integration.listener.ConnectionSynchronizer;
 import fr.kazejiyu.discord.rpc.integration.listener.FileChangeListener;
+import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
 
 /**
  * This class, activated on Eclipse's start-up:
@@ -59,14 +63,20 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 		}
 	}
 
-	/** Initialises the connection to Discord and shows active editor, if any */
+	/** Initializes the connection to Discord and shows active editor, if any */
 	private void connectToDiscord() {
-		discord = new PreferredDiscordRpc();
-		discord.initialize();
-		discord.showNothing();
+		GlobalPreferences preferences = new GlobalPreferences();
+		discord = new PreferredDiscordRpc(new DiscordRpcProxy(), preferences);
+		
+		if (preferences.showsRichPresence()) {
+			discord.initialize();
+			discord.showNothing();
+		}
 		
 		fileChange = new FileChangeListener(discord);
 		fileChange.notifyDiscordWithActivePart();
+		
+		preferences.addSettingChangeListener(new ConnectionSynchronizer(discord, fileChange::notifyDiscordWithActivePart));
 	}
 
 	/** Sets up listeners so that the given listener is notified each time a new part is selected */
@@ -95,6 +105,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 		getPreferenceStore().setDefault(SHOW_PROJECT_NAME.property(), true);
 		getPreferenceStore().setDefault(SHOW_ELAPSED_TIME.property(), true);
 		getPreferenceStore().setDefault(SHOW_LANGUAGE_ICON.property(), true);
+		getPreferenceStore().setDefault(SHOW_RICH_PRESENCE.property(), true);
 		getPreferenceStore().setDefault(RESET_ELAPSED_TIME.property(), RESET_ELAPSED_TIME_ON_NEW_PROJECT.property());
 	}
 	

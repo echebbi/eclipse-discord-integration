@@ -43,6 +43,8 @@ public enum Settings {
 	
 	USE_PROJECT_SETTINGS("USE_PROJECT_SETTINGS"),
 	
+	SHOW_RICH_PRESENCE("SHOW_RICH_PRESENCE"),
+	
 	PROJECT_NAME("PROJECT_NAME");
 	
 	private static final Map<String, Settings> propertyToSetting = new HashMap<>();

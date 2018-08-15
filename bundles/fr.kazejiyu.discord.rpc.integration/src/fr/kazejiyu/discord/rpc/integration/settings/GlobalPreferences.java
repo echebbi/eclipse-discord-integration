@@ -17,6 +17,7 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_ELAPSED
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_FILE_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_LANGUAGE_ICON;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_RICH_PRESENCE;
 import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
@@ -70,6 +71,11 @@ public class GlobalPreferences implements UserPreferences {
 	@Override
 	public boolean showsLanguageIcon() {
 		return store.getBoolean(SHOW_LANGUAGE_ICON.property());
+	}
+	
+	@Override
+	public boolean showsRichPresence() {
+		return store.getBoolean(SHOW_RICH_PRESENCE.property());
 	}
 	
 	@Override

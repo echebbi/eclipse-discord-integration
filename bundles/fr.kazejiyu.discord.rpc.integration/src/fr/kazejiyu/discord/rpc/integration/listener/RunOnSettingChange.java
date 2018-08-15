@@ -11,6 +11,7 @@ package fr.kazejiyu.discord.rpc.integration.listener;
 
 import static java.util.Objects.requireNonNull;
 
+import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcLifecycle;
 import fr.kazejiyu.discord.rpc.integration.settings.Moment;
 import fr.kazejiyu.discord.rpc.integration.settings.SettingChangeListener;
 
@@ -20,6 +21,8 @@ import fr.kazejiyu.discord.rpc.integration.settings.SettingChangeListener;
  * @author Emmanuel CHEBBI
  */
 class RunOnSettingChange implements SettingChangeListener {
+	
+	private final DiscordRpcLifecycle discord;
 
 	private final Runnable runnable;
 	
@@ -30,7 +33,8 @@ class RunOnSettingChange implements SettingChangeListener {
 	 * 			The instance to run each time a setting changes.
 	 * 			Must not be null.
 	 */
-	RunOnSettingChange(Runnable runnable) {
+	RunOnSettingChange(DiscordRpcLifecycle discord, Runnable runnable) {
+		this.discord = requireNonNull(discord, "Cannot use a null Discord proxy");
 		this.runnable = requireNonNull(runnable, "Cannot run a null runnable");
 	}
 	
@@ -67,6 +71,17 @@ class RunOnSettingChange implements SettingChangeListener {
 	@Override
 	public void projectNameChanged(String oldName, String newName) {
 		runnable.run();
+	}
+	
+	@Override
+	public void richPresenceVisibilityChanged(boolean isVisible) {
+		if (isVisible && ! discord.isConnected()) {
+			discord.initialize();
+			runnable.run();
+		}
+		else if (! isVisible) {
+			discord.shutdown();
+		}
 	}
 
 }

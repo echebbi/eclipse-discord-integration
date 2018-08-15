@@ -16,20 +16,36 @@ public interface DiscordRpcLifecycle extends AutoCloseable {
 
 	/**
 	 * Initialises the connection to Discord session.
+	 * 
+	 * @see #shutdown()
 	 */
 	void initialize();
 	
 	/**
-	 * Shows given presence on Discord.
+	 * Returns whether the instance is currently connected to a Discord client.
+	 * @return {@code true} if the instance is connected to a Discord client,
+	 * 		   {@code false} otherwise
+	 */
+	boolean isConnected();
+	
+	/**
+	 * Shows given presence on Discord.<br>
+	 * <br>
+	 * <b>Caution</b>: the behavior is undefined if the instance is not {@link #isConnected() connected}
+	 * to a Discord client.
 	 * 
 	 * @param rp
 	 * 			Contains the elements to show on Discord.
 	 * 			Must not be {@code null}.
+	 * 
+	 * @see #showNothing()
 	 */
 	void show(RichPresence rp);
 
 	/**
 	 * Clear Discord's rich presence so that only "Playing Eclipse IDE" is shown.
+	 * 
+	 * @see #show(RichPresence)
 	 */
 	void showNothing();
 
@@ -37,6 +53,8 @@ public interface DiscordRpcLifecycle extends AutoCloseable {
 	 * Shutdowns the connection to Discord session.<br>
 	 * <br>
 	 * If this method is called while the connection has already being closed, it has no effect.
+	 * 
+	 * @see #initialize()
 	 */
 	void shutdown();
 	

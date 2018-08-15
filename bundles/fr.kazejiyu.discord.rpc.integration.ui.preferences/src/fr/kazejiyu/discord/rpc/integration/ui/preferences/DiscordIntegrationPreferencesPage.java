@@ -14,6 +14,7 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_ELAPSED
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_FILE_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_LANGUAGE_ICON;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_RICH_PRESENCE;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.BooleanFieldEditor;
@@ -40,6 +41,9 @@ public class DiscordIntegrationPreferencesPage extends FieldEditorPreferencePage
 
 	@Override
     public void createFieldEditors() {
+		BooleanFieldEditor showRichPresence = new BooleanFieldEditor(SHOW_RICH_PRESENCE.property(), "Activate Rich Presence Integration", getFieldEditorParent());
+		addField(showRichPresence);
+		
 		GroupFieldEditor group = new GroupFieldEditor("Privacy", getFieldEditorParent());
 		
         BooleanFieldEditor showFileName = new BooleanFieldEditor(SHOW_FILE_NAME.property(), "Show &file name", group.getFieldEditorParent());
@@ -62,5 +66,5 @@ public class DiscordIntegrationPreferencesPage extends FieldEditorPreferencePage
 		));
         
     }
-    
+
 }
