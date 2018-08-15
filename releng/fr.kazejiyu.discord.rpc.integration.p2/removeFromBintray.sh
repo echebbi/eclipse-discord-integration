@@ -1,8 +1,6 @@
 #!/bin/bash
 # remove p2 metadata artifacts from bintray remote path
 #Sample Usage: removeFromBintray.sh apikey remotePath
-API=https://api.bintray.com
-
 BINTRAY_API_KEY=$1
 PATH_TO_REPOSITORY=$2
 

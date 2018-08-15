@@ -42,6 +42,8 @@ import org.eclipse.ui.IWorkbenchPropertyPage;
 import org.eclipse.ui.dialogs.PropertyPage;
 import org.osgi.service.prefs.BackingStoreException;
 
+import fr.kazejiyu.discord.rpc.integration.Plugin;
+
 /**
  * TODO [Refactor] Since we use IEclipsePreferences to share project properties,
  * 				   is using Resource.*PersistentProperties method really useful ?
@@ -50,6 +52,8 @@ import org.osgi.service.prefs.BackingStoreException;
  */
 public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPropertyPage {
 	
+	private static final String CORE_PLUGIN_ID = "fr.kazejiyu.discord.rpc.integration";
+
 	private IProject project;
 	
 	private IEclipsePreferences preferences;
@@ -67,7 +71,6 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 	private Button resetOnFileSelection;
 	
 	private Text projectName;
-	private Label projectNameLabel;
 	
 	@Override
 	protected Control createContents(Composite parent) {
@@ -75,12 +78,12 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 			return new Composite(parent, SWT.NONE);
 		
 		IScopeContext context = new ProjectScope(project);
-		preferences = context.getNode("fr.kazejiyu.discord.rpc.integration");
+		preferences = context.getNode(CORE_PLUGIN_ID);
 		
 		try {
 			setMissingPropertiesToDefault(project);
 		} catch (CoreException e) {
-			e.printStackTrace();
+			Plugin.logException("Unable to set missing preferences to default", e);
 			return new Composite(parent, SWT.NONE);
 		}
 		
@@ -193,7 +196,7 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 			
 		} catch (CoreException | BackingStoreException e) {
 			// Should never happen
-			e.printStackTrace();
+			Plugin.logException("An unexpected error occurred while saving preferences", e);
 			return false;
 		}
 		return true;
@@ -242,7 +245,7 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 		projectNameGroup.setLayout(gridLayout);
 		projectNameGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		projectNameLabel = new Label(projectNameGroup, SWT.NULL);
+		Label projectNameLabel = new Label(projectNameGroup, SWT.NULL);
 		projectNameLabel.setText("Name displayed for project: ");
 		
 		projectName = new Text(projectNameGroup, SWT.SINGLE | SWT.BORDER);

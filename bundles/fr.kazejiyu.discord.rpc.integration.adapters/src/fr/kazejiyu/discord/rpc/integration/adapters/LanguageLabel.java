@@ -17,13 +17,13 @@ import fr.kazejiyu.discord.rpc.integration.languages.Language;
  *
  * TODO [Refactor] Consider turning Language into an OO architecture to get rid of this class
  */
-class LanguageLabel {
+final class LanguageLabel {
 	
 	private LanguageLabel() {
-		// utility class
+		// utility classes do not need to be instantiated
 	}
 	
-	static String labelOf(Language language, String fileName) {
+	protected static String labelOf(Language language, String fileName) {
 		if (language == UNKNOWN)
 			return "";
 		

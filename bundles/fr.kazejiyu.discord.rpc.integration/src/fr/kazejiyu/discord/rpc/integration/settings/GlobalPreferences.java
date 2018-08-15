@@ -20,13 +20,12 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT
 import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 import fr.kazejiyu.discord.rpc.integration.Activator;
@@ -41,9 +40,7 @@ public class GlobalPreferences implements UserPreferences {
 	
 	private static final String PREFERENCES_STORE_ID = Activator.PLUGIN_ID;
 
-	private List<SettingChangeListener> listeners = new ArrayList<>();
-	
-	private final IPropertyChangeListener listener;
+	private Collection<SettingChangeListener> listeners = new ArrayList<>();
 	
 	private final IPreferenceStore store;
 	
@@ -52,9 +49,7 @@ public class GlobalPreferences implements UserPreferences {
 	 */
 	public GlobalPreferences() {
 		this.store = new ScopedPreferenceStore(InstanceScope.INSTANCE, PREFERENCES_STORE_ID);
-		this.listener = new GlobalPreferencesListener(listeners);
-		
-		this.store.addPropertyChangeListener(this.listener);
+		this.store.addPropertyChangeListener(new GlobalPreferencesListener(listeners));
 	}
 	
 	@Override
