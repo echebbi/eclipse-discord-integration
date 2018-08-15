@@ -9,15 +9,15 @@
 **********************************************************************/
 package fr.kazejiyu.discord.rpc.integration.settings;
 
-import static fr.kazejiyu.discord.rpc.integration.settings.Settings.PROJECT_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_FILE;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_PROJECT;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_STARTUP;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_ELAPSED_TIME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_FILE_NAME;
-import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_LANGUAGE_ICON;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_RICH_PRESENCE;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.fromProperty;
 import static java.util.Objects.requireNonNull;
 
@@ -41,6 +41,8 @@ import org.eclipse.jface.util.PropertyChangeEvent;
  */
 public class GlobalPreferencesListener implements IPropertyChangeListener {
 	
+	private static final BiConsumer<PropertyChangeEvent, SettingChangeListener> DO_NOTHING = (evt, listener) -> {};
+	
 	private final Collection<SettingChangeListener> listeners;
 	
 	private final Map<String, BiConsumer<PropertyChangeEvent, SettingChangeListener>> events = new HashMap<>();
@@ -55,17 +57,17 @@ public class GlobalPreferencesListener implements IPropertyChangeListener {
 	public GlobalPreferencesListener(Collection<SettingChangeListener> listeners) {
 		this.listeners = requireNonNull(listeners, "The collection of listeners must not be null");
 		
-		events.put(PROJECT_NAME.property(), (event, listener) -> {}); // Should never be called
 		events.put(SHOW_FILE_NAME.property(), (event, listener) -> listener.fileNameVisibilityChanged(Boolean.parseBoolean((String) event.getNewValue())));
 		events.put(SHOW_PROJECT_NAME.property(), (event, listener) -> listener.projectNameVisibilityChanged(Boolean.parseBoolean((String) event.getNewValue())));
 		events.put(SHOW_ELAPSED_TIME.property(), (event, listener) -> listener.elapsedTimeVisibilityChanged(Boolean.parseBoolean((String) event.getNewValue())));
 		events.put(SHOW_LANGUAGE_ICON.property(), (event, listener) -> listener.languageIconVisibilityChanged(Boolean.parseBoolean((String) event.getNewValue())));
+		events.put(SHOW_RICH_PRESENCE.property(), (event, listener) -> listener.richPresenceVisibilityChanged(Boolean.parseBoolean((String) event.getNewValue())));
 		events.put(RESET_ELAPSED_TIME.property(), (event, listener) -> listener.elapsedTimeResetMomentChanged(toMoment(event.getOldValue()), toMoment(event.getNewValue())));
 	}
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
-		BiConsumer<PropertyChangeEvent, SettingChangeListener> callback = events.get(event.getProperty());
+		BiConsumer<PropertyChangeEvent, SettingChangeListener> callback = events.getOrDefault(event.getProperty(), DO_NOTHING);
 		
 		for (SettingChangeListener listener : listeners) {
 			callback.accept(event, listener);

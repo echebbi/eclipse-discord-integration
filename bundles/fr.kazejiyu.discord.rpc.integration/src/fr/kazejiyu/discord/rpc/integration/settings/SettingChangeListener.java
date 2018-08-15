@@ -81,4 +81,13 @@ public interface SettingChangeListener {
 	 */
 	void projectNameChanged(String oldName, String newName);
 	
+	/**
+	 * Called when the user choose to whether show or hide rich presence in Discord.
+	 * 
+	 * @param isVisible
+	 * 			{@code true} if the user wants to show rich presence in Discord,
+	 * 			{@code false} otherwise.
+	 */
+	void richPresenceVisibilityChanged(boolean isVisible);
+	
 }

@@ -104,7 +104,7 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
 	 */
 	private void updateDiscord() {
 		try {
-			if (lastSelectedPart == null)
+			if ((lastSelectedPart == null) || (! discord.isConnected()))
 				return;
 			
 			IEditorPart editor = (IEditorPart) lastSelectedPart;
@@ -155,7 +155,7 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
 		
 		presence.getProject().ifPresent(project -> {
 			lastSelectedProjectPreferences = new ProjectPreferences(project);
-			lastSelectedProjectListener = new RunOnSettingChange(this::updateDiscord);
+			lastSelectedProjectListener = new RunOnSettingChange(discord, this::updateDiscord);
 			lastSelectedProjectPreferences.addSettingChangeListener(lastSelectedProjectListener);
 		});
 	}

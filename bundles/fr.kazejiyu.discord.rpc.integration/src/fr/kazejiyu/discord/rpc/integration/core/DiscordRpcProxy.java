@@ -26,14 +26,27 @@ public class DiscordRpcProxy implements DiscordRpcLifecycle {
 	/** Identifies the Discord Rich Presence for Eclipse IDE application */
 	private static final String APPLICATION_ID = "413038514616139786";
 	
+	/** Whether the proxy is connected to a Discord client */
+	private boolean isConnected = false;
+	
 	@Override
 	public void initialize() {
 		DiscordRPC.INSTANCE.Discord_Initialize(APPLICATION_ID, createHandlers(), true, "");
+		this.isConnected = true;
 	}
 	
 	/** @return the handlers handling Discord events */
 	private DiscordEventHandlers createHandlers() {
-		return new DiscordEventHandlers();
+		DiscordEventHandlers handlers = new DiscordEventHandlers();
+		handlers.ready = user -> isConnected = true;
+		handlers.disconnected = (status, message) -> isConnected = false;
+		
+		return handlers;
+	}
+	
+	@Override
+	public boolean isConnected() {
+		return this.isConnected;
 	}
 	
 	@Override
@@ -58,5 +71,6 @@ public class DiscordRpcProxy implements DiscordRpcLifecycle {
 	@Override
 	public void shutdown() {
 		DiscordRPC.INSTANCE.Discord_Shutdown();
+		this.isConnected = false;
 	}
 }

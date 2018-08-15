@@ -65,6 +65,11 @@ public class PreferredDiscordRpc implements DiscordRpcLifecycle {
 	}
 	
 	@Override
+	public boolean isConnected() {
+		return discord.isConnected();
+	}
+	
+	@Override
 	public void shutdown() {
 		discord.shutdown();
 	}
