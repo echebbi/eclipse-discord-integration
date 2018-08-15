@@ -53,9 +53,15 @@ Currently, there is no option to prevent this once the plug-in is started. Howev
 
 From that time on, Discord won't be notified anymore by Eclipse IDE. In order to re-activate Rich Presence, follow the steps above and check _Eclipse Discord Integration_ again.
 
-## Work in Progress
+## License
 
-**Disclaimer**: The work is still in progress. The code will also be refactored and the API is likely to change.
+The Discord Rich Presence for Eclipse IDE plug-in is licensed under the [Eclipse Public License 2.0](https://www.eclipse.org/legal/epl-2.0/).
+
+It uses different third-party components which licensed under:
+- the Apache Public License 2.0 
+  - [java-discord-rpc](https://github.com/MinnDevelopment/java-discord-rpc) Copyright (c) 2016 - 2018 Florian Spieß
+- the MIT License (MIT)
+  - [fileicons-render](https://github.com/HelloWorld017/fileicons-render) Copyright (c) 2014
 
 ## Thanks
 
