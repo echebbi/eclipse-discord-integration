@@ -2,7 +2,6 @@ package fr.kazejiyu.discord.rpc.integration.settings;
 
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.only;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
@@ -22,10 +21,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 
-import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferencesListener;
-import fr.kazejiyu.discord.rpc.integration.settings.Moment;
-import fr.kazejiyu.discord.rpc.integration.settings.SettingChangeListener;
-import fr.kazejiyu.discord.rpc.integration.settings.Settings;
 import fr.kazejiyu.discord.rpc.integration.tests.mock.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -70,8 +65,8 @@ public class GlobalPreferencesListenerTest implements WithAssertions {
 		
 		listener.propertyChange(event);
 		
+		verify(settingChangeListener).fileNameVisibilityChanged(newValue);
 		verify(settingChangeListener, only()).fileNameVisibilityChanged(newValue);
-		verify(settingChangeListener, times(1)).fileNameVisibilityChanged(newValue);
 	}
 	
 	@ParameterizedTest(name="when old value={0} and new value={1}") 
@@ -84,8 +79,8 @@ public class GlobalPreferencesListenerTest implements WithAssertions {
 		
 		listener.propertyChange(event);
 		
+		verify(settingChangeListener).projectNameVisibilityChanged(newValue);
 		verify(settingChangeListener, only()).projectNameVisibilityChanged(newValue);
-		verify(settingChangeListener, times(1)).projectNameVisibilityChanged(newValue);
 	}
 	
 	@ParameterizedTest(name="when old value={0} and new value={1}") 
@@ -98,8 +93,8 @@ public class GlobalPreferencesListenerTest implements WithAssertions {
 		
 		listener.propertyChange(event);
 		
+		verify(settingChangeListener).elapsedTimeVisibilityChanged(newValue);
 		verify(settingChangeListener, only()).elapsedTimeVisibilityChanged(newValue);
-		verify(settingChangeListener, times(1)).elapsedTimeVisibilityChanged(newValue);
 	}
 	
 	@ParameterizedTest(name="when old value={0} and new value={1}")
@@ -112,8 +107,22 @@ public class GlobalPreferencesListenerTest implements WithAssertions {
 		
 		listener.propertyChange(event);
 		
+		verify(settingChangeListener).languageIconVisibilityChanged(newValue);
 		verify(settingChangeListener, only()).languageIconVisibilityChanged(newValue);
-		verify(settingChangeListener, times(1)).languageIconVisibilityChanged(newValue);
+	}
+	
+	@ParameterizedTest(name="when old value={0} and new value = {1}")
+	@MethodSource("pairsOfBooleans")
+	@DisplayName("notifies its listeners when showRichPresence property changes")
+	void notifies_its_listeners_when_showRichPresence_property_changes(boolean oldValue, boolean newValue) {
+		when(event.getProperty()).thenReturn(Settings.SHOW_RICH_PRESENCE.property());
+		when(event.getOldValue()).thenReturn(String.valueOf(oldValue));
+		when(event.getNewValue()).thenReturn(String.valueOf(newValue));
+		
+		listener.propertyChange(event);
+		
+		verify(settingChangeListener).richPresenceVisibilityChanged(newValue);
+		verify(settingChangeListener, only()).richPresenceVisibilityChanged(newValue);
 	}
 	
 	static Stream<Arguments> pairsOfBooleans() {
@@ -133,8 +142,8 @@ public class GlobalPreferencesListenerTest implements WithAssertions {
 		
 		listener.propertyChange(event);
 		
+		verify(settingChangeListener).elapsedTimeResetMomentChanged(oldMoment, newMoment);
 		verify(settingChangeListener, only()).elapsedTimeResetMomentChanged(oldMoment, newMoment);
-		verify(settingChangeListener, times(1)).elapsedTimeResetMomentChanged(oldMoment, newMoment);
 	}
 	
 	static Stream<Arguments> momentCombinations() {
@@ -163,8 +172,8 @@ public class GlobalPreferencesListenerTest implements WithAssertions {
 		
 		listener.propertyChange(event);
 		
+		verify(settingChangeListener).elapsedTimeResetMomentChanged(null, null);
 		verify(settingChangeListener, only()).elapsedTimeResetMomentChanged(null, null);
-		verify(settingChangeListener, times(1)).elapsedTimeResetMomentChanged(null, null);
 	}
 
 }
