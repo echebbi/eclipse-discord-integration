@@ -1,6 +1,10 @@
 package fr.kazejiyu.discord.rpc.integration.core;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,11 +12,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 
-import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcLifecycle;
-import fr.kazejiyu.discord.rpc.integration.core.PreferredDiscordRpc;
-import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
 import fr.kazejiyu.discord.rpc.integration.tests.mock.MockitoExtension;
 
@@ -89,6 +92,13 @@ public class PreferredDiscordRpcTest implements WithAssertions {
 		
 		verify(delegate, only()).show(any(RichPresence.class));
 		verify(delegate, times(1)).show(any(RichPresence.class));
+	}
+	
+	@ParameterizedTest(name="when isConnected={0}")
+	@ValueSource(strings= {"true", "false"})
+	void delegates_the_call_to_isConnected(boolean isConnected) {
+		when(delegate.isConnected()).thenReturn(isConnected);
+		assertThat(discord.isConnected()).isEqualTo(isConnected);
 	}
 	
 }

@@ -3,9 +3,7 @@ package fr.kazejiyu.discord.rpc.integration.listener;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
@@ -25,7 +23,6 @@ import org.mockito.Mock;
 
 import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcLifecycle;
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
-import fr.kazejiyu.discord.rpc.integration.listener.FileChangeListener;
 import fr.kazejiyu.discord.rpc.integration.tests.mock.MockitoExtension;
 
 /**
@@ -47,6 +44,9 @@ public class FileChangeListenerTest implements WithAssertions {
 	void instantiateObjectUnderTest() {
 		listener = new FileChangeListener(discord);
 		when(activePart.getEditorInput()).thenReturn(mock(IEditorInput.class));
+		
+		// Discord is considered connected by default
+		when(discord.isConnected()).thenReturn(true);
 	}
 	
 	@Nested
@@ -87,15 +87,13 @@ public class FileChangeListenerTest implements WithAssertions {
 		listener.partClosed(closedPartRef);
 		
 		// Then: discord shows nothing
-		verify(discord, only()).showNothing();
-		verify(discord, times(1)).showNothing();
+		verify(discord).showNothing();
 	}
 	
 	@Test @DisplayName("sends a presence to Discord when a new selection occurs")
 	void sends_a_presence_to_discord_when_a_new_selection_occurs() {
 		listener.selectionChanged(activePart, null);
-		verify(discord, only()).show(any(RichPresence.class));
-		verify(discord, times(1)).show(any(RichPresence.class));
+		verify(discord).show(any(RichPresence.class));
 	}
 	
 	@Test @DisplayName("does nothing when a new selection occurs on the current active part")
@@ -103,13 +101,21 @@ public class FileChangeListenerTest implements WithAssertions {
 		listener.selectionChanged(activePart, null);
 		listener.selectionChanged(activePart, null);
 		
-		verify(discord, only()).show(any(RichPresence.class));
-		verify(discord, times(1)).show(any(RichPresence.class));
+		verify(discord).show(any(RichPresence.class));
 	}
 	
 	@Test @DisplayName("does nothing when a new selection occurs on a non editor part")
 	void does_nothing_when_a_selection_occurs_on_a_non_editor_part(@Mock IWorkbenchPart view) {
 		listener.selectionChanged(view, null);
+		verifyZeroInteractions(discord);
+	}
+	
+	@Test @DisplayName("does nothing when a new selection occurs but Discord is disconnected")
+	void does_nothing_when_a_selection_occurs_but_discord_is_disconnected(@Mock IWorkbenchPart view) {
+		when(discord.isConnected()).thenReturn(false);
+		
+		listener.selectionChanged(view, null);
+		
 		verifyZeroInteractions(discord);
 	}
 	
@@ -119,7 +125,7 @@ public class FileChangeListenerTest implements WithAssertions {
 		
 		listener.partActivated(activatedPartRef);
 		
-		verify(discord, only()).show(any(RichPresence.class));
+		verify(discord).show(any(RichPresence.class));
 	}
 	
 	@Test @DisplayName("does nothing when part brought to top")

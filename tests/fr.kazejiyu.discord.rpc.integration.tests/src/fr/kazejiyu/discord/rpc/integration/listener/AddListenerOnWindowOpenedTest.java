@@ -25,8 +25,8 @@ import fr.kazejiyu.discord.rpc.integration.tests.mock.MockitoExtension;
 @DisplayName("An AddListenerOnWindowOpened")
 public class AddListenerOnWindowOpenedTest implements WithAssertions {
 
-	/** Instance Under Test */
-	private AddListenerOnWindowOpened<?> iud;
+	/** Software Under Test */
+	private AddListenerOnWindowOpened<?> sut;
 
 	@Mock
 	private SelectionListenerAndPartListener2 listener;
@@ -36,17 +36,17 @@ public class AddListenerOnWindowOpenedTest implements WithAssertions {
 	
 	@BeforeEach
 	void instanciateClassUnderTest() {
-		iud = new AddListenerOnWindowOpened<>(listener);
+		sut = new AddListenerOnWindowOpened<>(listener);
 	}
 	
 	@Test @DisplayName("does not throw when a null window opens")
 	void does_not_throw_when_a_null_window_opens() {
-		iud.windowOpened(null);
+		sut.windowOpened(null);
 	}
 	
 	@Test @DisplayName("does not throw when a null window closes")
 	void does_not_throw_when_a_null_window_closes() {
-		iud.windowClosed(null);
+		sut.windowClosed(null);
 	}
 	
 	@Test @DisplayName("adds listener as a new selection listener of each window that opens")
@@ -59,7 +59,7 @@ public class AddListenerOnWindowOpenedTest implements WithAssertions {
 		when(window.getPages()).thenReturn(new IWorkbenchPage[] {});
 		
 		// When: the window opens
-		iud.windowOpened(window);
+		sut.windowOpened(window);
 		
 		// Then: the listener has been registered
 		verify(service, atLeastOnce()).addSelectionListener(listener);
@@ -76,7 +76,7 @@ public class AddListenerOnWindowOpenedTest implements WithAssertions {
 		when(window.getPages()).thenReturn(pages);
 		
 		// When: the window opens
-		iud.windowOpened(window);
+		sut.windowOpened(window);
 		
 		// Then: the listener has been registered
 		for (IWorkbenchPage page : pages)
@@ -93,7 +93,7 @@ public class AddListenerOnWindowOpenedTest implements WithAssertions {
 		when(window.getPages()).thenReturn(new IWorkbenchPage[] {});
 		
 		// When: the window opens
-		iud.windowClosed(window);
+		sut.windowClosed(window);
 		
 		// Then: the listener has been registered
 		verify(service, atLeastOnce()).removeSelectionListener(listener);
@@ -110,7 +110,7 @@ public class AddListenerOnWindowOpenedTest implements WithAssertions {
 		when(window.getPages()).thenReturn(pages);
 		
 		// When: the window opens
-		iud.windowClosed(window);
+		sut.windowClosed(window);
 		
 		// Then: the listener has been registered
 		for (IWorkbenchPage page : pages)
@@ -119,13 +119,13 @@ public class AddListenerOnWindowOpenedTest implements WithAssertions {
 	
 	@Test @DisplayName("does nothing on window activated")
 	void does_nothing_on_window_activated() {
-		iud.windowActivated(window);
+		sut.windowActivated(window);
 		verifyZeroInteractions(window);
 	}
 	
 	@Test @DisplayName("does nothing on window deactivated")
 	void does_nothing_on_window_deactivated() {
-		iud.windowDeactivated(window);
+		sut.windowDeactivated(window);
 		verifyZeroInteractions(window);
 	}
 	

@@ -1,7 +1,9 @@
 package fr.kazejiyu.discord.rpc.integration.listener;
 
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.stream.Stream;
 
@@ -17,9 +19,10 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 
-import fr.kazejiyu.discord.rpc.integration.listener.RunOnSettingChange;
+import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcLifecycle;
 import fr.kazejiyu.discord.rpc.integration.settings.Moment;
 import fr.kazejiyu.discord.rpc.integration.tests.mock.MockitoExtension;
+
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("A RunOnSettingChange")
@@ -30,9 +33,12 @@ public class RunOnSettingChangeTest implements WithAssertions {
 	@Mock
 	private Runnable runnable;
 	
+	@Mock
+	private DiscordRpcLifecycle discord;
+	
 	@BeforeEach()
 	void createInstance() {
-		 listener = new RunOnSettingChange(runnable);
+		 listener = new RunOnSettingChange(discord, runnable);
 	}
 	
 	@Nested
@@ -42,7 +48,14 @@ public class RunOnSettingChangeTest implements WithAssertions {
 		@Test @DisplayName("throws when runnable is null")
 		void throws_when_runnable_is_null() {
 			assertThatNullPointerException().isThrownBy(() -> 
-				new RunOnSettingChange(null)
+				new RunOnSettingChange(discord, null)
+			);
+		}
+			
+		@Test @DisplayName("throws when discord proxy is null")
+		void throws_when_discord_proxy_is_null() {
+			assertThatNullPointerException().isThrownBy(() -> 
+				new RunOnSettingChange(null, runnable)
 			);
 		}
 		
@@ -112,5 +125,50 @@ public class RunOnSettingChangeTest implements WithAssertions {
 	void executes_the_runnable_on_projectNameChange(String oldName, String newName) {
 		listener.projectNameChanged(oldName, newName);
 		verify(runnable, times(1)).run();
+	}
+	
+	@Test @DisplayName("shutdowns Discord connection when RichPresence visibility is set to false")
+	void shutdowns_discord_connection_when_RichPresence_visibility_set_to_false() {
+		when(discord.isConnected()).thenReturn(true);
+		
+		listener.richPresenceVisibilityChanged(false);
+		
+		verify(discord).shutdown();
+	}
+	
+	@Test @DisplayName("initializes Discord connection when RichPresence visibility is set to true")
+	void initializes_discord_connection_when_RichPresence_visibility_set_to_true() {
+		when(discord.isConnected()).thenReturn(false);
+		
+		listener.richPresenceVisibilityChanged(true);
+		
+		verify(discord).initialize();
+	}
+	
+	@Test @DisplayName("runs runnable when RichPresence visibility is set to true")
+	void runs_runnable_when_RichPresence_visibility_is_set_to_true() {
+		when(discord.isConnected()).thenReturn(false);
+		
+		listener.richPresenceVisibilityChanged(true);
+		
+		verify(runnable).run();
+	}
+	
+	@Test @DisplayName("does not re-initialize Discord connection when RichPresence visibility is set to true")
+	void does_not_initialize_connection_on_richPresenceVisibilityChanged_when_already_connected() {
+		when(discord.isConnected()).thenReturn(true);
+		
+		listener.richPresenceVisibilityChanged(true);
+		
+		verify(discord, never()).initialize();
+	}
+	
+	@Test @DisplayName("does not run runnable on richPresenceVisibilityChanged when already connected to discord")
+	void does_not_run_runnable_on_richPresenceVisibilityChanged_when_already_connected_to_discord() {
+		when(discord.isConnected()).thenReturn(true);
+		
+		listener.richPresenceVisibilityChanged(true);
+		
+		verify(runnable, never()).run();
 	}
 }
