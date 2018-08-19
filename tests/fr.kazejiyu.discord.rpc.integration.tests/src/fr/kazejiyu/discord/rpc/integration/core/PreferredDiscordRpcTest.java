@@ -32,11 +32,14 @@ public class PreferredDiscordRpcTest implements WithAssertions {
 	@Mock
 	private RichPresence presence;
 	
+	@Mock
+	private SelectionTimes times;
+	
 	private PreferredDiscordRpc discord;
 	
 	@BeforeEach
 	void instanciate() {
-		discord = new PreferredDiscordRpc(delegate, preferences);
+		discord = new PreferredDiscordRpc(delegate, preferences, times);
 	}
 
 	@Nested
@@ -46,14 +49,14 @@ public class PreferredDiscordRpcTest implements WithAssertions {
 		@Test @DisplayName("throws when DiscordRpcLifecycle is null")
 		void throws_when_DiscordRpcLifecycle_is_null() {
 			assertThatNullPointerException().isThrownBy(() ->
-				new PreferredDiscordRpc(null, preferences)
+				new PreferredDiscordRpc(null, preferences, times)
 			);
 		}
 		
 		@Test @DisplayName("throws when UserPreferences are null")
 		void throws_when_preferences_are_null() {
 			assertThatNullPointerException().isThrownBy(() ->
-				new PreferredDiscordRpc(delegate, null)
+				new PreferredDiscordRpc(delegate, null, times)
 			);
 		}
 		

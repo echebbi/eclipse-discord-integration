@@ -28,9 +28,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcProxy;
-import fr.kazejiyu.discord.rpc.integration.core.PreferredDiscordRpc;
 import fr.kazejiyu.discord.rpc.integration.listener.AddListenerOnWindowOpened;
-import fr.kazejiyu.discord.rpc.integration.listener.ConnectionSynchronizer;
 import fr.kazejiyu.discord.rpc.integration.listener.FileChangeListener;
 import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
 
@@ -48,15 +46,15 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	/** Listens current selection then notify Discord'RPC */
 	private FileChangeListener fileChange;
 
-	/** Used to send rich presence to Discord */
-	private PreferredDiscordRpc discord;
+	/** Used to communicate with Discord */
+	private DiscordRpcProxy discord;
 	
 	@Override
 	public void earlyStartup() {
 		try {
 			setDefaultPreferencesValue();
 			connectToDiscord();
-			listenForSelectionChanges(fileChange);
+			listenForSelectionChangesWith(fileChange);
 			
 		} catch (Exception e) {
 			Plugin.logException("An error occurred while starting the Discord Rich Presence for Eclipse IDE plug-in", e);
@@ -65,8 +63,8 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 
 	/** Initializes the connection to Discord and shows active editor, if any */
 	private void connectToDiscord() {
+		discord = new DiscordRpcProxy();
 		GlobalPreferences preferences = new GlobalPreferences();
-		discord = new PreferredDiscordRpc(new DiscordRpcProxy(), preferences);
 		
 		if (preferences.showsRichPresence()) {
 			discord.initialize();
@@ -75,12 +73,10 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 		
 		fileChange = new FileChangeListener(discord);
 		fileChange.notifyDiscordWithActivePart();
-		
-		preferences.addSettingChangeListener(new ConnectionSynchronizer(discord, fileChange::notifyDiscordWithActivePart));
 	}
 
 	/** Sets up listeners so that the given listener is notified each time a new part is selected */
-	private <T extends ISelectionListener & IPartListener2> void listenForSelectionChanges(T listener) {
+	private <T extends ISelectionListener & IPartListener2> void listenForSelectionChangesWith(T listener) {
 		final IWorkbench workbench = PlatformUI.getWorkbench();
 		
 		workbench.addWindowListener(new AddListenerOnWindowOpened<>(listener));
