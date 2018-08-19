@@ -62,7 +62,7 @@ class RunOnSettingChange implements SettingChangeListener {
 	public void elapsedTimeVisibilityChanged(boolean isVisible) {
 		runnable.run();
 	}
-
+	
 	@Override
 	public void elapsedTimeResetMomentChanged(Moment oldMoment, Moment newMoment) {
 		runnable.run();

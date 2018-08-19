@@ -9,6 +9,10 @@
 **********************************************************************/
 package fr.kazejiyu.discord.rpc.integration.core;
 
+import java.util.Objects;
+
+import org.eclipse.core.resources.IProject;
+
 /**
  * The times at which selection changed. 
  */
@@ -16,26 +20,27 @@ public class SelectionTimes {
 
 	private final long timeOnStartup;
 	
-	private final long timeOnNewProject;
+	private long timeOnNewProject;
 	
-	private final long timeOnNewSelection;
+	private long timeOnNewSelection;
 	
-	protected SelectionTimes() {
+	private IProject lastSelectedProject = null;
+	
+	public SelectionTimes() {
 		this.timeOnStartup = this.timeOnNewProject = this.timeOnNewSelection = System.currentTimeMillis() / 1000;
 	}
 	
-	protected SelectionTimes(long timeOnStartup, long timeOnNewProject, long timeOnNewSelection) {
-		this.timeOnStartup = timeOnStartup;
-		this.timeOnNewProject = timeOnNewProject;
-		this.timeOnNewSelection = timeOnNewSelection;
+	public SelectionTimes withNewSelectionInResourceOwnedBy(IProject project) {
+		this.timeOnNewProject = isANewProject(project) ? System.currentTimeMillis() / 1000 : timeOnNewProject;
+		this.timeOnNewSelection = System.currentTimeMillis() / 1000;
+		this.lastSelectedProject = project;
+		
+		return this;
 	}
-
-	public SelectionTimes withNewSelection(boolean isANewProject) {
-		return new SelectionTimes(
-			timeOnStartup,
-			isANewProject ? System.currentTimeMillis() / 1000 : timeOnNewProject,
-			System.currentTimeMillis() / 1000
-		);
+	
+	/** @return whether the selection associated with the presence is in a new project */
+	private boolean isANewProject(IProject project) {
+		return ! Objects.equals(project, lastSelectedProject);
 	}
 	
 	/** @return the timestamp on Eclipse startup */

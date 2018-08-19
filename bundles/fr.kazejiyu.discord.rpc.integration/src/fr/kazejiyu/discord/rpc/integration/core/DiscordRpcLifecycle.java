@@ -31,8 +31,7 @@ public interface DiscordRpcLifecycle extends AutoCloseable {
 	/**
 	 * Shows given presence on Discord.<br>
 	 * <br>
-	 * <b>Caution</b>: the behavior is undefined if the instance is not {@link #isConnected() connected}
-	 * to a Discord client.
+	 * Has no effect if {@link #isConnected()} is false.
 	 * 
 	 * @param rp
 	 * 			Contains the elements to show on Discord.

@@ -3,26 +3,34 @@ package fr.kazejiyu.discord.rpc.integration.core;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.assertj.core.api.SoftAssertions;
+import org.eclipse.core.resources.IProject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 
-import fr.kazejiyu.discord.rpc.integration.core.SelectionTimes;
+import fr.kazejiyu.discord.rpc.integration.tests.mock.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
 @DisplayName("A SelectionTimes")
 public class SelectionTimesTest {
 	
 	private long before;
-	private SelectionTimes times;
 	private long after;
+
+	private SelectionTimes times;
+	
+	@Mock
+	private IProject selectedProject;
 
 	@BeforeEach
 	void createSelectionTimes() {
 		before = System.currentTimeMillis() / 1000;
 		times = new SelectionTimes();
 		after = System.currentTimeMillis() / 1000;
+		
+		times.withNewSelectionInResourceOwnedBy(selectedProject);
 	}
 	
 	@Test @DisplayName("is initialized with current timestamp")
@@ -34,40 +42,36 @@ public class SelectionTimesTest {
 		softly.assertAll();
 	}
 	
-	@ParameterizedTest
-	@CsvSource({"true", "false"})
-	@DisplayName("creates a new instance when configured with a new selection")
-	void creates_a_new_instance_when_configured_with_a_new_selection(boolean isNewProject) {
-		assertThat(times).isNotSameAs(times.withNewSelection(isNewProject));
+	@Test @DisplayName("returns the same instance when configured with a new selection")
+	void returns_the_same_instance_when_configured_with_a_new_selection(@Mock IProject newProject) {
+		assertThat(times).isSameAs(times.withNewSelectionInResourceOwnedBy(newProject));
 	}
 	
-	@ParameterizedTest
-	@CsvSource({"true", "false"})
-	@DisplayName("does not reset time on startup on new selection")
-	void does_not_reset_time_on_new_project_on_new_selection(boolean isNewProject) {
-		assertThat(times.withNewSelection(isNewProject).onStartup()).isEqualTo(times.onStartup());
+	@Test @DisplayName("does not reset time on startup on new selection")
+	void does_not_reset_time_on_new_project_on_new_selection(@Mock IProject newProject) {
+		long expectedTimeOnStartup = times.onStartup();
+		assertThat(times.withNewSelectionInResourceOwnedBy(newProject).onStartup()).isEqualTo(expectedTimeOnStartup);
 	}
 	
 	@Test @DisplayName("does not reset time on new project if selection is in the same project")
 	void does_not_reset_time_on_new_project_if_selection_is_in_the_same_project() {
-		assertThat(times.withNewSelection(false).onNewProject()).isEqualTo(times.onNewProject());
+		long expectedTimeOnNewProject = times.onNewProject();
+		assertThat(times.withNewSelectionInResourceOwnedBy(selectedProject).onNewProject()).isEqualTo(expectedTimeOnNewProject);
 	}
 	
 	@Test @DisplayName("resets time on new project if selection is in the same project")
 	void resets_time_on_new_project_if_selection_is_in_the_same_project() {
 		long beforeNewSelection = System.currentTimeMillis() / 1000;
-		SelectionTimes timesAtNewSelection = times.withNewSelection(true);
+		SelectionTimes timesAtNewSelection = times.withNewSelectionInResourceOwnedBy(selectedProject);
 		long afterNewSelection = System.currentTimeMillis() / 1000;
 		
 		assertThat(timesAtNewSelection.onNewProject()).isBetween(beforeNewSelection, afterNewSelection);
 	}
 	
-	@ParameterizedTest
-	@CsvSource({"true", "false"})
-	@DisplayName("resets time on selection if selection changes")
-	void resets_time_on__selection_if_selection_changes(boolean isNewProject) {
+	@Test @DisplayName("resets time on selection if selection changes")
+	void resets_time_on__selection_if_selection_changes() {
 		long beforeNewSelection = System.currentTimeMillis() / 1000;
-		SelectionTimes timesAtNewSelection = times.withNewSelection(isNewProject);
+		SelectionTimes timesAtNewSelection = times.withNewSelectionInResourceOwnedBy(selectedProject);
 		long afterNewSelection = System.currentTimeMillis() / 1000;
 		
 		assertThat(timesAtNewSelection.onSelection()).isBetween(beforeNewSelection, afterNewSelection);

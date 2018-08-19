@@ -51,16 +51,18 @@ public class DiscordRpcProxy implements DiscordRpcLifecycle {
 	
 	@Override
 	public void show(RichPresence rp) {
-		DiscordRichPresence presence = new DiscordRichPresence();
-		
-		rp.getState().ifPresent(state -> presence.state = state);
-		rp.getDetails().ifPresent(details -> presence.details = details);
-		rp.getStartTimestamp().ifPresent(start -> presence.startTimestamp = start);
-		rp.getLargeImageText().ifPresent(text -> presence.largeImageText = text);
-		rp.getLanguage().map(Language::getKey).ifPresent(key -> presence.largeImageKey = key);
-		
-		DiscordRPC.INSTANCE.Discord_UpdatePresence(presence);
-		DiscordRPC.INSTANCE.Discord_RunCallbacks();
+		if (isConnected) {
+			DiscordRichPresence presence = new DiscordRichPresence();
+			
+			rp.getState().ifPresent(state -> presence.state = state);
+			rp.getDetails().ifPresent(details -> presence.details = details);
+			rp.getStartTimestamp().ifPresent(start -> presence.startTimestamp = start);
+			rp.getLargeImageText().ifPresent(text -> presence.largeImageText = text);
+			rp.getLanguage().map(Language::getKey).ifPresent(key -> presence.largeImageKey = key);
+			
+			DiscordRPC.INSTANCE.Discord_UpdatePresence(presence);
+			DiscordRPC.INSTANCE.Discord_RunCallbacks();
+		}
 	}
 	
 	@Override

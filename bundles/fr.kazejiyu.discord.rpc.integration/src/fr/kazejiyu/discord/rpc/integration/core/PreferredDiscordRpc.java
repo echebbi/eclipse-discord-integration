@@ -11,10 +11,6 @@ package fr.kazejiyu.discord.rpc.integration.core;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.Objects;
-
-import org.eclipse.core.resources.IProject;
-
 import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
 import fr.kazejiyu.discord.rpc.integration.settings.UserPreferences;
 
@@ -33,16 +29,7 @@ public class PreferredDiscordRpc implements DiscordRpcLifecycle {
 	private final GlobalPreferences preferences;
 
 	// Used to manage elapsed time
-	private IProject lastSelectedProject = null;
-	private SelectionTimes times = new SelectionTimes();
-	
-	/**
-	 * Creates a new instance using {@link DiscordRpcProxy} to communicate with Discord and
-	 * {@link GlobalPreferences} to check user's preferences.
-	 */
-	public PreferredDiscordRpc() {
-		this(new DiscordRpcProxy(), new GlobalPreferences());
-	}
+	private SelectionTimes times;
 	
 	/**
 	 * Creates a new instance.
@@ -54,9 +41,10 @@ public class PreferredDiscordRpc implements DiscordRpcLifecycle {
 	 * 			Allows to check user's preferences.
 	 * 			Must not be null.
 	 */
-	public PreferredDiscordRpc(DiscordRpcLifecycle discord, GlobalPreferences preferences) {
+	public PreferredDiscordRpc(DiscordRpcLifecycle discord, GlobalPreferences preferences, SelectionTimes times) {
 		this.discord = requireNonNull(discord, "Discord proxy must not be null");
 		this.preferences = requireNonNull(preferences, "Preferences must not be null");
+		this.times = requireNonNull(times, "The times of selection must not be null");
 	}
 	
 	@Override
@@ -76,8 +64,6 @@ public class PreferredDiscordRpc implements DiscordRpcLifecycle {
 
 	@Override
 	public void show(RichPresence presence) {
-		updateTimesOnSelection(presence);
-
 		RichPresence presenceFollowingPreferences = new PreferredRichPresence(
 			preferences.getApplicablePreferencesFor(presence.getProject().orElse(null)), 
 			presence, 
@@ -85,8 +71,6 @@ public class PreferredDiscordRpc implements DiscordRpcLifecycle {
 		);
 		
 		discord.show(presenceFollowingPreferences);
-
-		updateLastSelectedProject(presenceFollowingPreferences);
 	}
 	
 	@Override
@@ -94,17 +78,4 @@ public class PreferredDiscordRpc implements DiscordRpcLifecycle {
 		discord.showNothing();
 	}
 	
-	private void updateLastSelectedProject(RichPresence presence) {
-		lastSelectedProject = presence.getProject().orElse(null);
-	}
-
-	/** Updates times so that we know the time on the last selection */
-	private void updateTimesOnSelection(RichPresence presence) {
-		times = times.withNewSelection(isANewProject(presence));
-	}
-	
-	/** @return whether the selection associated with the presence is in a new project */
-	private boolean isANewProject(RichPresence presence) {
-		return ! Objects.equals(presence.getProject().orElse(null), lastSelectedProject);
-	}
 }

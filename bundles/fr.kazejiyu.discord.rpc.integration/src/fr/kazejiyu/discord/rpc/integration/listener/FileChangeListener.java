@@ -27,7 +27,9 @@ import org.eclipse.ui.part.EditorPart;
 
 import fr.kazejiyu.discord.rpc.integration.Plugin;
 import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcLifecycle;
+import fr.kazejiyu.discord.rpc.integration.core.PreferredDiscordRpc;
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
+import fr.kazejiyu.discord.rpc.integration.core.SelectionTimes;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
 import fr.kazejiyu.discord.rpc.integration.extensions.impl.DiscordIntegrationExtensions;
 import fr.kazejiyu.discord.rpc.integration.extensions.impl.UnknownInputRichPresence;
@@ -45,7 +47,7 @@ import fr.kazejiyu.discord.rpc.integration.settings.SettingChangeListener;
 public class FileChangeListener implements ISelectionListener, IPartListener2 {
 	
 	/** Used to update Discord when active project's preferences change */
-	private IWorkbenchPart lastSelectedPart = null;
+	private IEditorPart lastSelectedEditor = null;
 	
 	/** Proxy used to communicate with Discord */
 	private final DiscordRpcLifecycle discord;
@@ -59,7 +61,10 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
 	// Used to watch project's preferences
 	private IProject lastSelectedProject = null;
 	private ProjectPreferences lastSelectedProjectPreferences = null;
-	private SettingChangeListener lastSelectedProjectListener = null;
+	private SettingChangeListener updateDiscordOnSettingChange = null;
+	
+	/** Provides access to the different timestamps */
+	private SelectionTimes times = new SelectionTimes();
 	
 	/**
 	 * Creates a new instances able to listen for the active editor to change.
@@ -69,7 +74,14 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
 	 * 			the active editor changes. Must not be null.
 	 */
 	public FileChangeListener(DiscordRpcLifecycle discord) {
-		this.discord = requireNonNull(discord, "The Discord proxy must not be null");
+		this.preferences.addSettingChangeListener(new RunOnSettingChange(discord, this::updateDiscord));
+		this.preferences.addSettingChangeListener(new ConnectionSynchronizer(discord, this::updateDiscord));
+
+		this.discord = new PreferredDiscordRpc(
+				requireNonNull(discord, "The Discord proxy must not be null"),
+				preferences,
+				times
+		);
 	}
 
 	/**
@@ -77,14 +89,20 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
 	 */
 	public void notifyDiscordWithActivePart() {
 		PlatformUI.getWorkbench().getDisplay().syncExec(this::findActivePart);
-		updateDiscord();
+		
+		// a little trick required because activePart cannot be directly assigned
+		// from within the lambda passed to Display.syncExec()
+		IEditorPart activePart = lastSelectedEditor;
+		lastSelectedEditor = null;
+		
+		selectionChanged(activePart, null);
 	}
 	
-	/** Sets {@link #lastSelectedPart} to workbench's active editor, if any.
+	/** Sets {@link #lastSelectedEditor} to workbench's active editor, if any.
 	 * 	Helps to select automatically the active part on IDE startup. */
 	private void findActivePart() {
 		try {
-			lastSelectedPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+			lastSelectedEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 		} catch (NullPointerException e) {
 			// no active editor
 		}
@@ -92,72 +110,95 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
 
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		if (!(part instanceof IEditorPart) || part.equals(lastSelectedPart))
+		if (!(part instanceof IEditorPart) || part.equals(lastSelectedEditor))
 			return;
 		
-		lastSelectedPart = part;
-		updateDiscord();
-	}
-	
-	/**
-	 * Sends to Discord a new {@link RichPresence} corresponding to the last selected editor part.
-	 */
-	private void updateDiscord() {
 		try {
-			if ((lastSelectedPart == null) || (! discord.isConnected()))
-				return;
+			lastSelectedEditor = (IEditorPart) part;
 			
-			IEditorPart editor = (IEditorPart) lastSelectedPart;
+			Optional<RichPresence> presence = createRichPresenceFrom(lastSelectedEditor);
+			presence.ifPresent(this::updateTimesOnSelection); // must be called before discord.show()
 			
-			EditorInputRichPresence adapter = extensions.findAdapterFor(editor.getEditorInput())
-														.orElseGet(defaultAdapter());
+			presence.map(this::tailorToPreferences)
+					.ifPresent(discord::show);
 			
-			Optional<RichPresence> presence = adapter.createRichPresence(preferences, editor.getEditorInput());
-			presence.ifPresent(discord::show);
 			presence.ifPresent(this::listenForChangesInProjectPreferences);
-			presence.ifPresent(this::updateLastSelectedProject);
+			presence.ifPresent(this::registerLastSelectedProject); // must be called after listenFor..()
 			
 		} catch (Exception e) {
+			// Should never happen, but provides a more appropriate error in case of failure
 			Plugin.logException("An error occured while trying to udpate Discord", e);
 		}
+	}
+	
+	private void updateDiscord() {
+		try {
+			if (lastSelectedEditor != null)
+				createRichPresenceFrom(lastSelectedEditor).ifPresent(discord::show);
+			
+		} catch (Exception e) {
+			// Should never happen, but provides a more appropriate error in case of failure
+			Plugin.logException("An error occured while trying to udpate Discord", e);
+		}
+	}
+	
+	/** 
+	 * Creates a new RichPresence for the given editor part.
+	 * 
+	 * @param editor 
+	 * 			The editor from which a RichPresence has to be created. Must not be null.
+	 *  
+	 * @throws Exception if the adapter used to create the new instance does not follow
+	 *  				  the contract specified by {@link EditorInputRichPresence}.
+	 */
+	private Optional<RichPresence> createRichPresenceFrom(IEditorPart editor) {
+		return extensions.findAdapterFor(editor.getEditorInput())
+						 .orElseGet(defaultAdapter())
+						 .createRichPresence(preferences, editor.getEditorInput());
 	}
 
 	/** @return a built-in adapter that sends nothing to Discord */
 	private Supplier<EditorInputRichPresence> defaultAdapter() {
 		return UnknownInputRichPresence::new;
 	}
+	
+	private void registerLastSelectedProject(RichPresence presence) {
+		lastSelectedProject = presence.getProject().orElse(null);
+	}
 
+	/** Updates times so that we know the time on the last selection */
+	private void updateTimesOnSelection(RichPresence presence) {
+		times = times.withNewSelectionInResourceOwnedBy(presence.getProject().orElse(null));
+	}
+	
+	/** Creates a new listener watching for changes in the active project, if a new one has been activated */
+	private void listenForChangesInProjectPreferences(RichPresence presence) {
+		boolean isAlreadyListening = Objects.equals(presence.getProject().orElse(null), lastSelectedProject);
+		if (isAlreadyListening)
+			return;
+		
+		if (lastSelectedProjectPreferences != null)
+			lastSelectedProjectPreferences.removeSettingChangeListener(updateDiscordOnSettingChange);
+		
+		presence.getProject().ifPresent(project -> {
+			lastSelectedProjectPreferences = new ProjectPreferences(project);
+
+			updateDiscordOnSettingChange = new RunOnSettingChange(discord, this::updateDiscord);
+			lastSelectedProjectPreferences.addSettingChangeListener(updateDiscordOnSettingChange);
+		});
+	}
+	
 	@Override
 	public void partActivated(IWorkbenchPartReference partRef) {
 		// Helps to select automatically a new part when the last one has been closed
 		selectionChanged(partRef.getPart(false), null);
 	}
-
+	
 	@Override
 	public void partClosed(IWorkbenchPartReference partRef) {
-		if (Objects.equals(partRef.getPart(false), lastSelectedPart)) {
+		if (Objects.equals(partRef.getPart(false), lastSelectedEditor)) {
 			discord.showNothing();
 		}
-	}
-	
-	private void updateLastSelectedProject(RichPresence presence) {
-		lastSelectedProject = presence.getProject().orElse(null);
-	}
-	
-	/** Creates a new listener watching for changes in the active project, if a new one has been activated */
-	private void listenForChangesInProjectPreferences(RichPresence presence) {
-		boolean alreadyListening = Objects.equals(presence.getProject().orElse(null), lastSelectedProject);
-		if (alreadyListening)
-			return;
-		
-		if (lastSelectedProjectPreferences != null)
-			lastSelectedProjectPreferences.removeSettingChangeListener(lastSelectedProjectListener);
-		
-		presence.getProject().ifPresent(project -> {
-			lastSelectedProjectPreferences = new ProjectPreferences(project);
-			lastSelectedProjectListener = new RunOnSettingChange(discord, this::updateDiscord);
-			lastSelectedProjectPreferences.addSettingChangeListener(lastSelectedProjectListener);
-		});
 	}
 
 	@Override
