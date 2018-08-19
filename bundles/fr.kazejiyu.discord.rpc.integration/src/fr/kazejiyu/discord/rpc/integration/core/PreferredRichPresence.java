@@ -28,7 +28,7 @@ import fr.kazejiyu.discord.rpc.integration.settings.UserPreferences;
  * 	<li>select the right start timestamp.
  * </ul>
  */
-final class PreferredRichPresence implements RichPresence {
+final public class PreferredRichPresence implements RichPresence {
 	
 	/** Used to determine which information the user wants to hide */
 	private final UserPreferences preferences;
@@ -49,7 +49,7 @@ final class PreferredRichPresence implements RichPresence {
 	 * @param times
 	 * 			The available timestamps. Must not be null.
 	 */
-	PreferredRichPresence(UserPreferences prefs, RichPresence presence, SelectionTimes times) {
+	public PreferredRichPresence(UserPreferences prefs, RichPresence presence, SelectionTimes times) {
 		this.preferences = requireNonNull(prefs, "The preferences must not be null");
 		this.presence = requireNonNull(presence, "The decorated presence must not be null");
 		this.times = requireNonNull(times, "The times must not be null");
