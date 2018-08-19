@@ -27,7 +27,7 @@ import org.eclipse.ui.part.EditorPart;
 
 import fr.kazejiyu.discord.rpc.integration.Plugin;
 import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcLifecycle;
-import fr.kazejiyu.discord.rpc.integration.core.PreferredDiscordRpc;
+import fr.kazejiyu.discord.rpc.integration.core.PreferredRichPresence;
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.core.SelectionTimes;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
@@ -74,14 +74,9 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
 	 * 			the active editor changes. Must not be null.
 	 */
 	public FileChangeListener(DiscordRpcLifecycle discord) {
+		this.discord = requireNonNull(discord, "The Discord proxy must not be null");
 		this.preferences.addSettingChangeListener(new RunOnSettingChange(discord, this::updateDiscord));
 		this.preferences.addSettingChangeListener(new ConnectionSynchronizer(discord, this::updateDiscord));
-
-		this.discord = new PreferredDiscordRpc(
-				requireNonNull(discord, "The Discord proxy must not be null"),
-				preferences,
-				times
-		);
 	}
 
 	/**
@@ -134,7 +129,9 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
 	private void updateDiscord() {
 		try {
 			if (lastSelectedEditor != null)
-				createRichPresenceFrom(lastSelectedEditor).ifPresent(discord::show);
+				createRichPresenceFrom(lastSelectedEditor)
+					.map(this::tailorToPreferences)
+					.ifPresent(discord::show);
 			
 		} catch (Exception e) {
 			// Should never happen, but provides a more appropriate error in case of failure
@@ -164,6 +161,14 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
 	
 	private void registerLastSelectedProject(RichPresence presence) {
 		lastSelectedProject = presence.getProject().orElse(null);
+	}
+	
+	private RichPresence tailorToPreferences(RichPresence presence) {
+		return new PreferredRichPresence(
+			preferences.getApplicablePreferencesFor(presence.getProject().orElse(null)), 
+			presence, 
+			times
+		);
 	}
 
 	/** Updates times so that we know the time on the last selection */
