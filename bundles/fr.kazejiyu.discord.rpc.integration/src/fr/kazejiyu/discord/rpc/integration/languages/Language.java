@@ -33,6 +33,7 @@ public enum Language {
 	BOO("boo", "Boo", "boo"),
 	CLOJURE("clojure", "Clojure", "clj"),
 	COBOL("cobol", "Cobol", "cob", "cbl", "cpy"),
+	C("c", "C", "c", "h"),
 	CPP("cpp", "C++", "cpp", "hpp"),
 	CRYSTAL("crystal", "Crystal", "cr"),
 	CSS("css3", "CSS", "css"),
