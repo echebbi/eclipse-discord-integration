@@ -3,7 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [1.0.0] - 2018-08-23
+### Added
+- Allow to deactivate the Rich Presence integration
+- Handle the C language (_*.c_ and _*.h_ files)
+
 ### Fixed
 - Prevent elapsed time from not showing at startup when set on file change
 
