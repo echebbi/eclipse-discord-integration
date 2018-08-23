@@ -42,22 +42,20 @@ Discord is updated each time the current selection in Eclipse IDE changes. Howev
 
 ## Deactivate Discord Rich Presence
 
-Once the plug-in is installed, Discord Rich Presence is automatically started on Eclipse startup. As a result, Discord displays **Playing Eclipse IDE** as a status message as soon as Eclipse is opened. This behavior may not be desirable.
-
-Currently, there is no option to prevent this once the plug-in is started. However, it is possible to deactivate it: this way, the plug-in won't be launched at Eclipse startup. To this end:
+Once the plug-in is installed, Discord Rich Presence is automatically started on Eclipse startup. As a result, Discord displays **Playing Eclipse IDE** as a status message as soon as Eclipse IDE is opened. This behavior may not be desirable but can be easily deactivated.
 
 1. Open Eclipse Preferences (`Window` > `Preferences`)
-2. Open the _Startup and Shutdown_ page (`General` > `Startup and Shutdown`)
-3. Uncheck _Discord Rich Presence for Eclipse IDE_
-4. Reboot Eclipse IDE
+2. Open the plug-in's page (`Discord Rich Presence`)
+3. Uncheck _Activate Rich Presence Integration_
+4. Click on _Apply_
 
-From that time on, Discord won't be notified anymore by Eclipse IDE. In order to re-activate Rich Presence, follow the steps above and check _Eclipse Discord Integration_ again.
+From that time on, Discord won't be notified anymore by Eclipse IDE. In order to re-activate Rich Presence, follow the steps above and check _Activate Rich Presence Integration_ again.
 
 ## License
 
 The Discord Rich Presence for Eclipse IDE plug-in is licensed under the [Eclipse Public License 2.0](https://www.eclipse.org/legal/epl-2.0/).
 
-It uses different third-party components which licensed under:
+It uses different third-party components which are licensed under:
 - the Apache Public License 2.0 
   - [java-discord-rpc](https://github.com/MinnDevelopment/java-discord-rpc) Copyright (c) 2016 - 2018 Florian Spieß
 - the MIT License (MIT)
