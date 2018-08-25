@@ -1,6 +1,6 @@
 # Discord Rich Presence for Eclipse IDE
 
-![Build Status](https://travis-ci.org/KazeJiyu/eclipse-discord-integration.svg?branch=master) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/6af5be6899274ddc8367c92bd206c281)](https://www.codacy.com/app/KazeJiyu/eclipse-discord-integration?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=KazeJiyu/eclipse-discord-integration&amp;utm_campaign=Badge_Grade) [![codecov](https://codecov.io/gh/KazeJiyu/eclipse-discord-integration/branch/master/graph/badge.svg)](https://codecov.io/gh/KazeJiyu/eclipse-discord-integration) [![Managed with TAIGA.io](https://img.shields.io/badge/managed%20with-TAIGA.io-brightgreen.svg)](https://tree.taiga.io/project/kazejiyu-eclipse-discord-integration/) [ ![Download](https://api.bintray.com/packages/kazejiyu/eclipse-discord-integration/releases/images/download.svg) ](https://bintray.com/kazejiyu/eclipse-discord-integration/releases/_latestVersion)
+![Build Status](https://travis-ci.org/KazeJiyu/eclipse-discord-integration.svg?branch=master) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/6af5be6899274ddc8367c92bd206c281)](https://www.codacy.com/app/KazeJiyu/eclipse-discord-integration?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=KazeJiyu/eclipse-discord-integration&amp;utm_campaign=Badge_Grade) [![codecov](https://codecov.io/gh/KazeJiyu/eclipse-discord-integration/branch/master/graph/badge.svg)](https://codecov.io/gh/KazeJiyu/eclipse-discord-integration) [![Eclipse Marketplace](https://img.shields.io/badge/Eclipse-Marketplace-blue.svg?longCache=true&style=flat&logo=eclipse)](https://marketplace.eclipse.org/content/discord-rich-presence-eclipse-ide) [ ![Download](https://api.bintray.com/packages/kazejiyu/eclipse-discord-integration/releases/images/download.svg) ](https://bintray.com/kazejiyu/eclipse-discord-integration/releases/_latestVersion)
 
 ## Presentation
 
@@ -16,19 +16,21 @@ Here is an example of the Rich Presence Integration:
 
 ## Installation
 
+### From the update site
 The plug-in can be installed from the following update site:
 
 - [https://dl.bintray.com/kazejiyu/eclipse-discord-integration/updates/](https://dl.bintray.com/kazejiyu/eclipse-discord-integration/updates/)
 
 To use it from Eclipse IDE, click on `Help` > `Install new software...` and then paste the above URL.
 
-> **Note**: version 0.y.z should be considered as beta. The 1.0.0 release will be deployed once the plug-in is proved stable.
+### From the Eclipse Marketplace
 
-## Supported OS
+The plug-in is also available in the [Eclipse Marketplace](https://marketplace.eclipse.org/content/discord-rich-presence-eclipse-ide).
 
- - [x] Windows
- - [x] Linux
- - [x] macOS
+Drag the following button to your running Eclipse workspace to start the installation:
+<div align="center">
+  <a href="http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=4240174" class="drag" title="Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client"><img typeof="foaf:Image" class="img-responsive" src="https://marketplace.eclipse.org/sites/all/themes/solstice/public/images/marketplace/btn-install.png" alt="Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client" /></a>
+</div>
 
 ## Troubleshooting
 
@@ -36,9 +38,23 @@ To use it from Eclipse IDE, click on `Help` > `Install new software...` and then
 
 If Discord is not showing anything, ensure that Eclipse IDE is detected as a game. To this end, open Discord `User Settings` then go the `Games` tab. Click on the `Add it!` button and then select Eclipse IDE.
 
-### Discord takes some time to update
+### A 'Workbench early startup error' occurs since the plug-in is installed
 
-Discord is updated each time the current selection in Eclipse IDE changes. However, Discord can take up to 15s to update. Unfortunaly, this setting is server-side: Discord limits how fast the Rich Presence can be updated, and we have no way to change this.
+In case you encounter the following error on startup:
+```
+An internal error occurred during: "Workbench early startup".
+
+There is an incompatible JNA native library installed on this system
+Expected: 5.1.0
+Found: 4.0.1
+```
+you can try to modify the _eclipse.ini_ file which is located next to _eclipse.exe_ and then to in order to set the `jna.nosys` property to true as follows:
+```
+-vmargs
+-Djna.nosys=true
+```
+
+> The `-vmargs` line should already exist, otherwise you can append it at the end of the file.
 
 ## Deactivate Discord Rich Presence
 
