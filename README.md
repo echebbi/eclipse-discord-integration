@@ -48,7 +48,7 @@ There is an incompatible JNA native library installed on this system
 Expected: 5.1.0
 Found: 4.0.1
 ```
-you can try to modify the _eclipse.ini_ file which is located next to _eclipse.exe_ and then to in order to set the `jna.nosys` property to true as follows:
+you can try to modify the _eclipse.ini_ file which is located next to _eclipse.exe_ in order to set the `jna.nosys` property to true as follows:
 ```
 -vmargs
 -Djna.nosys=true
