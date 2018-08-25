@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 - Allow to deactivate the Rich Presence integration
 - Handle the C language (_*.c_ and _*.h_ files)
+- First deployment on the [Eclipse Marketplace](https://marketplace.eclipse.org/content/discord-rich-presence-eclipse-ide)
 
 ### Fixed
 - Prevent elapsed time from not showing at startup when set on file change
