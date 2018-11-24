@@ -20,6 +20,14 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
+	<!-- COMMANDS:	
+		* Change project's version:
+			mvn org.eclipse.tycho:tycho-versions-plugin:set-version -DnewVersion=major.minor.bug
+
+		* Deploy current version on Bintray:
+			mvn clean verify -P release-composite
+	-->
+
 	<build>
 		<plugins>
 			<!-- Activate Tycho -->
