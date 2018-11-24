@@ -30,6 +30,7 @@ import org.osgi.framework.BundleContext;
 import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcProxy;
 import fr.kazejiyu.discord.rpc.integration.listener.AddListenerOnWindowOpened;
 import fr.kazejiyu.discord.rpc.integration.listener.FileChangeListener;
+import fr.kazejiyu.discord.rpc.integration.listener.OnPostShutdown;
 import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
 
 /**
@@ -57,7 +58,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 			listenForSelectionChangesWith(fileChange);
 			
 		} catch (Exception e) {
-			Plugin.logException("An error occurred while starting the Discord Rich Presence for Eclipse IDE plug-in", e);
+			Plugin.logException("An error occurred while starting the 'Discord Rich Presence for Eclipse IDE' plug-in", e);
 		}
 	}
 
@@ -80,7 +81,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 		final IWorkbench workbench = PlatformUI.getWorkbench();
 		
 		workbench.addWindowListener(new AddListenerOnWindowOpened<>(listener));
-
+		workbench.addWorkbenchListener(new OnPostShutdown(iworkbench -> discord.close()));
 		workbench.getDisplay()
 				 .asyncExec(listenForSelectionInOpenedWindows(workbench));
 	}
@@ -89,6 +90,9 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	public void stop(BundleContext context) throws Exception {
 		try {
 			discord.shutdown();
+		}
+		catch (Exception e) {
+			Plugin.logException("An error occurred while shutting Discord Rich Presence down", e);
 		}
 		finally {
 			super.stop(context);
