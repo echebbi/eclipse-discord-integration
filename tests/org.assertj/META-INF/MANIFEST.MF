@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Assertj
 Bundle-SymbolicName: org.assertj
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.1
 Bundle-ClassPath: assertj-core-3.9.0.jar
 Export-Package: org.assertj.core.api,
  org.assertj.core.api.exception,
