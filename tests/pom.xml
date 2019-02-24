@@ -19,6 +19,9 @@
 
     <properties>
         <jacoco-version>0.8.1</jacoco-version>
+
+        <sonar.sources></sonar.sources>
+        <sonar.tests></sonar.tests>
     </properties>
 
     <build>
