@@ -4,4 +4,4 @@
  * 
  * @author Emmanuel CHEBBI
  */
-package fr.kazejiyu.discord.rpc.integration.extensions.impl;
+package fr.kazejiyu.discord.rpc.integration.extensions.internal;

@@ -23,7 +23,7 @@ import fr.kazejiyu.discord.rpc.integration.settings.Settings;
  * 	<li>given proxy is {@link DiscordRpcLifecycle#shutdown() disconnected}
  * </ul>
  */
-public class ConnectionSynchronizer implements SettingChangeListener {
+public class SynchronizeConnection implements SettingChangeListener {
 	
 	private final DiscordRpcLifecycle discord;
 	
@@ -39,7 +39,7 @@ public class ConnectionSynchronizer implements SettingChangeListener {
 	 * 			Will be executed each time the proxy is initialized.
 	 * 			Must not be {@code null}.
 	 */
-	public ConnectionSynchronizer(DiscordRpcLifecycle discord, Runnable runnable) {
+	public SynchronizeConnection(DiscordRpcLifecycle discord, Runnable runnable) {
 		this.discord = requireNonNull(discord, "Cannot synchronize user preferences with a null Discord proxy");
 		this.runnable = requireNonNull(runnable, "Cannot execute a null runnable");
 	}

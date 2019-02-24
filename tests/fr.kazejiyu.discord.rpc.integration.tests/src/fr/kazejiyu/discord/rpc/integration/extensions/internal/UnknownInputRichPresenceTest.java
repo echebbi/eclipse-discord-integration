@@ -1,4 +1,4 @@
-package fr.kazejiyu.discord.rpc.integration.extensions.impl;
+package fr.kazejiyu.discord.rpc.integration.extensions.internal;
 
 import java.util.Optional;
 
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
-import fr.kazejiyu.discord.rpc.integration.extensions.impl.UnknownInputRichPresence;
+import fr.kazejiyu.discord.rpc.integration.extensions.internal.UnknownInputRichPresence;
 import fr.kazejiyu.discord.rpc.integration.tests.mock.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,7 +30,7 @@ public class UnknownInputRichPresenceTest implements WithAssertions {
 	}
 	
 	@Test @DisplayName("expects any instance of IEditorInput")
-	void expects_any_instance_of_ieditor_input() {
+	void expects_any_instance_of_IEditorInput() {
 		assertThat(adapter.getExpectedEditorInputClass()).isEqualTo(IEditorInput.class);
 	}
 	

@@ -58,7 +58,9 @@ public class DiscordIntegrationPreferencesPage extends FieldEditorPreferencePage
         
         addField(group);
         
-        addField(new RadioGroupFieldEditor(RESET_ELAPSED_TIME.property(), "&Reset elapsed time:", 3,
+        final int numColumns = 3;
+        
+        addField(new RadioGroupFieldEditor(RESET_ELAPSED_TIME.property(), "&Reset elapsed time:", numColumns,
                 new String[][] { { "On startup", "RESET_ELAPSED_TIME_ON_STARTUP" }, 
         						 { "On new project", "RESET_ELAPSED_TIME_ON_NEW_PROJECT" },
                 				 { "On new file", "RESET_ELAPSED_TIME_ON_NEW_FILE" } },

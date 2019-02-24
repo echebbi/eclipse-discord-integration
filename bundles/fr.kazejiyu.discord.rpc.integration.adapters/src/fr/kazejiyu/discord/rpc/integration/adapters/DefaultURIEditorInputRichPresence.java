@@ -82,28 +82,28 @@ public class DefaultURIEditorInputRichPresence implements EditorInputRichPresenc
 		return Optional.of(presence);
 	}
 
-	private String detailsOf(GlobalPreferences preferences, File file) {
+	private static String detailsOf(GlobalPreferences preferences, File file) {
 		if (! preferences.showsFileName())
 			return "";
 		
 		return "Editing " + file.getName();
 	}
 
-	private String stateOf(GlobalPreferences preferences) {
+	private static String stateOf(GlobalPreferences preferences) {
 		if (! preferences.showsProjectName())
 			return "";
 		
 		return "Unknown project";
 	}
 
-	private Language languageOf(UserPreferences preferences, File file) {
+	private static Language languageOf(UserPreferences preferences, File file) {
 		if (! preferences.showsLanguageIcon())
 			return Language.UNKNOWN;
 		
 		return Language.fromFileName(file.getName());
 	}
 
-	private String largeImageTextOf(UserPreferences preferences, File file) {
+	private static String largeImageTextOf(UserPreferences preferences, File file) {
 		if (! preferences.showsLanguageIcon())
 			return "";
 		

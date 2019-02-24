@@ -30,19 +30,19 @@ import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcLifecycle;
 import fr.kazejiyu.discord.rpc.integration.core.PreferredRichPresence;
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.core.SelectionTimes;
+import fr.kazejiyu.discord.rpc.integration.extensions.EditorRichPresenceFromInput;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
-import fr.kazejiyu.discord.rpc.integration.extensions.impl.DiscordIntegrationExtensions;
-import fr.kazejiyu.discord.rpc.integration.extensions.impl.UnknownInputRichPresence;
+import fr.kazejiyu.discord.rpc.integration.extensions.internal.UnknownInputRichPresence;
 import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
 import fr.kazejiyu.discord.rpc.integration.settings.ProjectPreferences;
 import fr.kazejiyu.discord.rpc.integration.settings.SettingChangeListener;
 
 /**
- * Listens for selected part to change.<br>
- * <br>
- * Each a new {@link EditorPart} is selected, a corresponding {@link RichPresence}
+ * <p>Listens for selected part to change.</p>
+ * 
+ * <p>Each a new {@link EditorPart} is selected, a corresponding {@link RichPresence}
  * is created and then forward to a {@link DiscordRpcLifecycle} instance in order to
- * be shown in Discord's UI.
+ * be shown in Discord's UI.</p>
  */
 public class FileChangeListener implements ISelectionListener, IPartListener2 {
 	
@@ -55,8 +55,8 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
 	/** User's preferences */
 	private final GlobalPreferences preferences = new GlobalPreferences();
 	
-	/** Manages extension points */
-	private DiscordIntegrationExtensions extensions = new DiscordIntegrationExtensions();
+	/** Used to to create a RichPresence from the selected editor */
+	private final EditorRichPresenceFromInput adapters;
 	
 	// Used to watch project's preferences
 	private IProject lastSelectedProject = null;
@@ -73,10 +73,11 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
 	 * 			Will be notified with a new {@link RichPresence} instance each time
 	 * 			the active editor changes. Must not be null.
 	 */
-	public FileChangeListener(DiscordRpcLifecycle discord) {
+	public FileChangeListener(DiscordRpcLifecycle discord, EditorRichPresenceFromInput adapters) {
 		this.discord = requireNonNull(discord, "The Discord proxy must not be null");
+		this.adapters = requireNonNull(adapters, "The Discord extensions must not be null");
 		this.preferences.addSettingChangeListener(new RunOnSettingChange(discord, this::updateDiscord));
-		this.preferences.addSettingChangeListener(new ConnectionSynchronizer(discord, this::updateDiscord));
+		this.preferences.addSettingChangeListener(new SynchronizeConnection(discord, this::updateDiscord));
 	}
 
 	/**
@@ -126,6 +127,7 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
 		}
 	}
 	
+	/** Updates Discord by showing a RichPresence corresponding to the last selected editor */
 	private void updateDiscord() {
 		try {
 			if (lastSelectedEditor != null)
@@ -149,13 +151,13 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
 	 *  				  the contract specified by {@link EditorInputRichPresence}.
 	 */
 	private Optional<RichPresence> createRichPresenceFrom(IEditorPart editor) {
-		return extensions.findAdapterFor(editor.getEditorInput())
-						 .orElseGet(defaultAdapter())
-						 .createRichPresence(preferences, editor.getEditorInput());
+		return adapters.findAdapterFor(editor.getEditorInput())
+					   .orElseGet(defaultAdapter())
+					   .createRichPresence(preferences, editor.getEditorInput());
 	}
 
 	/** @return a built-in adapter that sends nothing to Discord */
-	private Supplier<EditorInputRichPresence> defaultAdapter() {
+	private static Supplier<EditorInputRichPresence> defaultAdapter() {
 		return UnknownInputRichPresence::new;
 	}
 	

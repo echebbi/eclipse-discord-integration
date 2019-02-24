@@ -7,7 +7,9 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 **********************************************************************/
-package fr.kazejiyu.discord.rpc.integration.extensions.impl;
+package fr.kazejiyu.discord.rpc.integration.extensions.internal;
+
+import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -17,60 +19,55 @@ import java.util.function.Predicate;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.RegistryFactory;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.ui.IEditorInput;
 
 import fr.kazejiyu.discord.rpc.integration.Plugin;
-import fr.kazejiyu.discord.rpc.integration.core.ImmutableRichPresence;
+import fr.kazejiyu.discord.rpc.integration.extensions.EditorRichPresenceFromInput;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
 
 /**
- * Manages plug-in's extensions.<br>
- * <br>
- * Instances of this class are notably charged of choosing the right
- * {@link EditorInputRichPresence adapter} for a given {@link IEditorInput}.
+ * <p>Manages plug-in's extensions.</p>
+ * 
+ * <p>Instances of this class are notably charged of choosing the right
+ * {@link EditorInputRichPresence adapter} for a given {@link IEditorInput}.</p>
+ * 
+ * <p>Please note that this implementation does not cache the adapters. 
+ * As a result, contributions provided by new plug-ins that have been installed 
+ * during runtime should be dynamically handled. However, this can have important 
+ * consequences on the performance if this method is often called.</p>
  * 
  * @author Emmanuel CHEBBI
  */
-public class DiscordIntegrationExtensions {
+public class EditorRichPresenceFromExtensions implements EditorRichPresenceFromInput {
 
-	private static final String EDITOR_INPUT_ADAPTER_EXTENSION_ID = "fr.kazejiyu.discord.rpc.integration.editor_input_adapter";
-
-	/** The adapters able to create RichPresence instances from IEditorInput instances */
-	private final List<EditorInputRichPresence> adapters;
+	/** The registry in which extensions are looked for */
+	private final IExtensionRegistry registry;
 	
-	public DiscordIntegrationExtensions() {
-		this.adapters = findAllAdapters();
-		this.adapters.sort(null);
+	/**
+	 * Creates a new instance to manage plug-in-related extensions.
+	 * 
+	 * @param registry
+	 * 			The registry storing all the contributions to extension points.
+	 */
+	public EditorRichPresenceFromExtensions(IExtensionRegistry registry) {
+		this.registry = requireNonNull(registry, "Cannot adapt extensions from a null registry");
 	}
 
-	/**
-	 * Returns an adapter able to turn {@code input} into a {@link ImmutableRichPresence}
-	 * instance.<br>
-	 * <br>
-	 * The adapter is one of the adapters registered to the
-	 * {@value #EDITOR_INPUT_ADAPTER_EXTENSION_ID} extension point.
-	 * 
-	 * @param input
-	 *			The input to turn into a {@code RichPresence} instance. 
-	 *          Must not be {@code null}.
-	 * 
-	 * @return an adapter able to handle {@code input}, if any.
-	 */
+	@Override
 	public Optional<EditorInputRichPresence> findAdapterFor(IEditorInput input) {
-		return adapters.stream()
-					   .filter(canHandle(input))
-					   .sorted(byDepthInTreeFrom(input.getClass()))
-					   .findFirst();
+		return allAdaptersIn(registry).stream()
+									  .filter(canHandle(input))
+									  .sorted(byDepthInTreeFrom(input.getClass()))
+									  .findFirst();
 	}
 	
 	/** @return all the elements registered through {@value #EDITOR_INPUT_ADAPTER_EXTENSION_ID} extension
 	 *  		that are instances of {@link EditorInputRichPresence} */
-	private List<EditorInputRichPresence> findAllAdapters() {
+	private static List<EditorInputRichPresence> allAdaptersIn(IExtensionRegistry registry) {
 		List<EditorInputRichPresence> adaptersFound = new ArrayList<>();
 		
-		IConfigurationElement[] elements = 
-				RegistryFactory.getRegistry().getConfigurationElementsFor(EDITOR_INPUT_ADAPTER_EXTENSION_ID);
+		IConfigurationElement[] elements = registry.getConfigurationElementsFor(Plugin.EDITOR_INPUT_ADAPTER_EXTENSION_ID);
 		
 		for (IConfigurationElement element : elements) {
 			Object extension = createExecutableExtension(element);
@@ -83,7 +80,7 @@ public class DiscordIntegrationExtensions {
 	}
 
 	/** @return a new instance of {@code element}'s class property if possible, {@code null} otherwise */
-	private Object createExecutableExtension(IConfigurationElement element) {
+	private static Object createExecutableExtension(IConfigurationElement element) {
 		try {
 			return element.createExecutableExtension("class");
 
@@ -94,28 +91,29 @@ public class DiscordIntegrationExtensions {
 	}
 
 	/** @return whether {@code adapter} can handle {@code input} */
-	private Predicate<EditorInputRichPresence> canHandle(IEditorInput input) {
+	private static Predicate<EditorInputRichPresence> canHandle(IEditorInput input) {
 		return adapter -> adapter.getExpectedEditorInputClass().isInstance(input);
 	}
 	
 	/**
 	 * @return a comparator comparing two elements depending on 
 	 * 		   the distance between their class and {@code parent}. */
-	private <T> Comparator<EditorInputRichPresence> byDepthInTreeFrom(Class<T> parent) {
+	private static <T> Comparator<EditorInputRichPresence> byDepthInTreeFrom(Class<T> parent) {
 		return (lhs, rhs) -> {
 			int lhsProximity = nbrOfClassesBetween(lhs.getExpectedEditorInputClass(), parent);
 			int rhsProximity = nbrOfClassesBetween(rhs.getExpectedEditorInputClass(), parent);
 			
-			// Same distance to parent class, so let's use the priority
+			// Same distance to parent class, so let's use the priority (highest first)
 			if (lhsProximity == rhsProximity)
 				return rhs.getPriority() - lhs.getPriority();
 			
-			return rhsProximity - lhsProximity;
+			// Lowest proximity first
+			return lhsProximity - rhsProximity;
 		};
 	}
 
 	/** @return the number of classes between {@code parent} and {@code child} */
-	private <P, C> int nbrOfClassesBetween(Class<P> parent, Class<C> child) {
+	private static <P, C> int nbrOfClassesBetween(Class<P> parent, Class<C> child) {
 		if (parent.equals(child))
 			return 0;
 
@@ -127,7 +125,7 @@ public class DiscordIntegrationExtensions {
 			if (parent.isAssignableFrom(interf))
 				return 1 + nbrOfClassesBetween(parent, interf);
 		
-		// Should not happen if child inherit from parent
+		// Should not happen if child inherits from parent
 		return Integer.MAX_VALUE;
 	}
 }

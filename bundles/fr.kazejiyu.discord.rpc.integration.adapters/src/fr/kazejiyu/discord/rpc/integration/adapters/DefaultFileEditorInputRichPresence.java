@@ -80,14 +80,14 @@ public class DefaultFileEditorInputRichPresence implements EditorInputRichPresen
 		return Optional.of(presence);
 	}
 
-	private String detailsOf(UserPreferences preferences, IFile file) {
+	private static String detailsOf(UserPreferences preferences, IFile file) {
 		if (! preferences.showsFileName())
 			return "";
 		
 		return "Editing " + file.getName();
 	}
 
-	private String stateOf(UserPreferences preferences, IProject project) {
+	private static String stateOf(UserPreferences preferences, IProject project) {
 		if (! preferences.showsProjectName())
 			return "";
 		
@@ -98,21 +98,21 @@ public class DefaultFileEditorInputRichPresence implements EditorInputRichPresen
 	}
 
 	/** @return either the name of the project, or "an unknown project" is project == null */
-	private String nameOf(IProject project) {
+	private static String nameOf(IProject project) {
 		if (project == null)
 			return "an unknown project";
 		
 		return project.getName(); 
 	}
 
-	private Language languageOf(UserPreferences preferences, IFile file) {
+	private static Language languageOf(UserPreferences preferences, IFile file) {
 		if (! preferences.showsLanguageIcon())
 			return Language.UNKNOWN;
 		
 		return Language.fromFileName(file.getName());
 	}
 
-	private String largeImageTextOf(UserPreferences preferences, IFile file) {
+	private static String largeImageTextOf(UserPreferences preferences, IFile file) {
 		if (! preferences.showsLanguageIcon())
 			return "";
 		
