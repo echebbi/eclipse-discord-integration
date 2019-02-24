@@ -18,6 +18,22 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+
+        <!-- Always refer to the corresponding tests project (if it exists) otherwise 
+        Sonarqube won't be able to collect code coverage. For example, when analyzing 
+        project foo it wouldn't find code coverage information if it doesn't use 
+        foo.tests jacoco.exec. -->
+        <sonar.jacoco.reportPaths>../../tests/${project.artifactId}.tests/target/jacoco.exec</sonar.jacoco.reportPaths>
+        
+		<!-- Ignore :
+				- generated source code,
+				- Exceptions,
+				- untestable activators
+		-->
+        <sonar.exclusions>**/*Exception.java,**/Activator.java,**/Plugin.java</sonar.exclusions>
+	
+		<!-- For some reason Sonar doesn't use the name set in sonar-project.properties -->
+		<sonar.projectName>Discord Rich Presence for Eclipse IDE</sonar.projectName>
 	</properties>
 
 	<!-- COMMANDS:	

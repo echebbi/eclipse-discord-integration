@@ -1,6 +1,23 @@
 language: java
 
-script: mvn verify -Pjacoco
+addons:
+  sonarcloud:
+    organization: "kazejiyu-github"
+
+# Prevents "mvn install" default step
+install: true
+
+before_script:
+  - git fetch --unshallow
+  # Prevent installed packages from being used during build
+  - rm -rfv "$HOME/.m2/repository/fr/kazejiyu/discord/"
+
+script: mvn clean verify -P jacoco sonar:sonar
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+
+# Keep p2 information
+cache:
+  directories:
+    - "$HOME/.m2/repository"
