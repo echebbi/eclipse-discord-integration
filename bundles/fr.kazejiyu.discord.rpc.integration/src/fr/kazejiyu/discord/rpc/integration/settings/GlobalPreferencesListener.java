@@ -9,6 +9,8 @@
 **********************************************************************/
 package fr.kazejiyu.discord.rpc.integration.settings;
 
+import static java.lang.Boolean.parseBoolean;
+
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_FILE;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_PROJECT;
@@ -36,8 +38,6 @@ import org.eclipse.jface.util.PropertyChangeEvent;
  * {@link SettingChangeListener SettingChangeListeners}.
  * 
  * @author Emmanuel CHEBBI
- * 
- * // TODO [Refactor] Avoid duplicate code between Global & Project Listeners classes
  */
 public class GlobalPreferencesListener implements IPropertyChangeListener {
 	
@@ -57,11 +57,11 @@ public class GlobalPreferencesListener implements IPropertyChangeListener {
 	public GlobalPreferencesListener(Collection<SettingChangeListener> listeners) {
 		this.listeners = requireNonNull(listeners, "The collection of listeners must not be null");
 		
-		events.put(SHOW_FILE_NAME.property(), (event, listener) -> listener.fileNameVisibilityChanged(Boolean.parseBoolean((String) event.getNewValue())));
-		events.put(SHOW_PROJECT_NAME.property(), (event, listener) -> listener.projectNameVisibilityChanged(Boolean.parseBoolean((String) event.getNewValue())));
-		events.put(SHOW_ELAPSED_TIME.property(), (event, listener) -> listener.elapsedTimeVisibilityChanged(Boolean.parseBoolean((String) event.getNewValue())));
-		events.put(SHOW_LANGUAGE_ICON.property(), (event, listener) -> listener.languageIconVisibilityChanged(Boolean.parseBoolean((String) event.getNewValue())));
-		events.put(SHOW_RICH_PRESENCE.property(), (event, listener) -> listener.richPresenceVisibilityChanged(Boolean.parseBoolean((String) event.getNewValue())));
+		events.put(SHOW_FILE_NAME.property(), (event, listener) -> listener.fileNameVisibilityChanged(parseBoolean((String) event.getNewValue())));
+		events.put(SHOW_PROJECT_NAME.property(), (event, listener) -> listener.projectNameVisibilityChanged(parseBoolean((String) event.getNewValue())));
+		events.put(SHOW_ELAPSED_TIME.property(), (event, listener) -> listener.elapsedTimeVisibilityChanged(parseBoolean((String) event.getNewValue())));
+		events.put(SHOW_LANGUAGE_ICON.property(), (event, listener) -> listener.languageIconVisibilityChanged(parseBoolean((String) event.getNewValue())));
+		events.put(SHOW_RICH_PRESENCE.property(), (event, listener) -> listener.richPresenceVisibilityChanged(parseBoolean((String) event.getNewValue())));
 		events.put(RESET_ELAPSED_TIME.property(), (event, listener) -> listener.elapsedTimeResetMomentChanged(toMoment(event.getOldValue()), toMoment(event.getNewValue())));
 	}
 	
@@ -74,7 +74,7 @@ public class GlobalPreferencesListener implements IPropertyChangeListener {
 		}
 	}
 	
-	private Moment toMoment(Object value) {
+	private static Moment toMoment(Object value) {
 		Settings setting = fromProperty((String) value);
 		
 		if (setting == RESET_ELAPSED_TIME_ON_NEW_FILE)

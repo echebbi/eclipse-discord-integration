@@ -128,7 +128,7 @@ public class GlobalPreferences implements UserPreferences {
 			};
 		
 		} catch (IllegalArgumentException e) {
-			// The project is not valid, return default preferences
+			// The project is not valid (e.g. is null), return default preferences
 		}
 		
 		return this;

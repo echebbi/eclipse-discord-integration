@@ -51,6 +51,9 @@ public class ProjectPreferences implements UserPreferences {
 	 * 
 	 * @param project
 	 * 			The project to check. Must not be {@code null}.
+	 * 
+	 * @throws IllegalArgumentException if the preferences of the given project cannot
+	 * 									be determined
 	 */
 	public ProjectPreferences(IProject project) {
 		IScopeContext context = new ProjectScope(project);

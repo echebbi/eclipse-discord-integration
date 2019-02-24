@@ -1,4 +1,5 @@
 /*********************************************************************
+
 * Copyright (c) 2018 Emmanuel CHEBBI
 *
 * This program and the accompanying materials are made
@@ -28,7 +29,7 @@ import fr.kazejiyu.discord.rpc.integration.settings.UserPreferences;
  * 	<li>select the right start timestamp.
  * </ul>
  */
-final public class PreferredRichPresence implements RichPresence {
+public final class PreferredRichPresence implements RichPresence {
 	
 	/** Used to determine which information the user wants to hide */
 	private final UserPreferences preferences;

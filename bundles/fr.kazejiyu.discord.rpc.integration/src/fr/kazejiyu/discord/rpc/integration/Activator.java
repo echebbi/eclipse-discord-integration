@@ -17,6 +17,7 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_LANGUAG
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_RICH_PRESENCE;
 
+import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IStartup;
@@ -28,6 +29,8 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcProxy;
+import fr.kazejiyu.discord.rpc.integration.extensions.EditorRichPresenceFromInput;
+import fr.kazejiyu.discord.rpc.integration.extensions.internal.EditorRichPresenceFromExtensions;
 import fr.kazejiyu.discord.rpc.integration.listener.AddListenerOnWindowOpened;
 import fr.kazejiyu.discord.rpc.integration.listener.FileChangeListener;
 import fr.kazejiyu.discord.rpc.integration.listener.OnPostShutdown;
@@ -45,7 +48,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	public static final String PLUGIN_ID = "fr.kazejiyu.discord.rpc.integration"; //$NON-NLS-1$
 
 	/** Listens current selection then notify Discord'RPC */
-	private FileChangeListener fileChange;
+	private FileChangeListener fileChangeListener;
 
 	/** Used to communicate with Discord */
 	private DiscordRpcProxy discord;
@@ -55,7 +58,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 		try {
 			setDefaultPreferencesValue();
 			connectToDiscord();
-			listenForSelectionChangesWith(fileChange);
+			listenForSelectionChangesWith(fileChangeListener);
 			
 		} catch (Exception e) {
 			Plugin.logException("An error occurred while starting the 'Discord Rich Presence for Eclipse IDE' plug-in", e);
@@ -72,8 +75,9 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 			discord.showNothing();
 		}
 		
-		fileChange = new FileChangeListener(discord);
-		fileChange.notifyDiscordWithActivePart();
+		EditorRichPresenceFromInput adapters = new EditorRichPresenceFromExtensions(RegistryFactory.getRegistry());
+		fileChangeListener = new FileChangeListener(discord, adapters);
+		fileChangeListener.notifyDiscordWithActivePart();
 	}
 
 	/** Sets up listeners so that the given listener is notified each time a new part is selected */
@@ -110,15 +114,15 @@ public class Activator extends AbstractUIPlugin implements IStartup {
 	}
 	
 	
-	/** Adds {@code fileChange} as an {@code ISelectionListener} to each opened window. */
+	/** Adds fileChangeListener as an ISelectionListener to each opened window. */
 	private Runnable listenForSelectionInOpenedWindows(IWorkbench workbench) {
 		return () -> {
 			for (IWorkbenchWindow window : workbench.getWorkbenchWindows()) {
 				if (window != null) {
-					window.getSelectionService().addSelectionListener(fileChange);
+					window.getSelectionService().addSelectionListener(fileChangeListener);
 					
 					for (IWorkbenchPage page : window.getPages()) {
-						page.addPartListener(fileChange);
+						page.addPartListener(fileChangeListener);
 					}
 				}
 			}

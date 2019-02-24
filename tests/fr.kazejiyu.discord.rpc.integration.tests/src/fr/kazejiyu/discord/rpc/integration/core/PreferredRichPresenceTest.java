@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.assertj.core.api.WithAssertions;
+import org.eclipse.core.resources.IProject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -18,9 +19,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 
-import fr.kazejiyu.discord.rpc.integration.core.PreferredRichPresence;
-import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
-import fr.kazejiyu.discord.rpc.integration.core.SelectionTimes;
 import fr.kazejiyu.discord.rpc.integration.languages.Language;
 import fr.kazejiyu.discord.rpc.integration.settings.UserPreferences;
 import fr.kazejiyu.discord.rpc.integration.tests.mock.MockitoExtension;
@@ -164,6 +162,20 @@ public class PreferredRichPresenceTest implements WithAssertions {
 	void returns_the_largeImageKey_of_the_original_presence(Optional<String> originalLargeImageKey) {
 		when(presence.getLargeImageText()).thenReturn(originalLargeImageKey);
 		assertThat(preferred.getLargeImageText()).isEqualTo(originalLargeImageKey);
+	}
+	
+	@Test
+	@DisplayName("returns nothing when the original presence has no project")
+	void returns_nothing_when_the_original_presence_has_no_project() {
+		when(presence.getProject()).thenReturn(Optional.empty());
+		assertThat(preferred.getProject()).isEmpty();
+	}
+	
+	@Test
+	@DisplayName("returns the project of the original presence")
+	void returns_the_project_of_the_original_presence(@Mock IProject project) {
+		when(presence.getProject()).thenReturn(Optional.of(project));
+		assertThat(preferred.getProject()).contains(project);
 	}
 	
 	static Stream<Arguments> optionalStrings() {

@@ -28,7 +28,7 @@ import fr.kazejiyu.discord.rpc.integration.tests.mock.MockitoExtension;
 public class ConnectionSynchronizerTest implements WithAssertions {
 
 	/** Software Under Test */
-	private ConnectionSynchronizer sut;
+	private SynchronizeConnection sut;
 	
 	@Mock
 	private DiscordRpcLifecycle discord;
@@ -38,20 +38,20 @@ public class ConnectionSynchronizerTest implements WithAssertions {
 
 	@BeforeEach
 	void instanciateClassUnderTest() {
-		sut = new ConnectionSynchronizer(discord, runnable);
+		sut = new SynchronizeConnection(discord, runnable);
 	}
 	
 	@Test @DisplayName("throws when instantiated with a null Discord proxy")
 	void throws_when_instanciated_with_a_null_discord_proxy() {
 		assertThatNullPointerException().isThrownBy(() -> 
-			new ConnectionSynchronizer(null, runnable)
+			new SynchronizeConnection(null, runnable)
 		);
 	}
 	
 	@Test @DisplayName("throws when instantiated with a null runnable")
 	void throws_when_instanciated_with_a_null_runnable() {
 		assertThatNullPointerException().isThrownBy(() -> 
-			new ConnectionSynchronizer(discord, null)
+			new SynchronizeConnection(discord, null)
 		);
 	}
 	

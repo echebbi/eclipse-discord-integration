@@ -15,6 +15,9 @@ public class Plugin {
 	
 	public static final String ID = Activator.PLUGIN_ID;
 	
+	/** ID of the 'editor_input_adapter' extension point */
+	public static final String EDITOR_INPUT_ADAPTER_EXTENSION_ID = "fr.kazejiyu.discord.rpc.integration.editor_input_adapter";
+	
 	private Plugin() {
 		// does not make sense to instantiate it
 	}

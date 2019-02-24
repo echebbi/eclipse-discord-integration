@@ -23,6 +23,7 @@ import org.mockito.Mock;
 
 import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcLifecycle;
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
+import fr.kazejiyu.discord.rpc.integration.extensions.EditorRichPresenceFromInput;
 import fr.kazejiyu.discord.rpc.integration.tests.mock.MockitoExtension;
 
 /**
@@ -40,9 +41,12 @@ public class FileChangeListenerTest implements WithAssertions {
 	@Mock(extraInterfaces = {IEditorPart.class})
 	private EditorPart activePart;
 	
+	@Mock
+	private EditorRichPresenceFromInput adapters;
+	
 	@BeforeEach
 	void instantiateObjectUnderTest() {
-		listener = new FileChangeListener(discord);
+		listener = new FileChangeListener(discord, adapters);
 		when(activePart.getEditorInput()).thenReturn(mock(IEditorInput.class));
 		
 		// Discord is considered connected by default
@@ -53,10 +57,17 @@ public class FileChangeListenerTest implements WithAssertions {
 	@DisplayName("during instanciation")
 	class DuringInstanciation {
 		
-		@Test @DisplayName("throws if its argument is null")
-		void throws_if_its_argument_is_null() {	
+		@Test @DisplayName("throws if the given Discord proxy is null")
+		void throws_if_the_given_Discord_proxy_is_null() {	
 			assertThatNullPointerException().isThrownBy(() ->
-				new FileChangeListener(null) 
+				new FileChangeListener(null, adapters) 
+			);
+		}
+		
+		@Test @DisplayName("throws if the given IEditorInput adapters is null")
+		void throws_if_the_given_IEditorInput_adapters_is_null() {	
+			assertThatNullPointerException().isThrownBy(() ->
+				new FileChangeListener(discord, null) 
 			);
 		}
 		

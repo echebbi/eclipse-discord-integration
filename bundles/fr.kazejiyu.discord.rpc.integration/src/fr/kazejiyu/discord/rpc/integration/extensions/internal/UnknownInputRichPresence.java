@@ -7,7 +7,7 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 **********************************************************************/
-package fr.kazejiyu.discord.rpc.integration.extensions.impl;
+package fr.kazejiyu.discord.rpc.integration.extensions.internal;
 
 import java.util.Optional;
 

@@ -38,7 +38,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbenchPropertyPage;
 import org.eclipse.ui.dialogs.PropertyPage;
 import org.osgi.service.prefs.BackingStoreException;
 
@@ -50,7 +49,7 @@ import fr.kazejiyu.discord.rpc.integration.Plugin;
  * 
  * @author Emmanuel CHEBBI
  */
-public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPropertyPage {
+public class ProjectPropertiesPage extends PropertyPage {
 	
 	private static final String CORE_PLUGIN_ID = "fr.kazejiyu.discord.rpc.integration";
 
@@ -106,7 +105,10 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 			disableFieldsOnUseWorkspacePreferences();
 			disableResetFieldsOnHideElapsedTime();
 			
-		} catch (CoreException e) { /* Should never happen */ }
+		} catch (CoreException e) {
+			/* Should never happen */
+			Plugin.logException("Unable to create the Project page for the 'Discord Rich Presence for Eclipse IDE' plug-in", e);
+		}
 		
 		return composite;
 	}
@@ -127,7 +129,7 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 		return project != null;
 	}
 
-	private void setMissingPropertiesToDefault(IResource resource) throws CoreException {
+	private static void setMissingPropertiesToDefault(IResource resource) throws CoreException {
 		if (resource.getPersistentProperty(USE_PROJECT_SETTINGS.qualifiedName()) == null)
 			resource.setPersistentProperty(USE_PROJECT_SETTINGS.qualifiedName(), "false");
 		if (resource.getPersistentProperty(SHOW_PROJECT_NAME.qualifiedName()) == null)
@@ -202,7 +204,7 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 		return true;
 	}
 	
-	private void addSeparator(Composite parent) {
+	private static void addSeparator(Composite parent) {
 		Label separator = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL);
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = GridData.FILL;
@@ -241,7 +243,9 @@ public class ProjectPropertiesPage extends PropertyPage implements IWorkbenchPro
 		
 		Group projectNameGroup = new Group(parent, SWT.NULL);
 		projectNameGroup.setText("Display");
-		GridLayout gridLayout = new GridLayout(2, false);
+		
+		final int numColumnsInLayout = 2;
+		GridLayout gridLayout = new GridLayout(numColumnsInLayout, false);
 		projectNameGroup.setLayout(gridLayout);
 		projectNameGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
