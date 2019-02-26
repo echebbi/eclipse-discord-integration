@@ -2,10 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: java-discord-rpc
 Bundle-SymbolicName: java-discord-rpc
-Bundle-Version: 2.0.0
+Bundle-Version: 2.0.2
 Bundle-ClassPath: jna-4.4.0.jar,
-  discord-rpc-release-v3.3.0.jar,
-  java-discord-rpc-2.0.0.jar
+  discord-rpc-release-v3.4.0.jar,
+  java-discord-rpc-2.0.2.jar
 Bundle-Vendor: Florian Spieß
 Export-Package: club.minnced.discord.rpc,
  com.sun.jna,

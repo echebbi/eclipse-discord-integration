@@ -9,7 +9,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="[3.107.0,4.0.0)",
  org.eclipse.ui.editors;bundle-version="[3.9.0,4.0.0)",
  org.eclipse.ui.ide;bundle-version="[3.11.0,4.0.0)",
  org.eclipse.core.resources;bundle-version="[3.10.0,4.0.0)",
- java-discord-rpc
+ java-discord-rpc;bundle-version="[2.0.0,3.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: fr.kazejiyu.discord.rpc.integration;x-friends:="fr.kazejiyu.discord.rpc.integration.ui.preferences",
  fr.kazejiyu.discord.rpc.integration.core,
