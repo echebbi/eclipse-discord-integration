@@ -338,7 +338,7 @@ You may add additional accurate notices of copyright ownership.
 
    <includes
          id="java.discord.rpc.feature"
-         version="2.0.0"/>
+         version="0.0.0"/>
 
    <requires>
       <import plugin="org.eclipse.ui.workbench" version="3.107.0" match="compatible"/>

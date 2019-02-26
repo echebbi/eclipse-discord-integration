@@ -2,7 +2,7 @@
 <feature
       id="java.discord.rpc.feature"
       label="java-discord-rpc"
-      version="2.0.0"
+      version="2.0.2"
       provider-name="Florian Spieß">
 
    <description url="https://github.com/MinnDevelopment/java-discord-rpc">
@@ -71,6 +71,6 @@ END OF TERMS AND CONDITIONS
          id="java-discord-rpc"
          download-size="0"
          install-size="0"
-         version="2.0.0"/>
+         version="2.0.2"/>
 
 </feature>
