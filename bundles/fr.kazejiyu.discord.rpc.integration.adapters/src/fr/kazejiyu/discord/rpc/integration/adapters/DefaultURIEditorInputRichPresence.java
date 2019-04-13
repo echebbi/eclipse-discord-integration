@@ -27,88 +27,90 @@ import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
 import fr.kazejiyu.discord.rpc.integration.settings.UserPreferences;
 
 /**
- * Default implementation of {@link EditorInputRichPresence}.<br>
- * <br>
+ * <p>Default implementation of {@link EditorInputRichPresence}.</p>
+ * <p>
  * This implementation only operates on {@link IURIEditorInput} instances and sets Rich Presence as follows:
  * 
  * <table style="border: 1px solid black ; border-collapse: collapse">
- * 	<tr style="border: 1px solid black">
- * 		<th style="border: 1px solid black">Property</th>
- * 		<th style="border: 1px solid black">Shown in Discord</th>
- * 	</tr>
- * 	<tr>
- * 		<td style="border: 1px solid black"><b>Details</b></td>
- * 		<td style="border: 1px solid black">Editing <i>&lt;file.name&gt;</i></td>
- * 	</tr>
- * 	<tr>
- * 		<td style="border: 1px solid black"><b>State</b></td>
- * 		<td style="border: 1px solid black">Working on <i>&lt;project.name&gt;</i></td>
- * 	</tr>
+ *     <tr style="border: 1px solid black">
+ *         <th style="border: 1px solid black">Property</th>
+ *         <th style="border: 1px solid black">Shown in Discord</th>
+ *     </tr>
+ *     <tr>
+ *         <td style="border: 1px solid black"><b>Details</b></td>
+ *         <td style="border: 1px solid black">Editing <i>&lt;file.name&gt;</i></td>
+ *     </tr>
+ *     <tr>
+ *         <td style="border: 1px solid black"><b>State</b></td>
+ *         <td style="border: 1px solid black">Working on <i>&lt;project.name&gt;</i></td>
+ *     </tr>
  * </table>
+ * </p>
  * 
  * @author Emmanuel CHEBBI
  */
 public class DefaultURIEditorInputRichPresence implements EditorInputRichPresence {
-	
-	@Override
-	public int getPriority() {
-		return 0;
-	}
-	
-	@Override
-	public Class<FileStoreEditorInput> getExpectedEditorInputClass() {
-		return FileStoreEditorInput.class;
-		
-		// TODO Handle inheritance so that returning IURIEditorInput.class here does not prevent
-		// DefaultFileEditorInputRichPresence to be taken into account at runtime
-//		return IURIEditorInput.class;
-	}
-	
-	@Override
-	public Optional<RichPresence> createRichPresence(GlobalPreferences preferences, IEditorInput input) {
-		if (!(input instanceof IURIEditorInput))
-			throw new IllegalArgumentException("input must be an instance of " + IURIEditorInput.class);
-		
-		IURIEditorInput uriInput = (IURIEditorInput) input;
-		URI fileURI = uriInput.getURI();
-		File file = new File(fileURI.getPath());
-		
-		ImmutableRichPresence presence = new ImmutableRichPresence()
-				.withDetails(detailsOf(preferences, file))
-				.withState(stateOf(preferences))
-				.withLanguage(languageOf(preferences, file))
-				.withLargeImageText(largeImageTextOf(preferences, file));
-		
-		return Optional.of(presence);
-	}
+    
+    @Override
+    public int getPriority() {
+        return 0;
+    }
+    
+    @Override
+    public Class<FileStoreEditorInput> getExpectedEditorInputClass() {
+        return FileStoreEditorInput.class;
+        
+        // TODO Handle inheritance so that returning IURIEditorInput.class here does not prevent
+        // DefaultFileEditorInputRichPresence to be taken into account at runtime
+//        return IURIEditorInput.class;
+    }
+    
+    @Override
+    public Optional<RichPresence> createRichPresence(GlobalPreferences preferences, IEditorInput input) {
+        if (!(input instanceof IURIEditorInput)) {
+            throw new IllegalArgumentException("input must be an instance of " + IURIEditorInput.class);
+        }
+        
+        IURIEditorInput uriInput = (IURIEditorInput) input;
+        URI fileURI = uriInput.getURI();
+        File file = new File(fileURI.getPath());
+        
+        ImmutableRichPresence presence = new ImmutableRichPresence()
+                .withDetails(detailsOf(preferences, file))
+                .withState(stateOf(preferences))
+                .withLanguage(languageOf(preferences, file))
+                .withLargeImageText(largeImageTextOf(preferences, file));
+        
+        return Optional.of(presence);
+    }
 
-	private static String detailsOf(GlobalPreferences preferences, File file) {
-		if (! preferences.showsFileName())
-			return "";
-		
-		return "Editing " + file.getName();
-	}
+    private static String detailsOf(GlobalPreferences preferences, File file) {
+        if (! preferences.showsFileName()) {
+            return "";
+        }
+        return "Editing " + file.getName();
+    }
 
-	private static String stateOf(GlobalPreferences preferences) {
-		if (! preferences.showsProjectName())
-			return "";
-		
-		return "Unknown project";
-	}
+    private static String stateOf(GlobalPreferences preferences) {
+        if (! preferences.showsProjectName()) {
+            return "";
+        }
+        return "Unknown project";
+    }
 
-	private static Language languageOf(UserPreferences preferences, File file) {
-		if (! preferences.showsLanguageIcon())
-			return Language.UNKNOWN;
-		
-		return Language.fromFileName(file.getName());
-	}
+    private static Language languageOf(UserPreferences preferences, File file) {
+        if (! preferences.showsLanguageIcon()) {
+            return Language.UNKNOWN;
+        }
+        return Language.fromFileName(file.getName());
+    }
 
-	private static String largeImageTextOf(UserPreferences preferences, File file) {
-		if (! preferences.showsLanguageIcon())
-			return "";
-		
-		Language language = Language.fromFileName(file.getName());
-		return labelOf(language, file.getName());
-	}
+    private static String largeImageTextOf(UserPreferences preferences, File file) {
+        if (! preferences.showsLanguageIcon()) {
+            return "";
+        }
+        Language language = Language.fromFileName(file.getName());
+        return labelOf(language, file.getName());
+    }
 
 }

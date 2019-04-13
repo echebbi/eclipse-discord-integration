@@ -22,57 +22,57 @@ import fr.kazejiyu.discord.rpc.integration.languages.Language;
  * @author Emmanuel CHEBBI
  */
 public class DiscordRpcProxy implements DiscordRpcLifecycle {
-	
-	/** Identifies the Discord Rich Presence for Eclipse IDE application */
-	private static final String APPLICATION_ID = "413038514616139786";
-	
-	/** Whether the proxy is connected to a Discord client */
-	private boolean isConnected = false;
-	
-	@Override
-	public void initialize() {
-		DiscordRPC.INSTANCE.Discord_Initialize(APPLICATION_ID, createHandlers(), true, "");
-		this.isConnected = true;
-	}
-	
-	/** @return the handlers handling Discord events */
-	private DiscordEventHandlers createHandlers() {
-		DiscordEventHandlers handlers = new DiscordEventHandlers();
-		handlers.ready = user -> isConnected = true;
-		handlers.disconnected = (status, message) -> isConnected = false;
-		
-		return handlers;
-	}
-	
-	@Override
-	public boolean isConnected() {
-		return this.isConnected;
-	}
-	
-	@Override
-	public void show(RichPresence rp) {
-		if (isConnected) {
-			DiscordRichPresence presence = new DiscordRichPresence();
-			
-			rp.getState().ifPresent(state -> presence.state = state);
-			rp.getDetails().ifPresent(details -> presence.details = details);
-			rp.getStartTimestamp().ifPresent(start -> presence.startTimestamp = start);
-			rp.getLargeImageText().ifPresent(text -> presence.largeImageText = text);
-			rp.getLanguage().map(Language::getKey).ifPresent(key -> presence.largeImageKey = key);
-			
-			DiscordRPC.INSTANCE.Discord_UpdatePresence(presence);
-			DiscordRPC.INSTANCE.Discord_RunCallbacks();
-		}
-	}
-	
-	@Override
-	public void showNothing() {
-		show(new ImmutableRichPresence());
-	}
-	
-	@Override
-	public void shutdown() {
-		DiscordRPC.INSTANCE.Discord_Shutdown();
-		this.isConnected = false;
-	}
+    
+    /** Identifies the Discord Rich Presence for Eclipse IDE application. */
+    private static final String APPLICATION_ID = "413038514616139786";
+    
+    /** Whether the proxy is connected to a Discord client. */
+    private boolean isConnected = false;
+    
+    @Override
+    public void initialize() {
+        DiscordRPC.INSTANCE.Discord_Initialize(APPLICATION_ID, createHandlers(), true, "");
+        this.isConnected = true;
+    }
+    
+    /** Returns the handlers handling Discord events. */
+    private DiscordEventHandlers createHandlers() {
+        DiscordEventHandlers handlers = new DiscordEventHandlers();
+        handlers.ready = user -> isConnected = true;
+        handlers.disconnected = (status, message) -> isConnected = false;
+        
+        return handlers;
+    }
+    
+    @Override
+    public boolean isConnected() {
+        return this.isConnected;
+    }
+    
+    @Override
+    public void show(RichPresence rp) {
+        if (isConnected) {
+            DiscordRichPresence presence = new DiscordRichPresence();
+            
+            rp.getState().ifPresent(state -> presence.state = state);
+            rp.getDetails().ifPresent(details -> presence.details = details);
+            rp.getStartTimestamp().ifPresent(start -> presence.startTimestamp = start);
+            rp.getLargeImageText().ifPresent(text -> presence.largeImageText = text);
+            rp.getLanguage().map(Language::getKey).ifPresent(key -> presence.largeImageKey = key);
+            
+            DiscordRPC.INSTANCE.Discord_UpdatePresence(presence);
+            DiscordRPC.INSTANCE.Discord_RunCallbacks();
+        }
+    }
+    
+    @Override
+    public void showNothing() {
+        show(new ImmutableRichPresence());
+    }
+    
+    @Override
+    public void shutdown() {
+        DiscordRPC.INSTANCE.Discord_Shutdown();
+        this.isConnected = false;
+    }
 }

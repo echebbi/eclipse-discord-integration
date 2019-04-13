@@ -7,5 +7,5 @@ package fr.kazejiyu.discord.rpc.integration.extensions.internal;
  */
 public class GrandchildOfIEditorInput extends ChildOfIEditorInput {
 
-	
+    
 }

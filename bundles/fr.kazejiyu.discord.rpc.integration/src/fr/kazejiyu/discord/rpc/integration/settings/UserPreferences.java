@@ -17,32 +17,59 @@ import java.util.Optional;
  * @author Emmanuel CHEBBI
  */
 public interface UserPreferences {
-	
-	/** @return whether the name of the edited file should be shown in Discord */
-	boolean showsFileName();
-	
-	/** @return whether the name of the current project should be shown in Discord */
-	boolean showsProjectName();
-	
-	/** @return whether the time elapsed should be shown in Discord */
-	boolean showsElapsedTime();
-	
-	/** @return whether the programming language's icon should be shown in Discord */
-	boolean showsLanguageIcon();
-	
-	/** @return whether the Rich Presence should be shown in Discord */
-	boolean showsRichPresence();
-	
-	/** @return whether the name of the current project should be shown in Discord */
-	boolean resetsElapsedTimeOnStartup();
-	
-	/** @return whether the name of the current project should be shown in Discord */
-	boolean resetsElapsedTimeOnNewProject();
-	
-	/** @return whether the name of the current project should be shown in Discord */
-	boolean resetsElapsedTimeOnNewFile();
-	
-	/** @return the name of a given project, if the user specified one */
-	Optional<String> getProjectName();
+    
+    /** 
+     * Returns whether the name of the edited file should be shown in Discord.
+     * @return true if the name of the edited file should be shown, false otherwise 
+     */
+    boolean showsFileName();
+    
+    /** 
+     * Returns whether the name of the current project should be shown in Discord.
+     * @return true if the name of the current project should be shown, false otherwise
+     */
+    boolean showsProjectName();
+    
+    /** 
+     * Returns whether the elapsed time should be shown in Discord.
+     * @return true if the elapsed time should be shown, false otherwise 
+     */
+    boolean showsElapsedTime();
+    
+    /** 
+     * Returns whether the programming language's icon should be shown in Discord.
+     * @return true of the programming language's icon should be shown, false otherwise
+     */
+    boolean showsLanguageIcon();
+    
+    /** 
+     * Returns whether the Rich Presence should be shown in Discord.
+     * @return true if the Rich Presence should be shown, false otherwise
+     */
+    boolean showsRichPresence();
+    
+    /** 
+     * Returns whether the name of the current project should be shown in Discord.
+     * @return true if the name of the current project should be shown, false otherwise
+     */
+    boolean resetsElapsedTimeOnStartup();
+    
+    /** 
+     * Returns whether the name of the current project should be shown in Discord.
+     * @return true if the name of the current project should be shown, false otherwise
+     */
+    boolean resetsElapsedTimeOnNewProject();
+    
+    /**
+     * Returns whether the name of the current project should be shown in Discord.
+     * @return true if the name of the current project should be shown, false otherwise
+     */
+    boolean resetsElapsedTimeOnNewFile();
+    
+    /** 
+     * Returns the name of the current project, if the user specified one.
+     * @return the name of the current project, if the user specified one
+     */
+    Optional<String> getProjectName();
 
 }

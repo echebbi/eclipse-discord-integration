@@ -23,38 +23,37 @@ import fr.kazejiyu.discord.rpc.integration.languages.Language;
  * Creates a label for a given {@link Language}.
  * 
  * @author Emmanuel CHEBBI
- *
- * TODO [Refactor] Consider turning Language into an OO architecture to get rid of this class
  */
+// TODO [Refactor] Consider turning Language into an OO architecture to get rid of this class
 final class LanguageLabel {
-	
-	private LanguageLabel() {
-		// utility classes do not need to be instantiated
-	}
-	
-	protected static String labelOf(Language language, String fileName) {
-		if (language == UNKNOWN)
-			return "";
-		
-		if (language == BINARY)
-			return "Binary file";
-		
-		if (language == DOCKER)
-			return "Configuring Docker image";
-		
-		if (language == GIT)
-			return "Configuring Git";
-		
-		if (language == SCALA && fileName.endsWith(".sbt"))
-			return "Configuring SBT build";
-		
-		if (language == TERMINAL)
-			return "Configuring an OS script";
-		
-		if (language == TEXT)
-			return "Text file";
-		
-		return "Programming in " + language.getName();
-	}
+    
+    private LanguageLabel() {
+        // utility classes do not need to be instantiated
+    }
+    
+    protected static String labelOf(Language language, String fileName) {
+        if (language == UNKNOWN) {
+            return "";
+        }
+        if (language == BINARY) {
+            return "Binary file";
+        }
+        if (language == DOCKER) {
+            return "Configuring Docker image";
+        }        
+        if (language == GIT) {
+            return "Configuring Git";
+        }
+        if (language == SCALA && fileName.endsWith(".sbt")) {
+            return "Configuring SBT build";
+        }
+        if (language == TERMINAL) {
+            return "Configuring an OS script";
+        }
+        if (language == TEXT) {
+            return "Text file";
+        }
+        return "Programming in " + language.getName();
+    }
 
 }

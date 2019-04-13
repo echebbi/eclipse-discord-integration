@@ -3,17 +3,49 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>fr.kazejiyu.discord.rpc.integration.bundles</artifactId>
 	<packaging>pom</packaging>
-    
+
     <parent>
         <groupId>fr.kazejiyu.discord.rpc.integration</groupId>
         <artifactId>fr.kazejiyu.discord.rpc.integration.root</artifactId>
         <version>1.0.3</version>
     </parent>
-    
+
 	<modules>
         <module>java-discord-rpc</module>
         <module>fr.kazejiyu.discord.rpc.integration</module>
         <module>fr.kazejiyu.discord.rpc.integration.adapters</module>
         <module>fr.kazejiyu.discord.rpc.integration.ui.preferences</module>
 	</modules>
+
+    <build>
+        <plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>${checkstyle.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>com.puppycrawl.tools</groupId>
+						<artifactId>checkstyle</artifactId>
+						<version>${checkstyle.latest.version}</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>validate</id>
+						<phase>validate</phase>
+						<configuration>
+							<configLocation>../checkstyle.xml</configLocation>
+							<encoding>UTF-8</encoding>
+							<consoleOutput>true</consoleOutput>
+							<failsOnError>true</failsOnError>
+						</configuration>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+        </plugins>
+    </build>
 </project>
