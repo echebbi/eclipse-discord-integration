@@ -9,34 +9,34 @@ import org.eclipse.ui.IPersistableElement;
  */
 public class ChildOfIEditorInput implements IEditorInput {
 
-	@Override
-	public <T> T getAdapter(Class<T> adapter) {
-		return null;
-	}
+    @Override
+    public <T> T getAdapter(Class<T> adapter) {
+        return null;
+    }
 
-	@Override
-	public boolean exists() {
-		return false;
-	}
+    @Override
+    public boolean exists() {
+        return false;
+    }
 
-	@Override
-	public ImageDescriptor getImageDescriptor() {
-		return null;
-	}
+    @Override
+    public ImageDescriptor getImageDescriptor() {
+        return null;
+    }
 
-	@Override
-	public String getName() {
-		return null;
-	}
+    @Override
+    public String getName() {
+        return null;
+    }
 
-	@Override
-	public IPersistableElement getPersistable() {
-		return null;
-	}
+    @Override
+    public IPersistableElement getPersistable() {
+        return null;
+    }
 
-	@Override
-	public String getToolTipText() {
-		return null;
-	}
+    @Override
+    public String getToolTipText() {
+        return null;
+    }
 
 }

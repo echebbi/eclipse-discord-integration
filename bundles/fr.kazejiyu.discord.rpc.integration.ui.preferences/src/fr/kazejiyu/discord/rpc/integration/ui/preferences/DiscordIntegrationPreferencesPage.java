@@ -24,28 +24,35 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
-
+/**
+ * A page allowing users to tailor Discord Rich Presence related preferences.
+ * 
+ * @author Emmanuel CHEBBI
+ */
 public class DiscordIntegrationPreferencesPage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	private static final String PREFERENCES_STORE_ID = "fr.kazejiyu.discord.rpc.integration";
-			
-	public DiscordIntegrationPreferencesPage() {
-		super(FLAT);
-	}
+    private static final String PREFERENCES_STORE_ID = "fr.kazejiyu.discord.rpc.integration";
 
-	@Override
-	public void init(IWorkbench workbench) {
-		setPreferenceStore(new ScopedPreferenceStore(InstanceScope.INSTANCE, PREFERENCES_STORE_ID));
-		setDescription("Customize the way informations are shown in Discord");
-	}
+    /**
+     * Creates a new page.
+     */
+    public DiscordIntegrationPreferencesPage() {
+        super(FLAT);
+    }
 
-	@Override
+    @Override
+    public void init(IWorkbench workbench) {
+        setPreferenceStore(new ScopedPreferenceStore(InstanceScope.INSTANCE, PREFERENCES_STORE_ID));
+        setDescription("Customize the way informations are shown in Discord");
+    }
+
+    @Override
     public void createFieldEditors() {
-		BooleanFieldEditor showRichPresence = new BooleanFieldEditor(SHOW_RICH_PRESENCE.property(), "Activate Rich Presence Integration", getFieldEditorParent());
-		addField(showRichPresence);
-		
-		GroupFieldEditor group = new GroupFieldEditor("Privacy", getFieldEditorParent());
-		
+        BooleanFieldEditor showRichPresence = new BooleanFieldEditor(SHOW_RICH_PRESENCE.property(), "Activate Rich Presence Integration", getFieldEditorParent());
+        addField(showRichPresence);
+        
+        GroupFieldEditor group = new GroupFieldEditor("Privacy", getFieldEditorParent());
+        
         BooleanFieldEditor showFileName = new BooleanFieldEditor(SHOW_FILE_NAME.property(), "Show &file name", group.getFieldEditorParent());
         BooleanFieldEditor showProjectName = new BooleanFieldEditor(SHOW_PROJECT_NAME.property(), "Show &project name", group.getFieldEditorParent());
         BooleanFieldEditor showElapsedTime = new BooleanFieldEditor(SHOW_ELAPSED_TIME.property(), "Show &elapsed time", group.getFieldEditorParent());
@@ -62,10 +69,10 @@ public class DiscordIntegrationPreferencesPage extends FieldEditorPreferencePage
         
         addField(new RadioGroupFieldEditor(RESET_ELAPSED_TIME.property(), "&Reset elapsed time:", numColumns,
                 new String[][] { { "On startup", "RESET_ELAPSED_TIME_ON_STARTUP" }, 
-        						 { "On new project", "RESET_ELAPSED_TIME_ON_NEW_PROJECT" },
-                				 { "On new file", "RESET_ELAPSED_TIME_ON_NEW_FILE" } },
-				getFieldEditorParent()
-		));
+                                 { "On new project", "RESET_ELAPSED_TIME_ON_NEW_PROJECT" },
+                                 { "On new file", "RESET_ELAPSED_TIME_ON_NEW_FILE" } },
+                getFieldEditorParent()
+        ));
         
     }
 

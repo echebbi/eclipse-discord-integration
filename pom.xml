@@ -5,7 +5,10 @@
     <groupId>fr.kazejiyu.discord.rpc.integration</groupId>
     <version>1.0.3</version>
 	<packaging>pom</packaging>
-    
+
+	<name>Discord Rich Presence for Eclipse IDE</name>
+	<description>A set of plug-ins for the Eclipse IDE providing a Discord Rich Presence integration.</description>
+
 	<modules>
 		<module>bundles</module>
 		<module>features</module>
@@ -15,28 +18,31 @@
 
 	<properties>
 		<tycho.version>1.2.0</tycho.version>
+		<checkstyle.version>3.0.0</checkstyle.version>
+		<checkstyle.latest.version>8.19</checkstyle.latest.version>
+
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 
-        <!-- Always refer to the corresponding tests project (if it exists) otherwise 
-        Sonarqube won't be able to collect code coverage. For example, when analyzing 
-        project foo it wouldn't find code coverage information if it doesn't use 
+        <!-- Always refer to the corresponding tests project (if it exists) otherwise
+        Sonarqube won't be able to collect code coverage. For example, when analyzing
+        project foo it wouldn't find code coverage information if it doesn't use
         foo.tests jacoco.exec. -->
         <sonar.jacoco.reportPaths>../../tests/${project.artifactId}.tests/target/jacoco.exec</sonar.jacoco.reportPaths>
-        
+
 		<!-- Ignore :
 				- generated source code,
 				- Exceptions,
 				- untestable activators
 		-->
         <sonar.exclusions>**/*Exception.java,**/Activator.java,**/Plugin.java</sonar.exclusions>
-	
+
 		<!-- For some reason Sonar doesn't use the name set in sonar-project.properties -->
 		<sonar.projectName>Discord Rich Presence for Eclipse IDE</sonar.projectName>
 	</properties>
 
-	<!-- COMMANDS:	
+	<!-- COMMANDS:
 		* Change project's version:
 			mvn org.eclipse.tycho:tycho-versions-plugin:set-version -DnewVersion=major.minor.bug
 

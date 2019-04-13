@@ -26,20 +26,20 @@ import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
  * @author Emmanuel CHEBBI
  */
 public class UnknownInputRichPresence implements EditorInputRichPresence {
-	
-	@Override
-	public int getPriority() {
-		return Integer.MIN_VALUE;
-	}
+    
+    @Override
+    public int getPriority() {
+        return Integer.MIN_VALUE;
+    }
 
-	@Override
-	public Class<? extends IEditorInput> getExpectedEditorInputClass() {
-		return IEditorInput.class;
-	}
+    @Override
+    public Class<? extends IEditorInput> getExpectedEditorInputClass() {
+        return IEditorInput.class;
+    }
 
-	@Override
-	public Optional<RichPresence> createRichPresence(GlobalPreferences preferences, IEditorInput input) {
-		return Optional.of(new ImmutableRichPresence());
-	}
+    @Override
+    public Optional<RichPresence> createRichPresence(GlobalPreferences preferences, IEditorInput input) {
+        return Optional.of(new ImmutableRichPresence());
+    }
 
 }

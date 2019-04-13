@@ -21,28 +21,28 @@ import org.eclipse.ui.IWorkbenchListener;
  * event can be parameterized. 
  */
 public class OnPostShutdown implements IWorkbenchListener {
-	
-	/** Called on {@link #postShutdown(IWorkbench)} */
-	private final Consumer<IWorkbench> postShutdownCallback;
-	
-	/**
-	 * Creates a new listener.
-	 * 
-	 * @param postShutdownCallback
-	 * 			The callback to execute when the workbench is closed.
-	 */
-	public OnPostShutdown(Consumer<IWorkbench> postShutdownCallback) {
-		this.postShutdownCallback = requireNonNull(postShutdownCallback, "The callback must not be null");
-	}
+    
+    /** Called on {@link #postShutdown(IWorkbench)}. */
+    private final Consumer<IWorkbench> postShutdownCallback;
+    
+    /**
+     * Creates a new listener.
+     * 
+     * @param postShutdownCallback
+     *             The callback to execute when the workbench is closed.
+     */
+    public OnPostShutdown(Consumer<IWorkbench> postShutdownCallback) {
+        this.postShutdownCallback = requireNonNull(postShutdownCallback, "The callback must not be null");
+    }
 
-	@Override
-	public boolean preShutdown(IWorkbench workbench, boolean forced) {
-		return true;
-	}
+    @Override
+    public boolean preShutdown(IWorkbench workbench, boolean forced) {
+        return true;
+    }
 
-	@Override
-	public void postShutdown(IWorkbench workbench) {
-		postShutdownCallback.accept(workbench);
-	}
-	
+    @Override
+    public void postShutdown(IWorkbench workbench) {
+        postShutdownCallback.accept(workbench);
+    }
+    
 }
