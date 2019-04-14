@@ -1,6 +1,6 @@
 # Discord Rich Presence for Eclipse IDE
 
-[![Build Status](https://travis-ci.org/KazeJiyu/eclipse-discord-integration.svg?branch=master)](https://travis-ci.org/KazeJiyu/eclipse-discord-integration) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/6af5be6899274ddc8367c92bd206c281)](https://www.codacy.com/app/KazeJiyu/eclipse-discord-integration?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=KazeJiyu/eclipse-discord-integration&amp;utm_campaign=Badge_Grade) [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=fr.kazejiyu.discord.rpc.integration%3Afr.kazejiyu.discord.rpc.integration.root&metric=sqale_index)](https://sonarcloud.io/dashboard?id=fr.kazejiyu.discord.rpc.integration%3Afr.kazejiyu.discord.rpc.integration.root) [![codecov](https://codecov.io/gh/KazeJiyu/eclipse-discord-integration/branch/master/graph/badge.svg)](https://codecov.io/gh/KazeJiyu/eclipse-discord-integration) [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=fr.kazejiyu.discord.rpc.integration%3Afr.kazejiyu.discord.rpc.integration.root&metric=ncloc)](https://sonarcloud.io/dashboard?id=fr.kazejiyu.discord.rpc.integration%3Afr.kazejiyu.discord.rpc.integration.root) [![Eclipse Marketplace](https://img.shields.io/badge/Eclipse-Marketplace-blue.svg?longCache=true&style=flat&logo=eclipse)](https://marketplace.eclipse.org/content/discord-rich-presence-eclipse-ide) [ ![Download](https://api.bintray.com/packages/kazejiyu/eclipse-discord-integration/releases/images/download.svg) ](https://bintray.com/kazejiyu/eclipse-discord-integration/releases/_latestVersion)
+[![Build Status](https://travis-ci.org/echebbi/eclipse-discord-integration.svg?branch=master)](https://travis-ci.org/echebbi/eclipse-discord-integration) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/6af5be6899274ddc8367c92bd206c281)](https://www.codacy.com/app/KazeJiyu/eclipse-discord-integration?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=echebbi/eclipse-discord-integration&amp;utm_campaign=Badge_Grade) [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=fr.kazejiyu.discord.rpc.integration%3Afr.kazejiyu.discord.rpc.integration.root&metric=sqale_index)](https://sonarcloud.io/dashboard?id=fr.kazejiyu.discord.rpc.integration%3Afr.kazejiyu.discord.rpc.integration.root) [![codecov](https://codecov.io/gh/echebbi/eclipse-discord-integration/branch/master/graph/badge.svg)](https://codecov.io/gh/echebbi/eclipse-discord-integration) [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=fr.kazejiyu.discord.rpc.integration%3Afr.kazejiyu.discord.rpc.integration.root&metric=ncloc)](https://sonarcloud.io/dashboard?id=fr.kazejiyu.discord.rpc.integration%3Afr.kazejiyu.discord.rpc.integration.root) [![Eclipse Marketplace](https://img.shields.io/badge/Eclipse-Marketplace-blue.svg?longCache=true&style=flat&logo=eclipse)](https://marketplace.eclipse.org/content/discord-rich-presence-eclipse-ide) [ ![Download](https://api.bintray.com/packages/kazejiyu/eclipse-discord-integration/releases/images/download.svg) ](https://bintray.com/kazejiyu/eclipse-discord-integration/releases/_latestVersion)
 
 ## Presentation
 
@@ -9,10 +9,10 @@ Discord Rich Presence for Eclipse IDE is a plug-in that uses [Rich Presence](htt
 Here is an example of the Rich Presence Integration:
 
 <div align="center">
-  <img alt="Example of Rich Presence Integration" src="https://github.com/KazeJiyu/fr.kazejiyu.io/blob/master/repos/eclipse-discord-integration/rich-presence-screenshot.jpg"/>
+  <img alt="Example of Rich Presence Integration" src="https://github.com/echebbi/fr.echebbi.io/blob/master/repos/eclipse-discord-integration/rich-presence-screenshot.jpg"/>
 </div>
 
-> **!** Please [take a look at the Wiki](https://github.com/KazeJiyu/eclipse-discord-integration/wiki) for further information about installation, use and customizations.
+> **!** Please [take a look at the Wiki](https://github.com/echebbi/eclipse-discord-integration/wiki) for further information about installation, use and customizations.
 
 ## Installation
 
