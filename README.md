@@ -71,12 +71,16 @@ From that time on, Discord won't be notified anymore by Eclipse IDE. In order to
 
 See [CHANGELOG.md](CHANGELOG.md).
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## License
 
 The Discord Rich Presence for Eclipse IDE plug-in is licensed under the [Eclipse Public License 2.0](https://www.eclipse.org/legal/epl-2.0/).
 
 It uses different third-party components which are licensed under:
-- the Apache Public License 2.0 
+- the Apache Public License 2.0
   - [java-discord-rpc](https://github.com/MinnDevelopment/java-discord-rpc) Copyright (c) 2016 - 2019 Florian Spieß and the java-discord-rpc contributors
 - the MIT License (MIT)
   - [fileicons-render](https://github.com/HelloWorld017/fileicons-render) Copyright (c) 2014
