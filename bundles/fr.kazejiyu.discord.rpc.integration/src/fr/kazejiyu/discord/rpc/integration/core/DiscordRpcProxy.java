@@ -9,9 +9,12 @@
  ******************************************************************************/
 package fr.kazejiyu.discord.rpc.integration.core;
 
+import java.util.Optional;
+
 import club.minnced.discord.rpc.DiscordEventHandlers;
 import club.minnced.discord.rpc.DiscordRPC;
 import club.minnced.discord.rpc.DiscordRichPresence;
+import fr.kazejiyu.discord.rpc.integration.Plugin;
 import fr.kazejiyu.discord.rpc.integration.languages.Language;
 
 /**
@@ -23,22 +26,29 @@ import fr.kazejiyu.discord.rpc.integration.languages.Language;
  */
 public class DiscordRpcProxy implements DiscordRpcLifecycle {
     
-    /** Identifies the Discord Rich Presence for Eclipse IDE application. */
-    private static final String APPLICATION_ID = "413038514616139786";
-    
     /** Whether the proxy is connected to a Discord client. */
     private boolean isConnected = false;
     
+    /** The ID of the Discord application we're currently connected to. */
+    private String discordApplicationId;
+    
     @Override
-    public void initialize() {
-        DiscordRPC.INSTANCE.Discord_Initialize(APPLICATION_ID, createHandlers(), true, "");
+    public void initialize(String applicationId) {
+        DiscordRPC.INSTANCE.Discord_Initialize(applicationId, createHandlers(), true, "");
+
+        // Following attributes should be set in the 'ready' handlers
+        // but for some reason it does not work very well.
+        // Maybe just temporal issues? May investigate if I find the time to.
+        
         this.isConnected = true;
+        this.discordApplicationId = applicationId;
     }
     
     /** Returns the handlers handling Discord events. */
     private DiscordEventHandlers createHandlers() {
         DiscordEventHandlers handlers = new DiscordEventHandlers();
         handlers.ready = user -> isConnected = true;
+        handlers.errored = (status, message) -> Plugin.log(message);
         handlers.disconnected = (status, message) -> isConnected = false;
         
         return handlers;
@@ -47,6 +57,14 @@ public class DiscordRpcProxy implements DiscordRpcLifecycle {
     @Override
     public boolean isConnected() {
         return this.isConnected;
+    }
+    
+    @Override
+    public Optional<String> discordApplicationId() {
+        if (! isConnected()) {
+            return Optional.empty();
+        }
+        return Optional.of(discordApplicationId);
     }
     
     @Override

@@ -8,6 +8,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+import java.util.function.Function;
+
 import org.assertj.core.api.WithAssertions;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -46,13 +49,18 @@ public class FileChangeListenerTest implements WithAssertions {
     @Mock
     private EditorRichPresenceFromInput adapters;
     
+    @Mock
+    private Function<EditionContext, Optional<RichPresence>> toRichPresence;
+    
     @BeforeEach
     void instantiateObjectUnderTest() {
-        listener = new FileChangeListener(discord, adapters);
+        listener = new FileChangeListener(discord, toRichPresence);
         when(activePart.getEditorInput()).thenReturn(mock(IEditorInput.class));
         
         // Discord is considered connected by default
         when(discord.isConnected()).thenReturn(true);
+        
+        when(toRichPresence.apply(any(EditionContext.class))).thenReturn(Optional.of(mock(RichPresence.class)));
     }
     
     @Nested
@@ -62,11 +70,11 @@ public class FileChangeListenerTest implements WithAssertions {
         @Test @DisplayName("throws if the given Discord proxy is null")
         void throws_if_the_given_Discord_proxy_is_null() {    
             assertThatNullPointerException().isThrownBy(() ->
-                new FileChangeListener(null, adapters) 
+                new FileChangeListener(null, toRichPresence) 
             );
         }
         
-        @Test @DisplayName("throws if the given IEditorInput adapters is null")
+        @Test @DisplayName("throws if the given EditionContext to RichPresence adapter is null")
         void throws_if_the_given_IEditorInput_adapters_is_null() {    
             assertThatNullPointerException().isThrownBy(() ->
                 new FileChangeListener(discord, null) 

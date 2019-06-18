@@ -21,11 +21,9 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.USE_PROJECT_SETTINGS;
 import static java.lang.Boolean.parseBoolean;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.swt.SWT;
@@ -39,7 +37,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.dialogs.PropertyPage;
 import org.osgi.service.prefs.BackingStoreException;
 
 import fr.kazejiyu.discord.rpc.integration.Plugin;
@@ -51,12 +48,10 @@ import fr.kazejiyu.discord.rpc.integration.Plugin;
  */
 // TODO [Refactor] Since we use IEclipsePreferences to share project properties,
 //                 is using Resource.*PersistentProperties method really useful ?
-public class ProjectPropertiesPage extends PropertyPage {
+public class ProjectPropertiesPage extends AbstractPropertyPage {
     
     private static final String CORE_PLUGIN_ID = "fr.kazejiyu.discord.rpc.integration";
 
-    private IProject project;
-    
     private IEclipsePreferences preferences;
     
     private Button useProjectSettings;
@@ -113,22 +108,6 @@ public class ProjectPropertiesPage extends PropertyPage {
         }
         
         return composite;
-    }
-    
-    /**
-     * Sets {@link #project} to the value of the current project.
-     * 
-     * @return {@code true} if the current project has been resolved successfully,
-     *            {@code false} otherwise.
-     */
-    private boolean resolveCurrentProject() {
-        final IAdaptable adaptable = getElement();
-        
-        if (adaptable == null) {
-            return false;
-        }
-        project = adaptable.getAdapter(IProject.class);
-        return project != null;
     }
 
     private static void setMissingPropertiesToDefault(IResource resource) throws CoreException {
@@ -216,14 +195,6 @@ public class ProjectPropertiesPage extends PropertyPage {
             return false;
         }
         return true;
-    }
-    
-    private static void addSeparator(Composite parent) {
-        Label separator = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL);
-        GridData gridData = new GridData();
-        gridData.horizontalAlignment = GridData.FILL;
-        gridData.grabExcessHorizontalSpace = true;
-        separator.setLayoutData(gridData);
     }
     
     private void addSettingsScopeSection(Composite parent) throws CoreException {

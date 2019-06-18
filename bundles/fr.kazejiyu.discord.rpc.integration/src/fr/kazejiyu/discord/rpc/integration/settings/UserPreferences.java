@@ -49,20 +49,20 @@ public interface UserPreferences {
     boolean showsRichPresence();
     
     /** 
-     * Returns whether the name of the current project should be shown in Discord.
-     * @return true if the name of the current project should be shown, false otherwise
+     * Returns whether the elapsed time should be reset only when the workbench starts..
+     * @return true if the elapsed time should be reset only when the workbench starts, false otherwise
      */
     boolean resetsElapsedTimeOnStartup();
     
     /** 
-     * Returns whether the name of the current project should be shown in Discord.
-     * @return true if the name of the current project should be shown, false otherwise
+     * Returns whether the elapsed time should be reset when an editor for a resource in another project is activated.
+     * @return true if the elapsed time should be reset when an editor for a resource in another project is activated, false otherwise
      */
     boolean resetsElapsedTimeOnNewProject();
     
     /**
-     * Returns whether the name of the current project should be shown in Discord.
-     * @return true if the name of the current project should be shown, false otherwise
+     * Returns whether the elapsed time should be reset each time a new editor is activated.
+     * @return true if the elapsed time should be reset each time a new editor is activated, false otherwise
      */
     boolean resetsElapsedTimeOnNewFile();
     
@@ -71,5 +71,34 @@ public interface UserPreferences {
      * @return the name of the current project, if the user specified one
      */
     Optional<String> getProjectName();
+    
+    /**
+     * Returns whether a custom Discord application should be used.
+     * @return true if a custom Discord application should be used, false otherwise
+     */
+    boolean usesCustomDiscordApplication();
+    
+    /**
+     * Returns the ID of the Discord application to connect, if the user specified one.
+     * @return the ID of the Discord application to connect, if the user specified one
+     */
+    Optional<String> getDiscordApplicationId();
+
+
+    /**
+     * Registers a new listener that will be called each time a property change.
+     * 
+     * @param listener
+     *             The listener to register.
+     */
+    void addSettingChangeListener(SettingChangeListener listener);
+
+    /**
+     * Unregisters a listener so that it will no longer being notified of events.
+     * 
+     * @param listener
+     *             The listener to unregister.
+     */
+    void removeSettingChangeListener(SettingChangeListener listener);
 
 }

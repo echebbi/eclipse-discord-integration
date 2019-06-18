@@ -9,6 +9,7 @@
  ******************************************************************************/
 package fr.kazejiyu.discord.rpc.integration.settings;
 
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.CUSTOM_APP_ID;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.PROJECT_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_FILE;
@@ -19,6 +20,7 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_FILE_NA
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_LANGUAGE_ICON;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_RICH_PRESENCE;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.USE_CUSTOM_APP;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.USE_PROJECT_SETTINGS;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.fromProperty;
 import static java.lang.Boolean.parseBoolean;
@@ -63,7 +65,8 @@ public class ProjectPreferencesListener implements IPreferenceChangeListener {
         events.put(SHOW_ELAPSED_TIME.property(), (event, listener) -> listener.elapsedTimeVisibilityChanged(parseBoolean((String) event.getNewValue())));
         events.put(SHOW_LANGUAGE_ICON.property(), (event, listener) -> listener.languageIconVisibilityChanged(parseBoolean((String) event.getNewValue())));
         events.put(RESET_ELAPSED_TIME.property(), (event, listener) -> listener.elapsedTimeResetMomentChanged(toMoment(event.getOldValue()), toMoment(event.getNewValue())));
-        events.put(USE_PROJECT_SETTINGS.property(), (event, listener) -> listener.useProjectProperties(parseBoolean((String) event.getNewValue())));
+        events.put(USE_PROJECT_SETTINGS.property(), (event, listener) -> listener.useProjectProperties(parseBoolean((String) event.getNewValue())));events.put(USE_CUSTOM_APP.property(), (event, listener) -> listener.customDiscordApplicationVisibilityChanged(parseBoolean((String) event.getNewValue())));
+        events.put(CUSTOM_APP_ID.property(), (event, listener) -> listener.discordApplicationIdChanged((String) event.getNewValue()));
     }
     
     @Override

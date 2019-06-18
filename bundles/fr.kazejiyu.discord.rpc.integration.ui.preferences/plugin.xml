@@ -8,6 +8,12 @@
             id="fr.kazejiyu.discord.rpc.integration.ui.preferences.root"
             name="Discord Rich Presence">
       </page>
+      <page
+            category="fr.kazejiyu.discord.rpc.integration.ui.preferences.root"
+            class="fr.kazejiyu.discord.rpc.integration.ui.preferences.DiscordIntegrationIconsPreferencesPage"
+            id="fr.kazejiyu.discord.rpc.integration.ui.preferences.icons"
+            name="Icons">
+      </page>
    </extension>
    <extension
          point="org.eclipse.ui.propertyPages">
@@ -16,6 +22,17 @@
             id="fr.kazejiyu.discord.rpc.integration.ui.preferences.properties.projectPropertiesPage"
             name="Discord Rich Presence"
             selectionFilter="single">
+         <enabledWhen>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+            </adapt>
+         </enabledWhen>
+      </page>
+      <page
+            category="fr.kazejiyu.discord.rpc.integration.ui.preferences.properties.projectPropertiesPage"
+            class="fr.kazejiyu.discord.rpc.integration.ui.preferences.properties.ProjectPropertiesIconsPage"
+            id="fr.kazejiyu.discord.rpc.integration.ui.preferences.properties.projectIconsPropertiesPage"
+            name="Icons">
          <enabledWhen>
             <adapt
                   type="org.eclipse.core.resources.IProject">

@@ -9,6 +9,7 @@
  ******************************************************************************/
 package fr.kazejiyu.discord.rpc.integration.settings;
 
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.CUSTOM_APP_ID;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.PROJECT_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_FILE;
@@ -19,6 +20,7 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_FILE_NA
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_LANGUAGE_ICON;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_RICH_PRESENCE;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.USE_CUSTOM_APP;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.USE_PROJECT_SETTINGS;
 import static java.util.Objects.requireNonNull;
 
@@ -120,28 +122,33 @@ public class ProjectPreferences implements UserPreferences {
     public Optional<String> getProjectName() {
         String name = preferences.get(PROJECT_NAME.property(), "");
         
-        if (name == null || name.trim().isEmpty()) {
+        if (name.trim().isEmpty()) {
             return Optional.empty();
         }
         return Optional.of(name);
     }
+    
+    @Override
+    public boolean usesCustomDiscordApplication() {
+        return preferences.getBoolean(USE_CUSTOM_APP.property(), false);
+    }
+    
+    @Override
+    public Optional<String> getDiscordApplicationId() {
+        String id = preferences.get(CUSTOM_APP_ID.property(), "");
+        
+        if (id.trim().isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(id);
+    }
 
-    /**
-     * Registers a new listener that will be called each time a property change.
-     * 
-     * @param listener
-     *             The listener to register.
-     */
+    @Override
     public void addSettingChangeListener(SettingChangeListener listener) {
         listeners.add(requireNonNull(listener, "Cannot register a null listener"));
     }
 
-    /**
-     * Unregisters a listener so that it will no longer being notified of events.
-     * 
-     * @param listener
-     *             The listener to unregister.
-     */
+    @Override
     public void removeSettingChangeListener(SettingChangeListener listener) {
         listeners.remove(listener);
     }

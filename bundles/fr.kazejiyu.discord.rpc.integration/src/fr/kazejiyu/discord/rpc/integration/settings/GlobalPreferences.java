@@ -9,6 +9,7 @@
  ******************************************************************************/
 package fr.kazejiyu.discord.rpc.integration.settings;
 
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.CUSTOM_APP_ID;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_FILE;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_PROJECT;
@@ -18,6 +19,7 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_FILE_NA
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_LANGUAGE_ICON;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_RICH_PRESENCE;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.USE_CUSTOM_APP;
 import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
@@ -98,6 +100,21 @@ public class GlobalPreferences implements UserPreferences {
         return Optional.empty();
     }
     
+    @Override
+    public boolean usesCustomDiscordApplication() {
+        return store.getBoolean(USE_CUSTOM_APP.property());
+    }
+    
+    @Override
+    public Optional<String> getDiscordApplicationId() {
+        String discordApplicationId = store.getString(CUSTOM_APP_ID.property());
+        
+        if (discordApplicationId.trim().isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(discordApplicationId);
+    }
+    
     /**
      * <p>Returns the user preferences that should be applied for {@code project}.</p>
      * 
@@ -118,11 +135,32 @@ public class GlobalPreferences implements UserPreferences {
             if (projectPreferences.useProjectSettings()) {
                 return projectPreferences;
             }
+            // This anonymous class aims at managing the preferences that are set
+            // specifically for an IProject but that apply independently of whether
+            // the 'Use Project Settings' property is true or false.
             // TODO [Refactor] Create a dedicated class ?
             return new GlobalPreferences() {
                 @Override
                 public Optional<String> getProjectName() {
                     return projectPreferences.getProjectName();
+                }
+
+                @Override
+                public boolean usesCustomDiscordApplication() {
+                    if (projectPreferences.usesCustomDiscordApplication()) {
+                        return true;
+                    }
+                    return super.usesCustomDiscordApplication();
+                }
+
+                @Override
+                public Optional<String> getDiscordApplicationId() {
+                    Optional<String> projectScopeCustomApp = projectPreferences.getDiscordApplicationId();
+                            
+                    if (projectScopeCustomApp.isPresent()) {
+                        return projectScopeCustomApp;
+                    }
+                    return super.getDiscordApplicationId();
                 }
             };
         } 
@@ -132,22 +170,12 @@ public class GlobalPreferences implements UserPreferences {
         return this;
     }
 
-    /**
-     * Registers a new listener that will be called each time a property change.
-     * 
-     * @param listener
-     *             The listener to register.
-     */
+    @Override
     public void addSettingChangeListener(SettingChangeListener listener) {
         listeners.add(requireNonNull(listener, "Cannot register a null listener"));
     }
 
-    /**
-     * Unregisters a listener so that it will no longer being notified of events.
-     * 
-     * @param listener
-     *             The listener to unregister.
-     */
+    @Override
     public void removeSettingChangeListener(SettingChangeListener listener) {
         listeners.remove(listener);
     }

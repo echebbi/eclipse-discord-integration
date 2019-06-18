@@ -31,7 +31,7 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
  */
 public class DiscordIntegrationPreferencesPage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-    private static final String PREFERENCES_STORE_ID = "fr.kazejiyu.discord.rpc.integration";
+    static final String PREFERENCES_STORE_ID = "fr.kazejiyu.discord.rpc.integration";
 
     /**
      * Creates a new page.
@@ -73,7 +73,6 @@ public class DiscordIntegrationPreferencesPage extends FieldEditorPreferencePage
                                  { "On new file", "RESET_ELAPSED_TIME_ON_NEW_FILE" } },
                 getFieldEditorParent()
         ));
-        
     }
 
 }

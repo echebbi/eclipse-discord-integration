@@ -9,11 +9,12 @@
  ******************************************************************************/
 package fr.kazejiyu.discord.rpc.integration.listener;
 
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.DEFAULT_DISCORD_APPLICATION_ID;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.ISelection;
@@ -27,22 +28,18 @@ import org.eclipse.ui.part.EditorPart;
 
 import fr.kazejiyu.discord.rpc.integration.Plugin;
 import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcLifecycle;
-import fr.kazejiyu.discord.rpc.integration.core.PreferredRichPresence;
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
-import fr.kazejiyu.discord.rpc.integration.core.SelectionTimes;
-import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
-import fr.kazejiyu.discord.rpc.integration.extensions.EditorRichPresenceFromInput;
-import fr.kazejiyu.discord.rpc.integration.extensions.internal.UnknownInputRichPresence;
 import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
 import fr.kazejiyu.discord.rpc.integration.settings.ProjectPreferences;
 import fr.kazejiyu.discord.rpc.integration.settings.SettingChangeListener;
+import fr.kazejiyu.discord.rpc.integration.settings.UserPreferences;
 
 /**
- * <p>Listens for selected part to change.</p>
- * 
- * <p>Each a new {@link EditorPart} is selected, a corresponding {@link RichPresence}
+ * Listens for selected part to change.
+ * <p>
+ * Each time a new {@link EditorPart} is selected, a corresponding {@link RichPresence}
  * is created and then forward to a {@link DiscordRpcLifecycle} instance in order to
- * be shown in Discord's UI.</p>
+ * be shown in Discord's UI.
  */
 public class FileChangeListener implements ISelectionListener, IPartListener2 {
     
@@ -52,35 +49,36 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
     /** Proxy used to communicate with Discord. */
     private final DiscordRpcLifecycle discord;
 
-    /** User's preferences. */
-    private final GlobalPreferences preferences = new GlobalPreferences();
-    
-    /** Used to to create a RichPresence from the selected editor. */
-    private final EditorRichPresenceFromInput adapters;
-    
     // Used to watch project's preferences
     private IProject lastSelectedProject = null;
     private ProjectPreferences lastSelectedProjectPreferences = null;
-    private SettingChangeListener updateDiscordOnSettingChange = null;
+    private SettingChangeListener updateDiscordOnProjectSettingChange = null;
     
-    /** Provides access to the different timestamps. */
-    private SelectionTimes times = new SelectionTimes();
+    
+    private final EditionContext context;
+    
+    private final Function<EditionContext, Optional<RichPresence>> toRichPresence;
 
     /**
      * Creates a new instances able to listen for the active editor to change.
      * 
      * @param discord
      *          The proxy used to communicate with Discord.
-     * @param adapters
-     *          Will be notified with a new {@link RichPresence} instance each time
-     *          the active editor changes. Must not be null.
-     *              
+     * @param toRichPresence
+     *          The adapter used to create a RichPresence from an EditionContext.
      */
-    public FileChangeListener(DiscordRpcLifecycle discord, EditorRichPresenceFromInput adapters) {
+    public FileChangeListener(DiscordRpcLifecycle discord, Function<EditionContext, Optional<RichPresence>> toRichPresence) {
         this.discord = requireNonNull(discord, "The Discord proxy must not be null");
-        this.adapters = requireNonNull(adapters, "The Discord extensions must not be null");
-        this.preferences.addSettingChangeListener(new RunOnSettingChange(discord, this::updateDiscord));
-        this.preferences.addSettingChangeListener(new SynchronizeConnection(discord, this::updateDiscord));
+        this.context = new EditionContext();
+        this.toRichPresence = requireNonNull(toRichPresence, "The RichPresence adapter must not be null");
+    }
+
+    /**
+     * Returns the current editing context.
+     * @return the current editing context
+     */
+    public EditionContext editingContext() {
+        return context;
     }
 
     /**
@@ -116,12 +114,13 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
         }
         try {
             lastSelectedEditor = (IEditorPart) part;
+            context.setLastSelectedEditor(lastSelectedEditor);
             
-            Optional<RichPresence> presence = createRichPresenceFrom(lastSelectedEditor);
+            Optional<RichPresence> presence = toRichPresence.apply(context);
             presence.ifPresent(this::updateTimesOnSelection); // must be called before discord.show()
             
-            presence.map(this::tailorToPreferences)
-                    .ifPresent(discord::show);
+            presence.ifPresent(this::connectAnotherDiscordAppIfRequired);
+            presence.ifPresent(discord::show);
             
             presence.ifPresent(this::listenForChangesInProjectPreferences);
             presence.ifPresent(this::registerLastSelectedProject); // must be called after listenFor..()
@@ -131,58 +130,15 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
             Plugin.logException("An error occurred while trying to udpate Discord", e);
         }
     }
-    
-    /** Updates Discord by showing a RichPresence corresponding to the last selected editor. */
-    @SuppressWarnings({"checkstyle:illegalcatch"})
-    private void updateDiscord() {
-        try {
-            if (lastSelectedEditor != null) {
-                createRichPresenceFrom(lastSelectedEditor)
-                    .map(this::tailorToPreferences)
-                    .ifPresent(discord::show);
-            }
-        } 
-        catch (Exception e) {
-            // Should never happen, but provides a more appropriate error in case of failure
-            Plugin.logException("An error occured while trying to udpate Discord", e);
-        }
-    }
-    
-    /** 
-     * Creates a new RichPresence for the given editor part.
-     * 
-     * @param editor 
-     *             The editor from which a RichPresence has to be created. Must not be null.
-     *  
-     * @throws Exception if the adapter used to create the new instance does not follow
-     *                    the contract specified by {@link EditorInputRichPresence}.
-     */
-    private Optional<RichPresence> createRichPresenceFrom(IEditorPart editor) {
-        return adapters.findAdapterFor(editor.getEditorInput())
-                       .orElseGet(defaultAdapter())
-                       .createRichPresence(preferences, editor.getEditorInput());
-    }
 
-    /** Returns a built-in adapter that sends nothing to Discord. */
-    private static Supplier<EditorInputRichPresence> defaultAdapter() {
-        return UnknownInputRichPresence::new;
+    /** Updates times so that we know the time on the last selection. */
+    private void updateTimesOnSelection(RichPresence presence) {
+        IProject projectOwningFocusedResource = presence.getProject().orElse(null);
+        context.getElapsedTimes().updateWithNewSelectionIn(projectOwningFocusedResource);
     }
     
     private void registerLastSelectedProject(RichPresence presence) {
         lastSelectedProject = presence.getProject().orElse(null);
-    }
-    
-    private RichPresence tailorToPreferences(RichPresence presence) {
-        return new PreferredRichPresence(
-            preferences.getApplicablePreferencesFor(presence.getProject().orElse(null)), 
-            presence, 
-            times
-        );
-    }
-
-    /** Updates times so that we know the time on the last selection. */
-    private void updateTimesOnSelection(RichPresence presence) {
-        times = times.withNewSelectionInResourceOwnedBy(presence.getProject().orElse(null));
     }
     
     /** Creates a new listener watching for changes in the active project, if a new one has been activated. */
@@ -192,14 +148,38 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
             return;
         }
         if (lastSelectedProjectPreferences != null) {
-            lastSelectedProjectPreferences.removeSettingChangeListener(updateDiscordOnSettingChange);
+            lastSelectedProjectPreferences.removeSettingChangeListener(updateDiscordOnProjectSettingChange);
         }
         presence.getProject().ifPresent(project -> {
             lastSelectedProjectPreferences = new ProjectPreferences(project);
 
-            updateDiscordOnSettingChange = new RunOnSettingChange(discord, this::updateDiscord);
-            lastSelectedProjectPreferences.addSettingChangeListener(updateDiscordOnSettingChange);
+            updateDiscordOnProjectSettingChange = new UpdateDiscordOnSettingChange(context, toRichPresence, discord, new GlobalPreferences());
+            lastSelectedProjectPreferences.addSettingChangeListener(updateDiscordOnProjectSettingChange);
         });
+    }
+    
+    // TODO [Refactor] Consider moving this method within DiscordProxy
+    //                 so that it is implicitely executing when calling show().
+    //                 This piece of code is likely to be duplicated
+    //                 and has nothing to do with this class' concerns.
+    private void connectAnotherDiscordAppIfRequired(RichPresence presence) {
+        GlobalPreferences globalPreferences = new GlobalPreferences();
+        UserPreferences preferences = presence.getProject()
+                .map(globalPreferences::getApplicablePreferencesFor)
+                .orElse(globalPreferences); // Without a project, we cannot access resource's specific preferences and hence assume that global preferences apply
+        
+        if (! preferences.showsRichPresence()) {
+            // we should not be connected to Discord at all
+            return;
+        }
+        String expectedDiscordAppId = preferences.usesCustomDiscordApplication() ? preferences.getDiscordApplicationId().orElse("")
+                                                                                 : DEFAULT_DISCORD_APPLICATION_ID;
+        if (discord.isConnectedTo(expectedDiscordAppId)) {
+            // Nothing to do: we are already connected to the right Discord application
+            return;
+        }
+        discord.shutdown();
+        discord.initialize(expectedDiscordAppId);
     }
     
     @Override
@@ -212,22 +192,23 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
     public void partClosed(IWorkbenchPartReference partRef) {
         if (Objects.equals(partRef.getPart(false), lastSelectedEditor)) {
             discord.showNothing();
+            context.setLastSelectedEditor(null);
         }
     }
 
     @Override
     public void partBroughtToTop(IWorkbenchPartReference partRef) {
-        // irrelevant event
+        // already handled by #partActivated
     }
 
     @Override
     public void partDeactivated(IWorkbenchPartReference partRef) {
-        // irrelevant event
+        // already handled by #partActivated + #partClosed
     }
 
     @Override
     public void partOpened(IWorkbenchPartReference partRef) {
-        // irrelevant event
+        // already handled by #partActivated
     }
 
     @Override

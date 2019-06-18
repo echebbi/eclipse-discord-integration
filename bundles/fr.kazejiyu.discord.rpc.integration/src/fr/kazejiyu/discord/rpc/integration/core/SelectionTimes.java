@@ -15,6 +15,8 @@ import org.eclipse.core.resources.IProject;
 
 /**
  * The times at which selection changed. 
+ * 
+ * TODO Rename as "ElapsedTimes"
  */
 public class SelectionTimes {
 
@@ -46,7 +48,7 @@ public class SelectionTimes {
      *          
      * @return the current instance to enable method chaining
      */
-    public SelectionTimes withNewSelectionInResourceOwnedBy(IProject project) {
+    public SelectionTimes updateWithNewSelectionIn(IProject project) {
         this.timeOnNewProject = isANewProject(project) ? System.currentTimeMillis() / 1000 : timeOnNewProject;
         this.timeOnNewSelection = System.currentTimeMillis() / 1000;
         this.lastSelectedProject = project;

@@ -15,6 +15,7 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_ELAPSED
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_FILE_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_LANGUAGE_ICON;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.USE_CUSTOM_APP;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -39,6 +40,8 @@ public class DiscordIntegrationPreferencesInitializer extends AbstractPreference
         store.setDefault(SHOW_ELAPSED_TIME.property(), true);
         store.setDefault(SHOW_LANGUAGE_ICON.property(), true);
         store.setDefault(RESET_ELAPSED_TIME.property(), RESET_ELAPSED_TIME_ON_NEW_PROJECT.property());
+        
+        store.setDefault(USE_CUSTOM_APP.property(), false);
     }
 
 }
