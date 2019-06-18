@@ -9,6 +9,8 @@
  ******************************************************************************/
 package fr.kazejiyu.discord.rpc.integration.core;
 
+import java.util.Optional;
+
 /**
  * Defines an object aimed to manage plug-in's Rich Presence by communicating with Discord. 
  */
@@ -17,9 +19,12 @@ public interface DiscordRpcLifecycle extends AutoCloseable {
     /**
      * Initializes the connection to Discord session.
      * 
+     * @param applicationId
+     *          The ID of the Discord application to connect.
+     * 
      * @see #shutdown()
      */
-    void initialize();
+    void initialize(String applicationId);
     
     /**
      * Returns whether the instance is currently connected to a Discord client.
@@ -27,6 +32,26 @@ public interface DiscordRpcLifecycle extends AutoCloseable {
      *            {@code false} otherwise
      */
     boolean isConnected();
+    
+    /**
+     * Returns whether the proxy is connected to the given Discord application.
+     * 
+     * @param applicationId
+     *          The ID of the Discord application to which the proxy may be connected.
+     *          
+     * @return true if the proxy is connected to the given Discord application, false otherwise
+     */
+    default boolean isConnectedTo(String applicationId) {
+        return this.discordApplicationId()
+                   .map(id -> id.equals(applicationId))
+                   .orElse(false);
+    }
+    
+    /**
+     * Returns the ID of the Discord application to which the object is currently connected.
+     * @return the ID of the Discord application if a connection has been made, nothing otherwise
+     */
+    Optional<String> discordApplicationId();
     
     /**
      * <p>Shows given presence on Discord.</p>
@@ -53,7 +78,7 @@ public interface DiscordRpcLifecycle extends AutoCloseable {
      * 
      * <p>If this method is called while the connection has already being closed, it has no effect.</p>
      * 
-     * @see #initialize()
+     * @see #initialize(String)
      */
     void shutdown();
     

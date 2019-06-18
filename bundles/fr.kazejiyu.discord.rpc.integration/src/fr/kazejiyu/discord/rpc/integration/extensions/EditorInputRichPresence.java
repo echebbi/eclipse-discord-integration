@@ -56,6 +56,8 @@ public interface EditorInputRichPresence extends Comparable<EditorInputRichPrese
     
     /**
      * Creates the Rich Presence information to send to Discord.
+     * <p>
+     * <b>Important</b>: this method may be called several times in a row with the same editor input. 
      * 
      * @param preferences
      *             User's preferences regarding the information to show in Discord.

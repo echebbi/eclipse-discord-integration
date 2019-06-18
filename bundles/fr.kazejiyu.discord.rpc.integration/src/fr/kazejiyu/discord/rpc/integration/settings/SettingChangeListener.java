@@ -90,4 +90,20 @@ public interface SettingChangeListener {
      */
     void richPresenceVisibilityChanged(boolean isVisible);
     
+    /**
+     * Called when the user choose whether to use a custom Discord application.
+     * 
+     * @param shouldUse
+     *          Whether a custom Discord application should be used instead of the default one.
+     */
+    void customDiscordApplicationVisibilityChanged(boolean shouldUse);
+    
+    /**
+     * Called when the user specifies that informations should now be sent to another Discord application.
+     * 
+     * @param newApplicationId
+     *          The ID of the new Discord application.
+     */
+    void discordApplicationIdChanged(String newApplicationId);
+    
 }

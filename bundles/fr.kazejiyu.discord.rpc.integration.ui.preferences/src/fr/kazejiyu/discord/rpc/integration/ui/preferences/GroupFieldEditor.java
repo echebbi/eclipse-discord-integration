@@ -42,6 +42,7 @@ public class GroupFieldEditor extends FieldEditor {
      *          The parent of the group.
      */
     public GroupFieldEditor(String name, Composite parent) {
+        
         FillLayout layout = new FillLayout();
         layout.marginWidth = MARGIN;
         layout.marginHeight = MARGIN;

@@ -9,6 +9,7 @@
  ******************************************************************************/
 package fr.kazejiyu.discord.rpc.integration;
 
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.DEFAULT_DISCORD_APPLICATION_ID;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_PROJECT;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_ELAPSED_TIME;
@@ -18,8 +19,7 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_RICH_PRESENCE;
 
 import org.eclipse.core.runtime.RegistryFactory;
-import org.eclipse.ui.IPartListener2;
-import org.eclipse.ui.ISelectionListener;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
@@ -32,8 +32,11 @@ import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcProxy;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorRichPresenceFromInput;
 import fr.kazejiyu.discord.rpc.integration.extensions.internal.EditorRichPresenceFromExtensions;
 import fr.kazejiyu.discord.rpc.integration.listener.AddListenerOnWindowOpened;
+import fr.kazejiyu.discord.rpc.integration.listener.EditionContext;
+import fr.kazejiyu.discord.rpc.integration.listener.EditorToRichPresenceAdapter;
 import fr.kazejiyu.discord.rpc.integration.listener.FileChangeListener;
 import fr.kazejiyu.discord.rpc.integration.listener.OnPostShutdown;
+import fr.kazejiyu.discord.rpc.integration.listener.UpdateDiscordOnSettingChange;
 import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
 
 /**
@@ -46,23 +49,32 @@ import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
  *  </ul>
  * </p>
  */
+// Ignore the DAC here because the Activator is the application's entry and thus has a lot to set up.
+// Moreover, I believe that even if a lot of classes are involved the code remain pretty understandable.
+@SuppressWarnings("checkstyle:ClassDataAbstractionCoupling")
 public class Activator extends AbstractUIPlugin implements IStartup {
 
     public static final String PLUGIN_ID = "fr.kazejiyu.discord.rpc.integration"; //$NON-NLS-1$
 
-    /** Listens current selection then notify Discord'RPC. */
-    private FileChangeListener fileChangeListener;
-
     /** Used to communicate with Discord. */
     private DiscordRpcProxy discord;
+    
+    private FileChangeListener fileChangeListener;
+
+    private GlobalPreferences preferences = new GlobalPreferences();
     
     @Override
     @SuppressWarnings({"checkstyle:illegalcatch"})
     public void earlyStartup() {
         try {
+            // Caution: following methods have side effects which impose a precise call-order, do not change it!
+            //          (mutability have been chosen over purity because it makes this method easier to read)
+            
             setDefaultPreferencesValue();
             connectToDiscord();
-            listenForSelectionChangesWith(fileChangeListener);
+            listenForSelectionChanges();
+            listenForGlobalSettingChanges();
+            showActivePartInDiscord();
         } 
         catch (Exception e) {
             // 'Exception' is caught on purpose in order to handle any unexpected error properly
@@ -70,28 +82,69 @@ public class Activator extends AbstractUIPlugin implements IStartup {
         }
     }
 
-    /** Initializes the connection to Discord and shows active editor, if any. */
+    /** Initializes the connection to Discord and shows nothing. */
     private void connectToDiscord() {
         discord = new DiscordRpcProxy();
-        GlobalPreferences preferences = new GlobalPreferences();
         
-        if (preferences.showsRichPresence()) {
-            discord.initialize();
-            discord.showNothing();
+        // Do not initialize any connection if the user does not want to
+        if (! preferences.showsRichPresence()) {
+            return;
         }
-        EditorRichPresenceFromInput adapters = new EditorRichPresenceFromExtensions(RegistryFactory.getRegistry());
-        fileChangeListener = new FileChangeListener(discord, adapters);
-        fileChangeListener.notifyDiscordWithActivePart();
+        
+        // Else connect: 
+        //     - either to the Discord application specified by the user in its instance-scope preferences
+        //     - or, if none is specified, to the default Discord application I created for this project.
+        
+        String applicationId;
+        
+        if (preferences.usesCustomDiscordApplication()) {
+            applicationId = preferences.getDiscordApplicationId().orElse("");
+        }
+        else {
+            applicationId = DEFAULT_DISCORD_APPLICATION_ID;
+        }
+        discord.initialize(applicationId);
+        discord.showNothing();
     }
-
-    /** Sets up listeners so that the given listener is notified each time a new part is selected. */
-    private <T extends ISelectionListener & IPartListener2> void listenForSelectionChangesWith(T listener) {
+    
+    /**
+     * Sets up a listener that will:
+     *      - be notified each time a global preference (see {@link InstanceScope#INSTANCE}) is modified,
+     *      - update Discord to show information according to the new preferences.
+     */
+    private void listenForGlobalSettingChanges() {
+        EditorRichPresenceFromInput adapters = new EditorRichPresenceFromExtensions(RegistryFactory.getRegistry());
+        EditorToRichPresenceAdapter editingContextToRichPresenceAdapter = new EditorToRichPresenceAdapter(preferences, adapters);
+        EditionContext editingContext = fileChangeListener.editingContext();
+        
+        UpdateDiscordOnSettingChange updateDiscord = new UpdateDiscordOnSettingChange(editingContext, editingContextToRichPresenceAdapter, discord, preferences);
+        preferences.addSettingChangeListener(updateDiscord);
+    }
+    
+    /** 
+     * Sets up a listener that will:
+     *      - be notified each time a new editor is focused,
+     *      - update Discord to show information relevant to the new editor.
+     *      
+     * Moreover, ensures that:
+     *      - Discord is still updated when editors are opened on new windows,
+     *      - the connection with Discord is closed when the workbench is closed. 
+     */
+    private void listenForSelectionChanges() {
+        EditorRichPresenceFromInput adapters = new EditorRichPresenceFromExtensions(RegistryFactory.getRegistry());
+        EditorToRichPresenceAdapter editingContextToRichPresenceAdapter = new EditorToRichPresenceAdapter(preferences, adapters);
+        
+        fileChangeListener = new FileChangeListener(discord, editingContextToRichPresenceAdapter);
         final IWorkbench workbench = PlatformUI.getWorkbench();
         
-        workbench.addWindowListener(new AddListenerOnWindowOpened<>(listener));
+        workbench.addWindowListener(new AddListenerOnWindowOpened<>(fileChangeListener));
         workbench.addWorkbenchListener(new OnPostShutdown(iworkbench -> discord.close()));
         workbench.getDisplay()
-                 .asyncExec(listenForSelectionInOpenedWindows(workbench));
+                 .asyncExec(listenForSelectionInOpenedWindows(workbench, fileChangeListener));
+    }
+    
+    private void showActivePartInDiscord() {
+        fileChangeListener.notifyDiscordWithActivePart();
     }
     
     @Override
@@ -120,7 +173,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
     }
     
     /** Adds fileChangeListener as an ISelectionListener to each opened window. */
-    private Runnable listenForSelectionInOpenedWindows(IWorkbench workbench) {
+    private static Runnable listenForSelectionInOpenedWindows(IWorkbench workbench, FileChangeListener fileChangeListener) {
         return () -> {
             for (IWorkbenchWindow window : workbench.getWorkbenchWindows()) {
                 if (window != null) {

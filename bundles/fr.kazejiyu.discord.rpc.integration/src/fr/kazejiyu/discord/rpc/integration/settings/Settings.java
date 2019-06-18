@@ -24,27 +24,60 @@ import fr.kazejiyu.discord.rpc.integration.Activator;
 // TODO [Refactor] Add a field specifying setting's default value
 public enum Settings {
     
+    /** Whether the name of the file being edited should be shown in Discord. */
     SHOW_FILE_NAME("SHOW_FILE_NAME"),
     
+    /** Whether the name of the project being worked on should be shown in Discord. */
     SHOW_PROJECT_NAME("SHOW_PROJECT_NAME"),
     
+    /** Whether the time elapsed since starting to work should be shown in Discord. */
     SHOW_ELAPSED_TIME("SHOW_ELAPSED_TIME"),
     
+    /** 
+     * The reset elapsed time policy. 
+     * <p>
+     * Should be one of:
+     * <ul>
+     *  <li>{@link #RESET_ELAPSED_TIME_ON_NEW_FILE}
+     *  <li>{@link #RESET_ELAPSED_TIME_ON_NEW_PROJECT}
+     *  <li>{@link #RESET_ELAPSED_TIME_ON_STARTUP}
+     * </ul>
+     */
     RESET_ELAPSED_TIME("RESET_ELAPSED_TIME"),
     
+    /** Indicates that the elapsed time should only be reset when the software is started. */
     RESET_ELAPSED_TIME_ON_STARTUP("RESET_ELAPSED_TIME_ON_STARTUP"),
 
+    /** Indicates that the elapsed time should be reset each time an editor opens for a file located in another project. */
     RESET_ELAPSED_TIME_ON_NEW_PROJECT("RESET_ELAPSED_TIME_ON_NEW_PROJECT"),
     
+    /** Indicates that the elapsed time should be reset each time a new editor is focused. */
     RESET_ELAPSED_TIME_ON_NEW_FILE("RESET_ELAPSED_TIME_ON_NEW_FILE"),
     
+    /** Whether the icon representing the language of the file being edited should be shown in Discord. */
     SHOW_LANGUAGE_ICON("SHOW_LANGUAGE_ICON"),
     
+    /** Whether the project uses project-scope settings or global-scope settings. */
     USE_PROJECT_SETTINGS("USE_PROJECT_SETTINGS"),
     
+    /** 
+     * Whether any information should be shown in Discord. 
+     * <p>
+     * False means that the connection with Discord should not be set at all. */
     SHOW_RICH_PRESENCE("SHOW_RICH_PRESENCE"),
     
-    PROJECT_NAME("PROJECT_NAME");
+    /** Indicates a nickname that should be shown in Discord instead of the project's name. */
+    PROJECT_NAME("PROJECT_NAME"),
+    
+    /** Whether a custom Discord Application should be used instead of the default one. */
+    USE_CUSTOM_APP("USE_CUSTOM_APP"), 
+    
+    /** Indicates the ID of the custom Discord Application ID to use. */
+    CUSTOM_APP_ID("CUSTOM_APP_ID");
+    
+    /** Identifies the Discord application to which information has to be sent
+     *  in order to appear in Discord's UI. */
+    public static final String DEFAULT_DISCORD_APPLICATION_ID = "413038514616139786";
     
     private static final Map<String, Settings> propertyToSetting = new HashMap<>();
 

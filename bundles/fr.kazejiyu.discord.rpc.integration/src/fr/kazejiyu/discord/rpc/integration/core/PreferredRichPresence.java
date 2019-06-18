@@ -34,7 +34,7 @@ public final class PreferredRichPresence implements RichPresence {
     private final UserPreferences preferences;
     
     /** The original, decorated presence. */
-    private final RichPresence presence;
+    public final RichPresence presence;
     
     /** Provides access to the different timestamps. */
     private final SelectionTimes times;
