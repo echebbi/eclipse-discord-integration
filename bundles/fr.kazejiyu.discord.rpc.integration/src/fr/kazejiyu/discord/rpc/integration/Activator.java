@@ -57,6 +57,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
     private DiscordRpcProxy discord;
     
     @Override
+    @SuppressWarnings({"checkstyle:illegalcatch"})
     public void earlyStartup() {
         try {
             setDefaultPreferencesValue();
@@ -64,6 +65,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
             listenForSelectionChangesWith(fileChangeListener);
         } 
         catch (Exception e) {
+            // 'Exception' is caught on purpose in order to handle any unexpected error properly
             Plugin.logException("An error occurred while starting the 'Discord Rich Presence for Eclipse IDE' plug-in", e);
         }
     }
@@ -93,11 +95,13 @@ public class Activator extends AbstractUIPlugin implements IStartup {
     }
     
     @Override
+    @SuppressWarnings({"checkstyle:illegalcatch"})
     public void stop(BundleContext context) throws Exception {
         try {
             discord.shutdown();
         }
         catch (Exception e) {
+            // 'Exception' is caught on purpose in order to handle any unexpected error properly
             Plugin.logException("An error occurred while shutting Discord Rich Presence down", e);
         }
         finally {

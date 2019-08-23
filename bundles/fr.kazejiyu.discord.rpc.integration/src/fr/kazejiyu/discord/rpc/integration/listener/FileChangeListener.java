@@ -109,6 +109,7 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
     }
 
     @Override
+    @SuppressWarnings({"checkstyle:illegalcatch"})
     public void selectionChanged(IWorkbenchPart part, ISelection selection) {
         if (!(part instanceof IEditorPart) || part.equals(lastSelectedEditor)) {
             return;
@@ -132,6 +133,7 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
     }
     
     /** Updates Discord by showing a RichPresence corresponding to the last selected editor. */
+    @SuppressWarnings({"checkstyle:illegalcatch"})
     private void updateDiscord() {
         try {
             if (lastSelectedEditor != null) {
