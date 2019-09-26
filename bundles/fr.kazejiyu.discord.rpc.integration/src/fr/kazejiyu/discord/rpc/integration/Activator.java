@@ -10,13 +10,6 @@
 package fr.kazejiyu.discord.rpc.integration;
 
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.DEFAULT_DISCORD_APPLICATION_ID;
-import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME;
-import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_PROJECT;
-import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_ELAPSED_TIME;
-import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_FILE_NAME;
-import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_LANGUAGE_ICON;
-import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
-import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_RICH_PRESENCE;
 
 import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -31,13 +24,13 @@ import org.osgi.framework.BundleContext;
 import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcProxy;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorRichPresenceFromInput;
 import fr.kazejiyu.discord.rpc.integration.extensions.internal.EditorRichPresenceFromExtensions;
-import fr.kazejiyu.discord.rpc.integration.listener.AddListenerOnWindowOpened;
-import fr.kazejiyu.discord.rpc.integration.listener.EditionContext;
-import fr.kazejiyu.discord.rpc.integration.listener.EditorToRichPresenceAdapter;
-import fr.kazejiyu.discord.rpc.integration.listener.FileChangeListener;
-import fr.kazejiyu.discord.rpc.integration.listener.OnPostShutdown;
-import fr.kazejiyu.discord.rpc.integration.listener.UpdateDiscordOnSettingChange;
+import fr.kazejiyu.discord.rpc.integration.files.AddListenerOnWindowOpened;
+import fr.kazejiyu.discord.rpc.integration.files.EditionContext;
+import fr.kazejiyu.discord.rpc.integration.files.EditorToRichPresenceAdapter;
+import fr.kazejiyu.discord.rpc.integration.files.OnPostShutdown;
+import fr.kazejiyu.discord.rpc.integration.files.UpdateDiscordOnEditorChange;
 import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
+import fr.kazejiyu.discord.rpc.integration.settings.UpdateDiscordOnSettingChange;
 
 /**
  * <p>Setup the Discord Rich Presence for Eclipse IDE plug-in.</p>
@@ -59,7 +52,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
     /** Used to communicate with Discord. */
     private DiscordRpcProxy discord;
     
-    private FileChangeListener fileChangeListener;
+    private UpdateDiscordOnEditorChange editorChangeListener;
 
     private GlobalPreferences preferences = new GlobalPreferences();
     
@@ -114,7 +107,7 @@ public class Activator extends AbstractUIPlugin implements IStartup {
     private void listenForGlobalSettingChanges() {
         EditorRichPresenceFromInput adapters = new EditorRichPresenceFromExtensions(RegistryFactory.getRegistry());
         EditorToRichPresenceAdapter editingContextToRichPresenceAdapter = new EditorToRichPresenceAdapter(preferences, adapters);
-        EditionContext editingContext = fileChangeListener.editingContext();
+        EditionContext editingContext = editorChangeListener.editingContext();
         
         UpdateDiscordOnSettingChange updateDiscord = new UpdateDiscordOnSettingChange(editingContext, editingContextToRichPresenceAdapter, discord, preferences);
         preferences.addSettingChangeListener(updateDiscord);
@@ -133,17 +126,17 @@ public class Activator extends AbstractUIPlugin implements IStartup {
         EditorRichPresenceFromInput adapters = new EditorRichPresenceFromExtensions(RegistryFactory.getRegistry());
         EditorToRichPresenceAdapter editingContextToRichPresenceAdapter = new EditorToRichPresenceAdapter(preferences, adapters);
         
-        fileChangeListener = new FileChangeListener(discord, editingContextToRichPresenceAdapter);
+        editorChangeListener = new UpdateDiscordOnEditorChange(discord, editingContextToRichPresenceAdapter);
         final IWorkbench workbench = PlatformUI.getWorkbench();
         
-        workbench.addWindowListener(new AddListenerOnWindowOpened<>(fileChangeListener));
+        workbench.addWindowListener(new AddListenerOnWindowOpened<>(editorChangeListener));
         workbench.addWorkbenchListener(new OnPostShutdown(iworkbench -> discord.close()));
         workbench.getDisplay()
-                 .asyncExec(listenForSelectionInOpenedWindows(workbench, fileChangeListener));
+                 .asyncExec(listenForSelectionInOpenedWindows(workbench, editorChangeListener));
     }
     
     private void showActivePartInDiscord() {
-        fileChangeListener.notifyDiscordWithActivePart();
+        editorChangeListener.notifyDiscordWithActivePart();
     }
     
     @Override
@@ -162,14 +155,14 @@ public class Activator extends AbstractUIPlugin implements IStartup {
     }
     
     /** Adds fileChangeListener as an ISelectionListener to each opened window. */
-    private static Runnable listenForSelectionInOpenedWindows(IWorkbench workbench, FileChangeListener fileChangeListener) {
+    private static Runnable listenForSelectionInOpenedWindows(IWorkbench workbench, UpdateDiscordOnEditorChange editorChangeListener) {
         return () -> {
             for (IWorkbenchWindow window : workbench.getWorkbenchWindows()) {
                 if (window != null) {
-                    window.getSelectionService().addSelectionListener(fileChangeListener);
+                    window.getSelectionService().addSelectionListener(editorChangeListener);
                     
                     for (IWorkbenchPage page : window.getPages()) {
-                        page.addPartListener(fileChangeListener);
+                        page.addPartListener(editorChangeListener);
                     }
                 }
             }

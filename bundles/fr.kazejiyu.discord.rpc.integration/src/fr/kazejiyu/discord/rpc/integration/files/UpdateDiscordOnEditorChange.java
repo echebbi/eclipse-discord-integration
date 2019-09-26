@@ -7,7 +7,7 @@
  * 
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
-package fr.kazejiyu.discord.rpc.integration.listener;
+package fr.kazejiyu.discord.rpc.integration.files;
 
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.DEFAULT_DISCORD_APPLICATION_ID;
 import static java.util.Objects.requireNonNull;
@@ -32,16 +32,17 @@ import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
 import fr.kazejiyu.discord.rpc.integration.settings.ProjectPreferences;
 import fr.kazejiyu.discord.rpc.integration.settings.SettingChangeListener;
+import fr.kazejiyu.discord.rpc.integration.settings.UpdateDiscordOnSettingChange;
 import fr.kazejiyu.discord.rpc.integration.settings.UserPreferences;
 
 /**
- * Listens for selected part to change.
+ * Listens for the active editor to change and updates Discord accordingly.
  * <p>
  * Each time a new {@link EditorPart} is selected, a corresponding {@link RichPresence}
  * is created and then forward to a {@link DiscordRpcLifecycle} instance in order to
  * be shown in Discord's UI.
  */
-public class FileChangeListener implements ISelectionListener, IPartListener2 {
+public class UpdateDiscordOnEditorChange implements ISelectionListener, IPartListener2 {
     
     /** Used to update Discord when active project's preferences change. */
     private IEditorPart lastSelectedEditor = null;
@@ -54,20 +55,19 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
     private ProjectPreferences lastSelectedProjectPreferences = null;
     private SettingChangeListener updateDiscordOnProjectSettingChange = null;
     
-    
     private final EditionContext context;
     
     private final Function<EditionContext, Optional<RichPresence>> toRichPresence;
 
     /**
-     * Creates a new instances able to listen for the active editor to change.
+     * Creates a new instance that updates Discord when the active editor changes.
      * 
      * @param discord
      *          The proxy used to communicate with Discord.
      * @param toRichPresence
      *          The adapter used to create a RichPresence from an EditionContext.
      */
-    public FileChangeListener(DiscordRpcLifecycle discord, Function<EditionContext, Optional<RichPresence>> toRichPresence) {
+    public UpdateDiscordOnEditorChange(DiscordRpcLifecycle discord, Function<EditionContext, Optional<RichPresence>> toRichPresence) {
         this.discord = requireNonNull(discord, "The Discord proxy must not be null");
         this.context = new EditionContext();
         this.toRichPresence = requireNonNull(toRichPresence, "The RichPresence adapter must not be null");
@@ -159,7 +159,7 @@ public class FileChangeListener implements ISelectionListener, IPartListener2 {
     }
     
     // TODO [Refactor] Consider moving this method within DiscordProxy
-    //                 so that it is implicitely executing when calling show().
+    //                 so that it is implicitly executed when calling show().
     //                 This piece of code is likely to be duplicated
     //                 and has nothing to do with this class' concerns.
     private void connectAnotherDiscordAppIfRequired(RichPresence presence) {

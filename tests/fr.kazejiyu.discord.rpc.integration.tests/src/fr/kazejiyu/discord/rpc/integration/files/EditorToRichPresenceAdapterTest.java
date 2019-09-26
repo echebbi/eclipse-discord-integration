@@ -1,4 +1,4 @@
-package fr.kazejiyu.discord.rpc.integration.listener;
+package fr.kazejiyu.discord.rpc.integration.files;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;

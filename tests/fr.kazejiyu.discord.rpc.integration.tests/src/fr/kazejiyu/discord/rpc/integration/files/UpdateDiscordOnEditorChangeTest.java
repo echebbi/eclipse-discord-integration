@@ -1,4 +1,4 @@
-package fr.kazejiyu.discord.rpc.integration.listener;
+package fr.kazejiyu.discord.rpc.integration.files;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
@@ -30,15 +30,15 @@ import fr.kazejiyu.discord.rpc.integration.extensions.EditorRichPresenceFromInpu
 import fr.kazejiyu.discord.rpc.integration.tests.mock.MockitoExtension;
 
 /**
- * <p>Unit test the {@link FileChangeListener} class.</p>
+ * <p>Unit test the {@link UpdateDiscordOnEditorChange} class.</p>
  * 
  * <p><b>Important</b>: this class must be tested as a JUnit plug-in, otherwise some tests will fail.</p> 
  */
 @ExtendWith(MockitoExtension.class)
-@DisplayName("A FileChangeListener")
-public class FileChangeListenerTest implements WithAssertions {
+@DisplayName("An UpdateDiscordOnEditorChange")
+public class UpdateDiscordOnEditorChangeTest implements WithAssertions {
     
-    private FileChangeListener listener;
+    private UpdateDiscordOnEditorChange listener;
     
     @Mock
     private DiscordRpcLifecycle discord;
@@ -54,7 +54,7 @@ public class FileChangeListenerTest implements WithAssertions {
     
     @BeforeEach
     void instantiateObjectUnderTest() {
-        listener = new FileChangeListener(discord, toRichPresence);
+        listener = new UpdateDiscordOnEditorChange(discord, toRichPresence);
         when(activePart.getEditorInput()).thenReturn(mock(IEditorInput.class));
         
         // Discord is considered connected by default
@@ -70,14 +70,14 @@ public class FileChangeListenerTest implements WithAssertions {
         @Test @DisplayName("throws if the given Discord proxy is null")
         void throws_if_the_given_Discord_proxy_is_null() {    
             assertThatNullPointerException().isThrownBy(() ->
-                new FileChangeListener(null, toRichPresence) 
+                new UpdateDiscordOnEditorChange(null, toRichPresence) 
             );
         }
         
         @Test @DisplayName("throws if the given EditionContext to RichPresence adapter is null")
         void throws_if_the_given_IEditorInput_adapters_is_null() {    
             assertThatNullPointerException().isThrownBy(() ->
-                new FileChangeListener(discord, null) 
+                new UpdateDiscordOnEditorChange(discord, null) 
             );
         }
         

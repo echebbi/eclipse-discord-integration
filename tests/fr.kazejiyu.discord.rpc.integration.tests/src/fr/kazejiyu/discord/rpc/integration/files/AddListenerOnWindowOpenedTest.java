@@ -1,4 +1,4 @@
-package fr.kazejiyu.discord.rpc.integration.listener;
+package fr.kazejiyu.discord.rpc.integration.files;
 
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
@@ -18,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 
-import fr.kazejiyu.discord.rpc.integration.listener.AddListenerOnWindowOpened;
 import fr.kazejiyu.discord.rpc.integration.tests.mock.MockitoExtension;
 
 /**

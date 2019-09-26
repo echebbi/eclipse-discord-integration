@@ -1,4 +1,4 @@
-package fr.kazejiyu.discord.rpc.integration.listener;
+package fr.kazejiyu.discord.rpc.integration.settings;
 
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.DEFAULT_DISCORD_APPLICATION_ID;
 import static org.mockito.ArgumentMatchers.any;
@@ -32,8 +32,7 @@ import org.mockito.Mockito;
 
 import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcLifecycle;
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
-import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
-import fr.kazejiyu.discord.rpc.integration.settings.Moment;
+import fr.kazejiyu.discord.rpc.integration.files.EditionContext;
 import fr.kazejiyu.discord.rpc.integration.tests.mock.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
