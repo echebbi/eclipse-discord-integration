@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Discord Rich Presence for Eclipse IDE — Default Adapters (Tests)
 Bundle-SymbolicName: fr.kazejiyu.discord.rpc.integration.adapters.tests
-Bundle-Version: 1.0.3
+Bundle-Version: 1.1.0
 Bundle-Vendor: Emmanuel CHEBBI
 Fragment-Host: fr.kazejiyu.discord.rpc.integration.adapters;bundle-version="0.8.4"
 Automatic-Module-Name: fr.kazejiyu.discord.rpc.integration.adapters.tests
