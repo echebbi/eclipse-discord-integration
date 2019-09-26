@@ -7,7 +7,7 @@
  * 
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
-package fr.kazejiyu.discord.rpc.integration.listener;
+package fr.kazejiyu.discord.rpc.integration.settings;
 
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.DEFAULT_DISCORD_APPLICATION_ID;
 import static java.util.Objects.requireNonNull;
@@ -17,10 +17,7 @@ import java.util.function.Function;
 
 import fr.kazejiyu.discord.rpc.integration.core.DiscordRpcLifecycle;
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
-import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
-import fr.kazejiyu.discord.rpc.integration.settings.Moment;
-import fr.kazejiyu.discord.rpc.integration.settings.SettingChangeListener;
-import fr.kazejiyu.discord.rpc.integration.settings.UserPreferences;
+import fr.kazejiyu.discord.rpc.integration.files.EditionContext;
 
 /**
  * Updates the information shown in Discord each time a preference changes.
@@ -30,6 +27,14 @@ import fr.kazejiyu.discord.rpc.integration.settings.UserPreferences;
  * 
  * @author Emmanuel CHEBBI
  */
+// TODO [Refactor] Use a State pattern to handle changing behavior.
+//                 As the number of settings to deal with grows this class
+//                 becomes more and more complex. A State pattern could mitigate
+//                 this complexity by isolating the various "if-else" statements
+//                 in dedicated classes, such as:
+//                      - ConnectedToDefaultApplication
+//                      - ConnectedToCustomApplication
+//                      - DisconnectedFromDiscord
 public class UpdateDiscordOnSettingChange implements SettingChangeListener {
     
     /** Used to retrieve the active editor. */

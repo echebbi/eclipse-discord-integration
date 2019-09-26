@@ -8,10 +8,10 @@
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
 /**
- * Classes used to listen for Eclipse's current selection.<br>
- * <br>
- * Each time the selection changes, Discord is notified and updates its overlay accordingly.
+ * Classes used to listen for Eclipse's current selection.
+ * <p>
+ * Each time a new editor is activated by the user, Discord is notified and updates its overlay accordingly.
  * 
  * @author Emmanuel CHEBBI
  */
-package fr.kazejiyu.discord.rpc.integration.listener;
+package fr.kazejiyu.discord.rpc.integration.files;
