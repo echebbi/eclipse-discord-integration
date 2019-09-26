@@ -70,7 +70,6 @@ public class Activator extends AbstractUIPlugin implements IStartup {
             // Caution: following methods have side effects which impose a precise call-order, do not change it!
             //          (mutability have been chosen over purity because it makes this method easier to read)
             
-            setDefaultPreferencesValue();
             connectToDiscord();
             listenForSelectionChanges();
             listenForGlobalSettingChanges();
@@ -160,16 +159,6 @@ public class Activator extends AbstractUIPlugin implements IStartup {
         finally {
             super.stop(context);
         }
-    }
-    
-    /** Sets default values for plug-in's Preferences. */
-    private void setDefaultPreferencesValue() {
-        getPreferenceStore().setDefault(SHOW_FILE_NAME.property(), true);
-        getPreferenceStore().setDefault(SHOW_PROJECT_NAME.property(), true);
-        getPreferenceStore().setDefault(SHOW_ELAPSED_TIME.property(), true);
-        getPreferenceStore().setDefault(SHOW_LANGUAGE_ICON.property(), true);
-        getPreferenceStore().setDefault(SHOW_RICH_PRESENCE.property(), true);
-        getPreferenceStore().setDefault(RESET_ELAPSED_TIME.property(), RESET_ELAPSED_TIME_ON_NEW_PROJECT.property());
     }
     
     /** Adds fileChangeListener as an ISelectionListener to each opened window. */
