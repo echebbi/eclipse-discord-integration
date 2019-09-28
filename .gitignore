@@ -25,3 +25,6 @@ hs_err_pid*
 # Maven
 target/
 .polyglot.build.properties
+
+# Visual Studio Code
+.vscode/
