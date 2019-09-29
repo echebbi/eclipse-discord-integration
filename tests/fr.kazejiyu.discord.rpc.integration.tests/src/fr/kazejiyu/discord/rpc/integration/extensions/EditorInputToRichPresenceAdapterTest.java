@@ -10,25 +10,25 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 
-import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
+import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputToRichPresenceAdapter;
 import fr.kazejiyu.discord.rpc.integration.tests.mock.MockitoExtension;
 
 /**
- * Unit test the {@link EditorInputRichPresence} class.
+ * Unit test the {@link EditorInputToRichPresenceAdapter} class.
  */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("An EditorInputRichPresence")
-public class EditorInputRichPresenceTest implements WithAssertions {
+public class EditorInputToRichPresenceAdapterTest implements WithAssertions {
     
     @Mock
-    private EditorInputRichPresence iut;
+    private EditorInputToRichPresenceAdapter iut;
     
     @Mock
-    private EditorInputRichPresence compared;
+    private EditorInputToRichPresenceAdapter compared;
     
     @BeforeEach
     private void setupMockToCallRealMethod() {
-        when(iut.compareTo(any(EditorInputRichPresence.class))).thenCallRealMethod();
+        when(iut.compareTo(any(EditorInputToRichPresenceAdapter.class))).thenCallRealMethod();
     }
     
     @Test @DisplayName("returns a negative integer when compared to another object with a greater priority")

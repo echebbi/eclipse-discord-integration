@@ -20,7 +20,7 @@ import org.eclipse.ui.IEditorPart;
 import fr.kazejiyu.discord.rpc.integration.core.PreferredRichPresence;
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.core.SelectionTimes;
-import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
+import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputToRichPresenceAdapter;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorRichPresenceFromInput;
 import fr.kazejiyu.discord.rpc.integration.extensions.internal.UnknownInputRichPresence;
 import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
@@ -67,7 +67,7 @@ public class EditorToRichPresenceAdapter implements Function<EditionContext, Opt
     }
 
     /** Returns a built-in adapter that sends nothing to Discord. */
-    private static Supplier<EditorInputRichPresence> defaultAdapter() {
+    private static Supplier<EditorInputToRichPresenceAdapter> defaultAdapter() {
         return UnknownInputRichPresence::new;
     }
     

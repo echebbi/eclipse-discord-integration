@@ -25,7 +25,7 @@ import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
  * 
  * @author Emmanuel CHEBBI
  */
-public interface EditorInputRichPresence extends Comparable<EditorInputRichPresence> {
+public interface EditorInputToRichPresenceAdapter extends Comparable<EditorInputToRichPresenceAdapter> {
     
     /**
      * Helps to choose an adapter over another when several ones
@@ -77,7 +77,7 @@ public interface EditorInputRichPresence extends Comparable<EditorInputRichPrese
      *            equal to, or greater than the specified object's priority.
      */
     @Override
-    default int compareTo(EditorInputRichPresence rhs) {
+    default int compareTo(EditorInputToRichPresenceAdapter rhs) {
         return Integer.compare(this.getPriority(), rhs.getPriority());
     }
     

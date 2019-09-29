@@ -5,13 +5,13 @@ import java.util.Optional;
 import org.eclipse.ui.IEditorInput;
 
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
-import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
+import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputToRichPresenceAdapter;
 import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
 
 /**
- * A fake {@link EditorInputRichPresence} which priority and input class can be parameterized.
+ * A fake {@link EditorInputToRichPresenceAdapter} which priority and input class can be parameterized.
  */
-public class FakeEditorInputRichPresence implements EditorInputRichPresence {
+public class FakeEditorInputRichPresence implements EditorInputToRichPresenceAdapter {
     
     private final int priority;
     
