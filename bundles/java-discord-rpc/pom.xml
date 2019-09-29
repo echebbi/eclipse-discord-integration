@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>fr.kazejiyu.discord.rpc.integration</groupId>
 		<artifactId>fr.kazejiyu.discord.rpc.integration.bundles</artifactId>
-		<version>1.1.0</version>
+		<version>1.1.1</version>
 	</parent>
 
 	<artifactId>java-discord-rpc</artifactId>

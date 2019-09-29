@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>fr.kazejiyu.discord.rpc.integration</groupId>
 		<artifactId>tests</artifactId>
-		<version>1.1.0</version>
+		<version>1.1.1</version>
 	</parent>
 
 	<profiles>
@@ -41,25 +41,25 @@
 		<dependency>
 			<groupId>fr.kazejiyu.discord.rpc.integration</groupId>
 			<artifactId>fr.kazejiyu.discord.rpc.integration</artifactId>
-			<version>1.1.0</version>
+			<version>1.1.1</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>fr.kazejiyu.discord.rpc.integration</groupId>
 			<artifactId>fr.kazejiyu.discord.rpc.integration.tests</artifactId>
-			<version>1.1.0</version>
+			<version>1.1.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>fr.kazejiyu.discord.rpc.integration</groupId>
 			<artifactId>fr.kazejiyu.discord.rpc.integration.adapters</artifactId>
-			<version>1.1.0</version>
+			<version>1.1.1</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>fr.kazejiyu.discord.rpc.integration</groupId>
 			<artifactId>fr.kazejiyu.discord.rpc.integration.adapters.tests</artifactId>
-			<version>1.1.0</version>
+			<version>1.1.1</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
