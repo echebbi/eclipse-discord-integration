@@ -14,13 +14,12 @@ import java.util.Optional;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
-import fr.kazejiyu.discord.rpc.integration.core.ImmutableRichPresence;
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
 
 /**
- * Extracts {@link ImmutableRichPresence} from an {@link IEditorInput}.<br>
- * <br>
+ * Extracts {@link RichPresence} from an {@link IEditorInput}.
+ * <p>
  * This interface should be implemented by clients who aim to define
  * the information shown in Discord for their own editor.
  * 
@@ -30,17 +29,18 @@ public interface EditorInputRichPresence extends Comparable<EditorInputRichPrese
     
     /**
      * Helps to choose an adapter over another when several ones
-     * are registered for the same {@code IEditorInput}.<br>
-     * <br>
-     * The higher the priority, the more the adapter will be favored.<br>
-     * <br>
+     * are registered for the same {@code IEditorInput}.
+     * <p>
+     * The higher the priority, the more the adapter will be favored.
+     * <p>
      * For instance, given two adapters registering themselves for inputs of type
      * {@link FileEditorInput} and which priorities are 0 and 1, then the adapter
-     * of priority 1 will be chosen to handle the input.<br>
-     * <br>
+     * of priority 1 will be chosen to handle the input.
+     * <p>
      * Built-in adapters have a priority of 0. Hence, giving a higher priority
-     * ensure that the adapter will be preferred over default ones.<br>
-     * <br>
+     * ensures that the adapter will be preferred over default ones. This allows
+     * to dynamically override other adapters if needed.
+     * <p>
      * It is advised to only choose tens, such as 10 or 20, instead of digits
      * so that it is easier to add new adapters later if needed.
      * 
@@ -66,7 +66,7 @@ public interface EditorInputRichPresence extends Comparable<EditorInputRichPrese
      *             The input of the active editor. 
      *             Must satisfy {@code getExpectedEditorInputClass().isInstance(input) == true}.
      * 
-     * @return the information to show in Discord
+     * @return the information to show in Discord if the input can be handled
      */
     Optional<RichPresence> createRichPresence(GlobalPreferences preferences, IEditorInput input);
 
