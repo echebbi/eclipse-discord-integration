@@ -7,7 +7,7 @@
  * 
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
-package fr.kazejiyu.discord.rpc.integration.ui.preferences;
+package fr.kazejiyu.discord.rpc.integration.ui.preferences.internal;
 
 import java.util.ArrayList;
 import java.util.Collection;
