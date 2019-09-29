@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.1.1] - 2019-09-30
+- [#72](https://github.com/echebbi/eclipse-discord-integration/pull/72) Add link to the documentation in Preferences and Project Settings pages
+
 ## [1.1.0] - 2019-09-27
 - [#66](https://github.com/echebbi/eclipse-discord-integration/issues/66) Allow users to customize icons shown on Discord
 
