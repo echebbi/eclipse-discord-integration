@@ -24,6 +24,9 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
+import fr.kazejiyu.discord.rpc.integration.ui.preferences.internal.GroupFieldEditor;
+import fr.kazejiyu.discord.rpc.integration.ui.preferences.internal.LinkFieldEditor;
+
 /**
  * A page allowing users to tailor Discord Rich Presence related preferences.
  * 
@@ -43,11 +46,20 @@ public class DiscordIntegrationPreferencesPage extends FieldEditorPreferencePage
     @Override
     public void init(IWorkbench workbench) {
         setPreferenceStore(new ScopedPreferenceStore(InstanceScope.INSTANCE, PREFERENCES_STORE_ID));
-        setDescription("Customize the way informations are shown in Discord");
     }
 
     @Override
     public void createFieldEditors() {
+        String description = "Customize the way informations are shown in Discord. See the documentation for further details.";
+        LinkFieldEditor linkToDocumentation = new LinkFieldEditor(
+                description,
+                "https://discord-rich-presence-for-eclipse-ide.readthedocs.io/en/latest/",
+                description.indexOf("See") + 1,
+                description.length() - description.indexOf("See") - 1,
+                getFieldEditorParent()
+        );
+        addField(linkToDocumentation);
+        
         BooleanFieldEditor showRichPresence = new BooleanFieldEditor(SHOW_RICH_PRESENCE.property(), "Activate Rich Presence Integration", getFieldEditorParent());
         addField(showRichPresence);
         

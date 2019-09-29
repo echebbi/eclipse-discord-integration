@@ -27,10 +27,13 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyleRange;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -91,6 +94,8 @@ public class ProjectPropertiesPage extends AbstractPropertyPage {
         composite.setLayoutData(data);
 
         try {
+            addLinkToTheDocumentation(composite);
+            
             addSettingsScopeSection(composite);
             addPrivacySection(composite);
             addSeparator(composite);
@@ -195,6 +200,27 @@ public class ProjectPropertiesPage extends AbstractPropertyPage {
             return false;
         }
         return true;
+    }
+    
+    private static void addLinkToTheDocumentation(Composite parent) {
+        StyledText styledText = new StyledText(parent, SWT.NONE);
+        styledText.setText(" See the documentation for further details.");
+        styledText.setBackground(parent.getBackground());
+        
+        StyleRange style = new StyleRange();
+        style.underline = true;
+        style.underlineStyle = SWT.UNDERLINE_LINK;
+        style.background = parent.getBackground();
+        style.borderColor = parent.getBackground();
+        style.start = 1;
+        style.length = styledText.getText().length() - 1;
+        styledText.setStyleRange(style);
+
+        styledText.addListener(SWT.MouseDown, event ->
+            // Open the documentation with external browser
+            Program.launch("https://discord-rich-presence-for-eclipse-ide.readthedocs.io/en/latest/")
+        );
+        styledText.setBottomMargin(5);
     }
     
     private void addSettingsScopeSection(Composite parent) throws CoreException {
