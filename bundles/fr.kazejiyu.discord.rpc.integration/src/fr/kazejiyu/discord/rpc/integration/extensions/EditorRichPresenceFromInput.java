@@ -16,7 +16,7 @@ import org.eclipse.ui.IEditorInput;
 import fr.kazejiyu.discord.rpc.integration.core.ImmutableRichPresence;
 
 /**
- * Turns an {@link IEditorInput} into an {@link EditorInputRichPresence}.
+ * Turns an {@link IEditorInput} into an {@link EditorInputToRichPresenceAdapter}.
  * 
  * @author Emmanuel CHEBBI
  */
@@ -36,6 +36,6 @@ public interface EditorRichPresenceFromInput {
      * 
      * @return an adapter able to handle {@code input}, if any.
      */
-    Optional<EditorInputRichPresence> findAdapterFor(IEditorInput input);
+    Optional<EditorInputToRichPresenceAdapter> findAdapterFor(IEditorInput input);
 
 }

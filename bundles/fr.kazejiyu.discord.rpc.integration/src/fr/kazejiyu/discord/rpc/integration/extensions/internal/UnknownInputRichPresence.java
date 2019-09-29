@@ -15,7 +15,7 @@ import org.eclipse.ui.IEditorInput;
 
 import fr.kazejiyu.discord.rpc.integration.core.ImmutableRichPresence;
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
-import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
+import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputToRichPresenceAdapter;
 import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
 
 /**
@@ -25,7 +25,7 @@ import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
  * 
  * @author Emmanuel CHEBBI
  */
-public class UnknownInputRichPresence implements EditorInputRichPresence {
+public class UnknownInputRichPresence implements EditorInputToRichPresenceAdapter {
     
     @Override
     public int getPriority() {

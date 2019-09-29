@@ -21,13 +21,13 @@ import org.eclipse.ui.ide.FileStoreEditorInput;
 
 import fr.kazejiyu.discord.rpc.integration.core.ImmutableRichPresence;
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
-import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
+import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputToRichPresenceAdapter;
 import fr.kazejiyu.discord.rpc.integration.languages.Language;
 import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
 import fr.kazejiyu.discord.rpc.integration.settings.UserPreferences;
 
 /**
- * <p>Default implementation of {@link EditorInputRichPresence}.</p>
+ * <p>Default implementation of {@link EditorInputToRichPresenceAdapter}.</p>
  * <p>
  * This implementation only operates on {@link IURIEditorInput} instances and sets Rich Presence as follows:
  * 
@@ -49,7 +49,7 @@ import fr.kazejiyu.discord.rpc.integration.settings.UserPreferences;
  * 
  * @author Emmanuel CHEBBI
  */
-public class DefaultURIEditorInputRichPresence implements EditorInputRichPresence {
+public class DefaultURIEditorInputRichPresence implements EditorInputToRichPresenceAdapter {
     
     @Override
     public int getPriority() {

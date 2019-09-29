@@ -23,14 +23,14 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.ui.IEditorInput;
 
 import fr.kazejiyu.discord.rpc.integration.Plugin;
-import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
+import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputToRichPresenceAdapter;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorRichPresenceFromInput;
 
 /**
  * <p>Manages plug-in's extensions.</p>
  * 
  * <p>Instances of this class are notably charged of choosing the right
- * {@link EditorInputRichPresence adapter} for a given {@link IEditorInput}.</p>
+ * {@link EditorInputToRichPresenceAdapter adapter} for a given {@link IEditorInput}.</p>
  * 
  * <p>Please note that this implementation does not cache the adapters. 
  * As a result, contributions provided by new plug-ins that have been installed 
@@ -55,7 +55,7 @@ public class EditorRichPresenceFromExtensions implements EditorRichPresenceFromI
     }
 
     @Override
-    public Optional<EditorInputRichPresence> findAdapterFor(IEditorInput input) {
+    public Optional<EditorInputToRichPresenceAdapter> findAdapterFor(IEditorInput input) {
         return allAdaptersIn(registry).stream()
                                       .filter(canHandle(input))
                                       .sorted(byDepthInTreeFrom(input.getClass()))
@@ -63,17 +63,17 @@ public class EditorRichPresenceFromExtensions implements EditorRichPresenceFromI
     }
     
     /** Returns all the elements registered through {@value #EDITOR_INPUT_ADAPTER_EXTENSION_ID} extension
-     *          that are instances of {@link EditorInputRichPresence}. */
-    private static List<EditorInputRichPresence> allAdaptersIn(IExtensionRegistry registry) {
-        List<EditorInputRichPresence> adaptersFound = new ArrayList<>();
+     *          that are instances of {@link EditorInputToRichPresenceAdapter}. */
+    private static List<EditorInputToRichPresenceAdapter> allAdaptersIn(IExtensionRegistry registry) {
+        List<EditorInputToRichPresenceAdapter> adaptersFound = new ArrayList<>();
         
         IConfigurationElement[] elements = registry.getConfigurationElementsFor(Plugin.EDITOR_INPUT_ADAPTER_EXTENSION_ID);
         
         for (IConfigurationElement element : elements) {
             Object extension = createExecutableExtension(element);
             
-            if (extension instanceof EditorInputRichPresence) {
-                adaptersFound.add((EditorInputRichPresence) extension);
+            if (extension instanceof EditorInputToRichPresenceAdapter) {
+                adaptersFound.add((EditorInputToRichPresenceAdapter) extension);
             }
         }
         
@@ -93,14 +93,14 @@ public class EditorRichPresenceFromExtensions implements EditorRichPresenceFromI
     }
 
     /** Returns whether {@code adapter} can handle {@code input}. */
-    private static Predicate<EditorInputRichPresence> canHandle(IEditorInput input) {
+    private static Predicate<EditorInputToRichPresenceAdapter> canHandle(IEditorInput input) {
         return adapter -> adapter.getExpectedEditorInputClass().isInstance(input);
     }
     
     /**
      * Returns a comparator comparing two elements depending on 
      *            the distance between their class and {@code parent}. */
-    private static <T> Comparator<EditorInputRichPresence> byDepthInTreeFrom(Class<T> parent) {
+    private static <T> Comparator<EditorInputToRichPresenceAdapter> byDepthInTreeFrom(Class<T> parent) {
         return (lhs, rhs) -> {
             int lhsProximity = nbrOfClassesBetween(lhs.getExpectedEditorInputClass(), parent);
             int rhsProximity = nbrOfClassesBetween(rhs.getExpectedEditorInputClass(), parent);

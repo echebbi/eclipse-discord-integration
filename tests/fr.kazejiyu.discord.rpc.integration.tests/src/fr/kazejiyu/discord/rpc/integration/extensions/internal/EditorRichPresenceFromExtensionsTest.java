@@ -17,7 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 
 import fr.kazejiyu.discord.rpc.integration.Plugin;
-import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
+import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputToRichPresenceAdapter;
 import fr.kazejiyu.discord.rpc.integration.tests.mock.MockitoExtension;
 
 /**
@@ -32,7 +32,7 @@ public class EditorRichPresenceFromExtensionsTest implements WithAssertions {
     @Mock
     IExtensionRegistry registry;
     
-    EditorInputRichPresence expectedAdapter;
+    EditorInputToRichPresenceAdapter expectedAdapter;
     
     @BeforeEach
     void setup() throws CoreException {

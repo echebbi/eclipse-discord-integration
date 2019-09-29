@@ -21,7 +21,7 @@ import org.mockito.Mock;
 import fr.kazejiyu.discord.rpc.integration.core.ImmutableRichPresence;
 import fr.kazejiyu.discord.rpc.integration.core.RichPresence;
 import fr.kazejiyu.discord.rpc.integration.core.SelectionTimes;
-import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence;
+import fr.kazejiyu.discord.rpc.integration.extensions.EditorInputToRichPresenceAdapter;
 import fr.kazejiyu.discord.rpc.integration.extensions.EditorRichPresenceFromInput;
 import fr.kazejiyu.discord.rpc.integration.languages.Language;
 import fr.kazejiyu.discord.rpc.integration.settings.GlobalPreferences;
@@ -143,7 +143,7 @@ public class EditorToRichPresenceAdapterTest implements WithAssertions {
     class WhenAnExtensionIsAvailableForTheCorrespondingIEditorInput {
         
         @Mock
-        private EditorInputRichPresence extension;
+        private EditorInputToRichPresenceAdapter extension;
 
         @BeforeEach
         void createExtension() {
