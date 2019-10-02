@@ -87,6 +87,6 @@ It uses different third-party components which are licensed under:
 
 ## Thanks
 
-- [MinnDevelopment](https://github.com/MinnDevelopment) for [its Java implementation](https://github.com/MinnDevelopment/java-discord-rpc) of Discord RPC.
+- [MinnDevelopment](https://github.com/MinnDevelopment) for [his Java implementation](https://github.com/MinnDevelopment/java-discord-rpc) of Discord RPC.
 - [Lorenzo Bettini](https://github.com/LorenzoBettini) for his explanations on [how to publish a p2 composite repository on Bintray](http://www.lorenzobettini.it/2016/02/publish-an-eclipse-p2-composite-repository-on-bintray/).
  - [HelloWorld017](https://github.com/HelloWorld017/) for [his adaptation](https://github.com/HelloWorld017/fileicons-render) of [programming language icons](https://github.com/file-icons/atom). These icons are displayed on Discord according to the programming language of the current file.
