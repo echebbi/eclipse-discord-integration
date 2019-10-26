@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.1.2] - 2019-10-26
+ - [#75](https://github.com/echebbi/eclipse-discord-integration/pull/75) Display Eclipse IDE's logo in the bottom right corner of language's icon
+
 ## [1.1.1] - 2019-09-30
 - [#72](https://github.com/echebbi/eclipse-discord-integration/pull/72) Add link to the documentation in Preferences and Project Settings pages
 

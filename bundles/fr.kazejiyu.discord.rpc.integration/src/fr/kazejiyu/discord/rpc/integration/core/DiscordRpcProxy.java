@@ -72,6 +72,9 @@ public class DiscordRpcProxy implements DiscordRpcLifecycle {
         if (isConnected) {
             DiscordRichPresence presence = new DiscordRichPresence();
             
+            presence.smallImageKey = "eclipse-ide-logo";
+            presence.smallImageText = "Eclipse IDE";
+            
             rp.getState().ifPresent(state -> presence.state = state);
             rp.getDetails().ifPresent(details -> presence.details = details);
             rp.getStartTimestamp().ifPresent(start -> presence.startTimestamp = start);
