@@ -15,6 +15,8 @@ before_script:
   # Prevent installed packages from being used during build
   - rm -rfv "$HOME/.m2/repository/fr/kazejiyu/discord/"
 
+dist: trusty
+
 script: mvn clean verify -P jacoco sonar:sonar
 
 after_success:
