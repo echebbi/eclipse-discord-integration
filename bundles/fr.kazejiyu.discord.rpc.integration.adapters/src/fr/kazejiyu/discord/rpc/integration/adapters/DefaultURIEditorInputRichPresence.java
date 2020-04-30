@@ -51,6 +51,9 @@ import fr.kazejiyu.discord.rpc.integration.settings.UserPreferences;
  */
 public class DefaultURIEditorInputRichPresence implements EditorInputToRichPresenceAdapter {
     
+    private static final String DEFAULT_DETAILS_TEMPLATE = "Editing ${file}";
+    private static final String DEFAULT_STATE_TEMPLATE = "Working on ${project}";
+    
     @Override
     public int getPriority() {
         return 0;
@@ -74,28 +77,40 @@ public class DefaultURIEditorInputRichPresence implements EditorInputToRichPrese
         IURIEditorInput uriInput = (IURIEditorInput) input;
         URI fileURI = uriInput.getURI();
         File file = new File(fileURI.getPath());
+        Language language = languageOf(preferences, file);
         
-        ImmutableRichPresence presence = new ImmutableRichPresence()
-                .withDetails(detailsOf(preferences, file))
-                .withState(stateOf(preferences))
-                .withLanguage(languageOf(preferences, file))
+        ImmutableRichPresence presence = new ImmutableRichPresence();
+        presence = presence
+                .withLanguage(language)
+                .withDetails(detailsOf(preferences, language, file))
+                .withState(stateOf(preferences, language, file))
                 .withLargeImageText(largeImageTextOf(preferences, file));
         
         return Optional.of(presence);
     }
 
-    private static String detailsOf(GlobalPreferences preferences, File file) {
-        if (! preferences.showsFileName()) {
-            return "";
-        }
-        return "Editing " + file.getName();
+    private static String detailsOf(UserPreferences preferences, Language language, File file) {
+        String template = preferences.getCustomDetailsWording().orElse(DEFAULT_DETAILS_TEMPLATE);
+        
+        template = template.replace("${file}", preferences.showsFileName() ? file.getName() : "?");
+        template = template.replace("${file.baseName}", preferences.showsFileName() ? getBaseFileName(file) : "?");
+        template = template.replace("${file.extension}", preferences.showsFileName() ? getFileExtension(file) : "?");
+        template = template.replace("${language}", language.getName());
+        template = template.replace("${project}", preferences.showsProjectName() ? "unknown project" : "?");
+        
+        return template;
     }
 
-    private static String stateOf(GlobalPreferences preferences) {
-        if (! preferences.showsProjectName()) {
-            return "";
-        }
-        return "Unknown project";
+    private static String stateOf(UserPreferences preferences, Language language, File file) {
+        String template = preferences.getCustomDetailsWording().orElse(DEFAULT_STATE_TEMPLATE);
+        
+        template = template.replace("${file}", preferences.showsFileName() ? file.getName() : "?");
+        template = template.replace("${file.baseName}", preferences.showsFileName() ? getBaseFileName(file) : "?");
+        template = template.replace("${file.extension}", preferences.showsFileName() ? getFileExtension(file) : "?");
+        template = template.replace("${language}", language.getName());
+        template = template.replace("${project}", preferences.showsProjectName() ? "unknown project" : "?");
+        
+        return template;
     }
 
     private static Language languageOf(UserPreferences preferences, File file) {
@@ -111,6 +126,22 @@ public class DefaultURIEditorInputRichPresence implements EditorInputToRichPrese
         }
         Language language = Language.fromFileName(file.getName());
         return labelOf(language, file.getName());
+    }
+    
+    private static String getFileExtension(File file) {
+        String fileName = file.getName();
+        if (!fileName.contains(".") || fileName.endsWith(".")) {
+            return "";
+        }
+        return fileName.substring(fileName.lastIndexOf('.') + 1);
+    }
+    
+    private static String getBaseFileName(File file) {
+        String fileName = file.getName();
+        if (!fileName.contains(".") || fileName.endsWith(".")) {
+            return fileName;
+        }
+        return fileName.substring(0, fileName.lastIndexOf('.'));
     }
 
 }

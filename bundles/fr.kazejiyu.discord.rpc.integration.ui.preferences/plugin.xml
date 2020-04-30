@@ -14,6 +14,12 @@
             id="fr.kazejiyu.discord.rpc.integration.ui.preferences.icons"
             name="Icons">
       </page>
+      <page
+            category="fr.kazejiyu.discord.rpc.integration.ui.preferences.root"
+            class="fr.kazejiyu.discord.rpc.integration.ui.preferences.DiscordIntegrationWordingPreferencesPage"
+            id="fr.kazejiyu.discord.rpc.integration.ui.preferences.wording"
+            name="Wording">
+      </page>
    </extension>
    <extension
          point="org.eclipse.ui.propertyPages">
@@ -33,6 +39,17 @@
             class="fr.kazejiyu.discord.rpc.integration.ui.preferences.properties.ProjectPropertiesIconsPage"
             id="fr.kazejiyu.discord.rpc.integration.ui.preferences.properties.projectIconsPropertiesPage"
             name="Icons">
+         <enabledWhen>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+            </adapt>
+         </enabledWhen>
+      </page>
+      <page
+            category="fr.kazejiyu.discord.rpc.integration.ui.preferences.properties.projectPropertiesPage"
+            class="fr.kazejiyu.discord.rpc.integration.ui.preferences.properties.ProjectPropertiesWordingPage"
+            id="fr.kazejiyu.discord.rpc.integration.ui.preferences.properties.projectWordingPropertiesPage"
+            name="Wording">
          <enabledWhen>
             <adapt
                   type="org.eclipse.core.resources.IProject">

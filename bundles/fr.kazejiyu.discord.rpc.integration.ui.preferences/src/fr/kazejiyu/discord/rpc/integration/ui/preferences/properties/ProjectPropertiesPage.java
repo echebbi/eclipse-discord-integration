@@ -204,15 +204,13 @@ public class ProjectPropertiesPage extends AbstractPropertyPage {
     
     private static void addLinkToTheDocumentation(Composite parent) {
         StyledText styledText = new StyledText(parent, SWT.NONE);
-        styledText.setText(" See the documentation for further details.");
+        styledText.setText("See the documentation for further details.");
         styledText.setBackground(parent.getBackground());
         
         StyleRange style = new StyleRange();
         style.underline = true;
         style.underlineStyle = SWT.UNDERLINE_LINK;
-        style.background = parent.getBackground();
-        style.borderColor = parent.getBackground();
-        style.start = 1;
+        style.start = 0;
         style.length = styledText.getText().length() - 1;
         styledText.setStyleRange(style);
 

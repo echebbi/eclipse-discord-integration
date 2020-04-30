@@ -29,8 +29,9 @@ Table of Contents
 
    customize/global-and-project-scopes
    customize/change-name-of-projects
-   customize/hide-information
+   customize/change-wording
    customize/change-language-icons
+   customize/hide-information
    customize/deactivate-plugin
 
 .. toctree::

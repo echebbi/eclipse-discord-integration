@@ -30,7 +30,7 @@ import fr.kazejiyu.discord.rpc.integration.tests.mock.MockitoExtension;
  * Unit test fpr the {@link DefaultFileEditorInputRichPresence} class. 
  */
 @ExtendWith(MockitoExtension.class)
-@DisplayName("A DefaultFileEditorInputRichPresence")
+@DisplayName("A DefaultURIEditorInputRichPresence")
 public class DefaultURIEditorInputRichPresenceTest implements WithAssertions {
 
     private DefaultURIEditorInputRichPresence adapter;
@@ -91,7 +91,7 @@ public class DefaultURIEditorInputRichPresenceTest implements WithAssertions {
         Optional<String> details = adapter.createRichPresence(preferences, input)
                                           .flatMap(RichPresence::getDetails);
         
-        assertThat(details).isEmpty();
+        assertThat(details).contains("Editing ?");
     }
     
     @Test @DisplayName("creates a RichPresence with the expected state")
@@ -103,7 +103,7 @@ public class DefaultURIEditorInputRichPresenceTest implements WithAssertions {
         Optional<String> details = adapter.createRichPresence(preferences, input)
                                           .flatMap(RichPresence::getState);
         
-        assertThat(details).contains("Unknown project");
+        assertThat(details).contains("Working on unknown project");
     }
     
     @Test @DisplayName("hides the project's name if asked by the user")
@@ -114,7 +114,7 @@ public class DefaultURIEditorInputRichPresenceTest implements WithAssertions {
         Optional<String> details = adapter.createRichPresence(preferences, input)
                                           .flatMap(RichPresence::getState);
         
-        assertThat(details).isEmpty();
+        assertThat(details).contains("Working on ?");
     }
     
     @ParameterizedTest
