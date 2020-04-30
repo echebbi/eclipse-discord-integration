@@ -86,6 +86,7 @@ public class LinkFieldEditor extends FieldEditor {
         StyledText styledText = new StyledText(parent, SWT.NONE);
         styledText.setText(" " + text);
         styledText.setBackground(parent.getBackground());
+        styledText.setMarginColor(parent.getBackground());
 
         GridData gd = new GridData();
         gd.horizontalSpan = numColumns;
@@ -95,8 +96,6 @@ public class LinkFieldEditor extends FieldEditor {
         StyleRange style = new StyleRange();
         style.underline = true;
         style.underlineStyle = SWT.UNDERLINE_LINK;
-        style.background = parent.getBackground();
-        style.borderColor = parent.getBackground();
         style.start = this.linkStartIndex;
         style.length = this.linkLength;
         styledText.setStyleRange(style);

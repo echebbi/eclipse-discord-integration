@@ -115,7 +115,7 @@ public class DiscordIntegrationWordingPreferencesPage extends PreferencePage imp
         // "Details" field
         
         Label detailsLabel = new Label(group, SWT.LEFT);
-        detailsLabel.setText("Details: ");
+        detailsLabel.setText("&Details: ");
         detailsLabel.setToolTipText("The top text");
         GridDataFactory.swtDefaults().indent(LayoutConstants.getIndent(), 0).applyTo(detailsLabel);
         
@@ -128,7 +128,7 @@ public class DiscordIntegrationWordingPreferencesPage extends PreferencePage imp
         // "State" field
         
         Label stateLabel = new Label(group, SWT.LEFT);
-        stateLabel.setText("State: ");
+        stateLabel.setText("&State: ");
         stateLabel.setToolTipText("The bottom text");
         GridDataFactory.swtDefaults().indent(LayoutConstants.getIndent(), 0).applyTo(stateLabel);
         
