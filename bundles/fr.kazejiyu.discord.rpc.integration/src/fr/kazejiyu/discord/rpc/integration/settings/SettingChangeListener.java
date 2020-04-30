@@ -106,4 +106,32 @@ public interface SettingChangeListener {
      */
     void discordApplicationIdChanged(String newApplicationId);
     
+    /**
+     * Called when the user chooses whether a custom wording should be use.
+     * 
+     * @param shouldUse
+     *          Whether a custom wording should be used.
+     */
+    void useCustomWording(boolean shouldUse);
+    
+    /**
+     * Called when the user chooses a new wording for Discord's "details" field.
+     * 
+     * @param oldWording
+     *          The previous wording.
+     * @param newWording
+     *          The wording chosen by the user.
+     */
+    void detailsWordingChanged(String oldWording, String newWording);
+    
+    /**
+     * Called when the user chooses a new wording for Discord's "state" field.
+     * 
+     * @param oldWording
+     *          The previous wording.
+     * @param newWording
+     *          The wording chosen by the user.
+     */
+    void stateWordingChanged(String oldWording, String newWording);
+    
 }

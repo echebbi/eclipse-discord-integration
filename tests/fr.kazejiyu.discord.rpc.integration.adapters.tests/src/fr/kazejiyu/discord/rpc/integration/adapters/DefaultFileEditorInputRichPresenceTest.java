@@ -104,7 +104,7 @@ public class DefaultFileEditorInputRichPresenceTest implements WithAssertions {
         Optional<String> details = adapter.createRichPresence(preferences, input)
                                           .flatMap(RichPresence::getDetails);
         
-        assertThat(details).isEmpty();
+        assertThat(details).contains("Editing ?");
     }
     
     @ParameterizedTest
@@ -140,7 +140,7 @@ public class DefaultFileEditorInputRichPresenceTest implements WithAssertions {
         Optional<String> details = adapter.createRichPresence(preferences, input)
                                           .flatMap(RichPresence::getState);
         
-        assertThat(details).isEmpty();
+        assertThat(details).contains("Working on ?");
     }
     
     @ParameterizedTest

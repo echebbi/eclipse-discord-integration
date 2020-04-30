@@ -9,6 +9,8 @@
  ******************************************************************************/
 package fr.kazejiyu.discord.rpc.integration.settings;
 
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.CUSTOM_DISCORD_DETAILS_WORDING;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.CUSTOM_DISCORD_STATE_WORDING;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_PROJECT;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_ELAPSED_TIME;
@@ -17,6 +19,7 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_LANGUAG
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_RICH_PRESENCE;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.USE_CUSTOM_APP;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.USE_CUSTOM_WORDING;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -44,6 +47,10 @@ public class DiscordIntegrationPreferencesInitializer extends AbstractPreference
         store.setDefault(RESET_ELAPSED_TIME.property(), RESET_ELAPSED_TIME_ON_NEW_PROJECT.property());
         
         store.setDefault(USE_CUSTOM_APP.property(), false);
+        
+        store.setDefault(USE_CUSTOM_WORDING.property(), false);
+        store.setDefault(CUSTOM_DISCORD_DETAILS_WORDING.property(), "Editing ${file}");
+        store.setDefault(CUSTOM_DISCORD_STATE_WORDING.property(), "Working on ${project}");
     }
 
 }

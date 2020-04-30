@@ -10,6 +10,8 @@
 package fr.kazejiyu.discord.rpc.integration.settings;
 
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.CUSTOM_APP_ID;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.CUSTOM_DISCORD_DETAILS_WORDING;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.CUSTOM_DISCORD_STATE_WORDING;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_FILE;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_PROJECT;
@@ -20,6 +22,7 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_LANGUAG
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_RICH_PRESENCE;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.USE_CUSTOM_APP;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.USE_CUSTOM_WORDING;
 import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
@@ -114,6 +117,27 @@ public class GlobalPreferences implements UserPreferences {
         }
         return Optional.of(discordApplicationId);
     }
+
+    @Override
+    public boolean usesCustomWording() {
+        return store.getBoolean(USE_CUSTOM_WORDING.property());
+    }
+
+    @Override
+    public Optional<String> getCustomDetailsWording() {
+        if (usesCustomWording()) {
+            return Optional.of(store.getString(CUSTOM_DISCORD_DETAILS_WORDING.property()));
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<String> getCustomStateWording() {
+        if (usesCustomWording()) {
+            return Optional.of(store.getString(CUSTOM_DISCORD_STATE_WORDING.property()));
+        }
+        return Optional.empty();
+    }
     
     /**
      * <p>Returns the user preferences that should be applied for {@code project}.</p>
@@ -135,34 +159,7 @@ public class GlobalPreferences implements UserPreferences {
             if (projectPreferences.useProjectSettings()) {
                 return projectPreferences;
             }
-            // This anonymous class aims at managing the preferences that are set
-            // specifically for an IProject but that apply independently of whether
-            // the 'Use Project Settings' property is true or false.
-            // TODO [Refactor] Create a dedicated class ?
-            return new GlobalPreferences() {
-                @Override
-                public Optional<String> getProjectName() {
-                    return projectPreferences.getProjectName();
-                }
-
-                @Override
-                public boolean usesCustomDiscordApplication() {
-                    if (projectPreferences.usesCustomDiscordApplication()) {
-                        return true;
-                    }
-                    return super.usesCustomDiscordApplication();
-                }
-
-                @Override
-                public Optional<String> getDiscordApplicationId() {
-                    Optional<String> projectScopeCustomApp = projectPreferences.getDiscordApplicationId();
-                            
-                    if (projectScopeCustomApp.isPresent()) {
-                        return projectScopeCustomApp;
-                    }
-                    return super.getDiscordApplicationId();
-                }
-            };
+            return new ApplicablePreferences(this, projectPreferences);
         } 
         catch (IllegalArgumentException e) {
             // The project is not valid (e.g. is null), return default preferences
@@ -178,5 +175,119 @@ public class GlobalPreferences implements UserPreferences {
     @Override
     public void removeSettingChangeListener(SettingChangeListener listener) {
         listeners.remove(listener);
+    }
+    
+    /**
+     * Aims at managing the preferences that are set
+     * specifically for an IProject but that apply independently of whether
+     * the 'Use Project Settings' property is true or false.
+     */
+    private static class ApplicablePreferences implements UserPreferences {
+        
+        private final GlobalPreferences globalPreferences;
+        private final ProjectPreferences projectPreferences;
+        
+        ApplicablePreferences(GlobalPreferences globalPreferences, ProjectPreferences projectPreferences) {
+            this.globalPreferences = globalPreferences;
+            this.projectPreferences = projectPreferences;
+        }
+
+        @Override
+        public Optional<String> getProjectName() {
+            return projectPreferences.getProjectName();
+        }
+
+        @Override
+        public boolean usesCustomDiscordApplication() {
+            return projectPreferences.usesCustomDiscordApplication()
+                || globalPreferences.usesCustomDiscordApplication();
+        }
+
+        @Override
+        public Optional<String> getDiscordApplicationId() {
+            Optional<String> projectScopeCustomApp = projectPreferences.getDiscordApplicationId();
+                    
+            if (projectScopeCustomApp.isPresent()) {
+                return projectScopeCustomApp;
+            }
+            return globalPreferences.getDiscordApplicationId();
+        }
+
+        @Override
+        public boolean usesCustomWording() {
+            return projectPreferences.usesCustomWording()
+                || globalPreferences.usesCustomWording();
+        }
+
+        @Override
+        public Optional<String> getCustomDetailsWording() {
+            if (projectPreferences.usesCustomWording()) {
+                return projectPreferences.getCustomDetailsWording();
+            }
+            return globalPreferences.getCustomDetailsWording();
+        }
+
+        @Override
+        public Optional<String> getCustomStateWording() {
+            if (projectPreferences.usesCustomWording()) {
+                return projectPreferences.getCustomStateWording();
+            }
+            return globalPreferences.getCustomStateWording();
+        }
+
+        @Override
+        public boolean showsFileName() {
+            return globalPreferences.showsFileName();
+        }
+
+        @Override
+        public boolean showsProjectName() {
+            return globalPreferences.showsProjectName();
+        }
+
+        @Override
+        public boolean showsElapsedTime() {
+            return globalPreferences.showsElapsedTime();
+        }
+
+        @Override
+        public boolean showsLanguageIcon() {
+            return globalPreferences.showsLanguageIcon();
+        }
+
+        @Override
+        public boolean showsRichPresence() {
+            return globalPreferences.showsRichPresence();
+        }
+
+        @Override
+        public boolean resetsElapsedTimeOnStartup() {
+            return globalPreferences.resetsElapsedTimeOnStartup();
+        }
+
+        @Override
+        public boolean resetsElapsedTimeOnNewProject() {
+            return globalPreferences.resetsElapsedTimeOnNewProject();
+        }
+
+        @Override
+        public boolean resetsElapsedTimeOnNewFile() {
+            return globalPreferences.resetsElapsedTimeOnNewFile();
+        }
+
+        @Override
+        public void addSettingChangeListener(SettingChangeListener listener) {
+            // likely unused: instances of this class represent the preferences
+            // applicable at a given moment in time, they are not supposed to
+            // be updated later on
+        }
+
+        @Override
+        public void removeSettingChangeListener(SettingChangeListener listener) {
+            // likely unused: instances of this class represent the preferences
+            // applicable at a given moment in time, they are not supposed to
+            // be updated later on
+        }
+        
     }
 }

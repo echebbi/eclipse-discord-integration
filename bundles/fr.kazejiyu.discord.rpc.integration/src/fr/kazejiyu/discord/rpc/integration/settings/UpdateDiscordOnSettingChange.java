@@ -224,4 +224,19 @@ public class UpdateDiscordOnSettingChange implements SettingChangeListener {
         updateDiscord();
     }
 
+    @Override
+    public void useCustomWording(boolean shouldUse) {
+        updateDiscord();
+    }
+
+    @Override
+    public void detailsWordingChanged(String oldWording, String newWording) {
+        updateDiscord();
+    }
+
+    @Override
+    public void stateWordingChanged(String oldWording, String newWording) {
+        updateDiscord();
+    }
+
 }

@@ -73,7 +73,20 @@ public enum Settings {
     USE_CUSTOM_APP("USE_CUSTOM_APP"), 
     
     /** Indicates the ID of the custom Discord Application ID to use. */
-    CUSTOM_APP_ID("CUSTOM_APP_ID");
+    CUSTOM_APP_ID("CUSTOM_APP_ID"),
+    
+    /** Whether a custom wording, provided by the user, should be used instead of the built-in one. */
+    USE_CUSTOM_WORDING("USE_CUSTOM_WORDING"),
+    
+    /** 
+     * The custom wording provided by the user for Discord's state field. 
+     * (https://discordapp.com/developers/docs/rich-presence/how-to#updating-presence-update-presence-payload-fields). */
+    CUSTOM_DISCORD_STATE_WORDING("CUSTOM_DISCORD_STATE_WORDING"),
+    
+    /** 
+     * The custom wording provided by the user for Discord's details field. 
+     * (https://discordapp.com/developers/docs/rich-presence/how-to#updating-presence-update-presence-payload-fields). */
+    CUSTOM_DISCORD_DETAILS_WORDING("CUSTOM_DISCORD_DETAILS_WORDING");
     
     /** Identifies the Discord application to which information has to be sent
      *  in order to appear in Discord's UI. */

@@ -10,6 +10,8 @@
 package fr.kazejiyu.discord.rpc.integration.settings;
 
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.CUSTOM_APP_ID;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.CUSTOM_DISCORD_DETAILS_WORDING;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.CUSTOM_DISCORD_STATE_WORDING;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.PROJECT_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_FILE;
@@ -21,6 +23,7 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_LANGUAG
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_RICH_PRESENCE;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.USE_CUSTOM_APP;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.USE_CUSTOM_WORDING;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.USE_PROJECT_SETTINGS;
 import static java.util.Objects.requireNonNull;
 
@@ -141,6 +144,27 @@ public class ProjectPreferences implements UserPreferences {
             return Optional.empty();
         }
         return Optional.of(id);
+    }
+
+    @Override
+    public boolean usesCustomWording() {
+        return preferences.getBoolean(USE_CUSTOM_WORDING.property(), false);
+    }
+
+    @Override
+    public Optional<String> getCustomDetailsWording() {
+        if (usesCustomWording()) {
+            return Optional.of(preferences.get(CUSTOM_DISCORD_DETAILS_WORDING.property(), ""));
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<String> getCustomStateWording() {
+        if (usesCustomWording()) {
+            return Optional.of(preferences.get(CUSTOM_DISCORD_STATE_WORDING.property(), ""));
+        }
+        return Optional.empty();
     }
 
     @Override

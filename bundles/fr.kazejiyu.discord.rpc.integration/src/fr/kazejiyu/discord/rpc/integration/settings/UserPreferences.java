@@ -100,5 +100,23 @@ public interface UserPreferences {
      *             The listener to unregister.
      */
     void removeSettingChangeListener(SettingChangeListener listener);
+    
+    /**
+     * Returns whether a custom wording should be used when printing on Discord.
+     * @return whether a custom wording should be used when printing on Discord
+     */
+    boolean usesCustomWording();
+    
+    /**
+     * Returns the custom wording for Discord's "details" field, if the user specified one.
+     * @return the custom wording for Discord's "details" field, if the user specified one
+     */
+    Optional<String> getCustomDetailsWording();
+    
+    /**
+     * Returns the custom wording for Discord's "state" field, if the user specified one.
+     * @return the custom wording for Discord's "state" field, if the user specified one
+     */
+    Optional<String> getCustomStateWording();
 
 }

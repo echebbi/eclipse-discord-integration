@@ -10,6 +10,8 @@
 package fr.kazejiyu.discord.rpc.integration.settings;
 
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.CUSTOM_APP_ID;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.CUSTOM_DISCORD_DETAILS_WORDING;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.CUSTOM_DISCORD_STATE_WORDING;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_FILE;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.RESET_ELAPSED_TIME_ON_NEW_PROJECT;
@@ -20,6 +22,7 @@ import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_LANGUAG
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_PROJECT_NAME;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.SHOW_RICH_PRESENCE;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.USE_CUSTOM_APP;
+import static fr.kazejiyu.discord.rpc.integration.settings.Settings.USE_CUSTOM_WORDING;
 import static fr.kazejiyu.discord.rpc.integration.settings.Settings.fromProperty;
 import static java.lang.Boolean.parseBoolean;
 import static java.util.Objects.requireNonNull;
@@ -65,7 +68,9 @@ public class GlobalPreferencesListener implements IPropertyChangeListener {
         events.put(SHOW_RICH_PRESENCE.property(), (event, listener) -> listener.richPresenceVisibilityChanged(parseBoolean((String) event.getNewValue())));
         events.put(RESET_ELAPSED_TIME.property(), (event, listener) -> listener.elapsedTimeResetMomentChanged(toMoment(event.getOldValue()), toMoment(event.getNewValue())));
         events.put(USE_CUSTOM_APP.property(), (event, listener) -> listener.customDiscordApplicationVisibilityChanged(parseBoolean((String) event.getNewValue())));
-        events.put(CUSTOM_APP_ID.property(), (event, listener) -> listener.discordApplicationIdChanged((String) event.getNewValue()));
+        events.put(CUSTOM_APP_ID.property(), (event, listener) -> listener.discordApplicationIdChanged((String) event.getNewValue()));events.put(USE_CUSTOM_WORDING.property(), (event, listener) -> listener.useCustomWording(parseBoolean((String) event.getNewValue())));
+        events.put(CUSTOM_DISCORD_DETAILS_WORDING.property(), (event, listener) -> listener.detailsWordingChanged(String.valueOf(event.getOldValue()), String.valueOf(event.getNewValue())));
+        events.put(CUSTOM_DISCORD_STATE_WORDING.property(), (event, listener) -> listener.stateWordingChanged(String.valueOf(event.getOldValue()), String.valueOf(event.getNewValue())));
     }
     
     @Override

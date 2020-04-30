@@ -3,13 +3,24 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.1.3] - 2020-05-01
+### Added
+ - [#67](https://github.com/echebbi/eclipse-discord-integration/issues/67) Deactivate Preferences fields when the plug-in is disabled
+ - [#71](https://github.com/echebbi/eclipse-discord-integration/issues/71) Customize wording from Eclipse IDE's UI
+
+### Changed
+ - [#78](https://github.com/echebbi/eclipse-discord-integration/pull/78) Unchecking privacy settings like _Show file name_ now replaces the variable by _?_. The previous behavior (i.e. hidding the whole _Editing &lt;file name&gt;_ sentence) can be restored through custom wording
+
 ## [1.1.2] - 2019-10-26
+### Added
  - [#75](https://github.com/echebbi/eclipse-discord-integration/pull/75) Display Eclipse IDE's logo in the bottom right corner of language's icon
 
 ## [1.1.1] - 2019-09-30
+### Added
 - [#72](https://github.com/echebbi/eclipse-discord-integration/pull/72) Add link to the documentation in Preferences and Project Settings pages
 
 ## [1.1.0] - 2019-09-27
+### Added
 - [#66](https://github.com/echebbi/eclipse-discord-integration/issues/66) Allow users to customize icons shown on Discord
 
 ## [1.0.3] - 2019-02-26
