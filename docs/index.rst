@@ -5,7 +5,7 @@ Discord Rich Presence for Eclipse IDE
 
 The *Discord Rich Presence for Eclipse IDE* is a plug-in for Eclipse IDE that shows on Discord the projects and files you're currently working on:
 
-.. image:: images/rich_presence_example.png
+.. image:: images/rich-presence-examples.gif
     :align: center
     :alt: an example of Rich Presence shown in Discord
 
