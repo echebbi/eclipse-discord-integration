@@ -92,7 +92,7 @@ public class DefaultFileEditorInputRichPresence implements EditorInputToRichPres
         template = template.replace("${file.baseName}", preferences.showsFileName() ? getBaseFileName(file) : "?");
         template = template.replace("${file.extension}", preferences.showsFileName() ? getFileExtension(file) : "?");
         template = template.replace("${language}", language.getName());
-        template = template.replace("${project}", preferences.showsProjectName() ? nameOf(project) : "?");
+        template = template.replace("${project}", preferences.showsProjectName() ? nameOf(project, preferences) : "?");
         
         return template;
     }
@@ -104,17 +104,17 @@ public class DefaultFileEditorInputRichPresence implements EditorInputToRichPres
         template = template.replace("${file.baseName}", preferences.showsFileName() ? getBaseFileName(file) : "?");
         template = template.replace("${file.extension}", preferences.showsFileName() ? getFileExtension(file) : "?");
         template = template.replace("${language}", language.getName());
-        template = template.replace("${project}", preferences.showsProjectName() ? nameOf(project) : "?");
+        template = template.replace("${project}", preferences.showsProjectName() ? nameOf(project, preferences) : "?");
         
         return template;
     }
 
     /** Returns either the name of the project, or "an unknown project" is project == null. */
-    private static String nameOf(IProject project) {
+    private static String nameOf(IProject project, UserPreferences preferences) {
         if (project == null) {
             return "an unknown project";
         }
-        return project.getName(); 
+        return preferences.getProjectName().orElseGet(project::getName);
     }
 
     private static Language languageOf(UserPreferences preferences, IFile file) {
