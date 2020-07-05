@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.2.1] - 2020-07-05
+### Fixed
+ - [#85](https://github.com/echebbi/eclipse-discord-integration/issues/85) The 'editor_input_adapter' extension point asks for an instance of EditorInputRichPresence instead of EditorInputToRichPresenceAdapter
+
 ## [1.2.0] - 2020-05-01
 ### Fixed
  - [#79](https://github.com/echebbi/eclipse-discord-integration/pull/79) Prevent [custom project names](https://discord-rich-presence-for-eclipse-ide.readthedocs.io/en/latest/customize/change-name-of-projects.html#) from being ignored
