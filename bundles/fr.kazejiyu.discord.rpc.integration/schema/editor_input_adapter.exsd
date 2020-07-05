@@ -55,7 +55,7 @@
                   The adapter that extracts Rich Presence from a specific IEditorInput.
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn=":fr.kazejiyu.discord.rpc.integration.extensions.EditorInputRichPresence"/>
+                  <meta.attribute kind="java" basedOn=":fr.kazejiyu.discord.rpc.integration.extensions.EditorInputToRichPresenceAdapter"/>
                </appInfo>
             </annotation>
          </attribute>
