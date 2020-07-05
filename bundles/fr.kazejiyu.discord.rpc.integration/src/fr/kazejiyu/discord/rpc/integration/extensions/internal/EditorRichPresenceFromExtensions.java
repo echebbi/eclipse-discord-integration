@@ -94,7 +94,8 @@ public class EditorRichPresenceFromExtensions implements EditorRichPresenceFromI
 
     /** Returns whether {@code adapter} can handle {@code input}. */
     private static Predicate<EditorInputToRichPresenceAdapter> canHandle(IEditorInput input) {
-        return adapter -> adapter.getExpectedEditorInputClass().isInstance(input);
+        return adapter -> adapter.getExpectedEditorInputClass() != null
+        			   && adapter.getExpectedEditorInputClass().isInstance(input);
     }
     
     /**

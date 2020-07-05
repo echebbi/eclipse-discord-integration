@@ -9,6 +9,9 @@
       <adapter
             class="fr.kazejiyu.discord.rpc.integration.adapters.DefaultFileEditorInputRichPresence">
       </adapter>
+      <adapter
+            class="fr.kazejiyu.discord.rpc.integration.adapters.DefaultClassFileEditorInputRichPresence">
+      </adapter>
    </extension> 
 
 </plugin>

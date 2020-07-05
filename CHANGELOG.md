@@ -3,9 +3,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [1.2.1] - 2020-07-05
+## [1.2.2] - 2020-07-05
+### Added
+ - [#84](https://github.com/echebbi/eclipse-discord-integration/issues/84) Show "Viewing _fileName_" when the current editor displays a _.class_ file
+
 ### Fixed
  - [#85](https://github.com/echebbi/eclipse-discord-integration/issues/85) The 'editor_input_adapter' extension point asks for an instance of EditorInputRichPresence instead of EditorInputToRichPresenceAdapter
+
+## [1.2.1] - 2020-06-05
+### Changed
+ - [#86](https://github.com/echebbi/eclipse-discord-integration/issues/86) The UI feature includes the core feature so that installing the first one automatically installs the later
 
 ## [1.2.0] - 2020-05-01
 ### Fixed
