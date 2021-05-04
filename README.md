@@ -7,7 +7,7 @@
 
 <div align="center">
 
-[![Build Status](https://travis-ci.org/echebbi/eclipse-discord-integration.svg?branch=master)](https://travis-ci.org/echebbi/eclipse-discord-integration) [![Documentation Status](https://readthedocs.org/projects/discord-rich-presence-for-eclipse-ide/badge/?version=latest)](https://discord-rich-presence-for-eclipse-ide.readthedocs.io/en/latest/?badge=latest) <a href="https://dl.bintray.com/kazejiyu/eclipse-discord-integration/updates/"><img alt="p2 update site" src="https://img.shields.io/website?label=p2&logo=p2%20update%20site&up_message=available&url=https:%2F%2Fdl.bintray.com%2Fkazejiyu%2Feclipse-discord-integration%2Fupdates%2F"></a> [![Eclipse Marketplace](https://img.shields.io/badge/Eclipse-Marketplace-blue.svg?longCache=true&style=flat&logo=eclipse)](https://marketplace.eclipse.org/content/discord-rich-presence-eclipse-ide)
+[![Build Status](https://travis-ci.org/echebbi/eclipse-discord-integration.svg?branch=master)](https://travis-ci.org/echebbi/eclipse-discord-integration) [![Documentation Status](https://readthedocs.org/projects/discord-rich-presence-for-eclipse-ide/badge/?version=latest)](https://discord-rich-presence-for-eclipse-ide.readthedocs.io/en/latest/?badge=latest) <a href="https://dl.bintray.com/kazejiyu/eclipse-discord-integration/updates/"><img alt="p2 update site" src="https://img.shields.io/website?label=p2&logo=p2%20update%20site&up_message=available&url=https:%2F%2Fechebbi.github.io%2Feclipse-discord-integration-updates"></a> [![Eclipse Marketplace](https://img.shields.io/badge/Eclipse-Marketplace-blue.svg?longCache=true&style=flat&logo=eclipse)](https://marketplace.eclipse.org/content/discord-rich-presence-eclipse-ide)
 <br/>
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=fr.kazejiyu.discord.rpc.integration%3Afr.kazejiyu.discord.rpc.integration.root&metric=sqale_index)](https://sonarcloud.io/dashboard?id=fr.kazejiyu.discord.rpc.integration%3Afr.kazejiyu.discord.rpc.integration.root) [![codecov](https://codecov.io/gh/echebbi/eclipse-discord-integration/branch/master/graph/badge.svg)](https://codecov.io/gh/echebbi/eclipse-discord-integration)
 
@@ -53,9 +53,9 @@ Drag the following button to your running Eclipse workspace to start the install
   1. Open Eclipse IDE
   2. Go to *Help > Install New Software...*
   3. Copy the update site’s URL in the *Work with* textbox:
-     	- https://dl.bintray.com/kazejiyu/eclipse-discord-integration/updates/
+     	- https://echebbi.github.io/eclipse-discord-integration-updates/releases/1.2.2
   4. Hit *Enter* and wait for the list to load
-  5. Check *Action Language for EMF*
+  5. Check *Discord Rich Presence for Eclipse IDE*
   6. Click *Next* then *Finish*
 </details>
 
